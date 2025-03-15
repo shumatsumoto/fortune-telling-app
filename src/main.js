@@ -1,18 +1,13 @@
 import './tailwind.min.css'
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 import './script.js'
 
 document.querySelector('#app').innerHTML = `
 <div class="container mx-auto px-4 py-8">
   <header class="text-center mb-10">
-    <div class="flex justify-center mb-2">
-      <img src="https://via.placeholder.com/80" alt="勘違い鑑定" class="rounded-full bg-purple-300">
-    </div>
+    <div class="text-5xl flex justify-center mb-2">🔮</div>
     <h1 class="text-3xl font-bold text-purple-800 mb-2">勘違い鑑定</h1>
-    <p class="text-lg text-gray-600">3つの柱で自然体な自分を発見する</p>
+    <p class="text-lg text-gray-600">自然体な自分を発見する</p>
   </header>
   <div class="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-2xl mx-auto">
     <h2 class="text-xl font-semibold text-purple-700 mb-4">あなたの情報を入力してください</h2>
@@ -57,8 +52,7 @@ document.querySelector('#app').innerHTML = `
           <option value="水瓶座">水瓶座</option>
           <option value="魚座">魚座</option>
         </select>
-        <p class="text-xs text-gray-500 mt-1">※月星座がわからない場合は
-          <a href="https://moonmysign.com/ja" target="_blank" class="text-purple-600 hover:underline">こちら</a>で調べられます</p>
+        <p class="text-xs text-gray-500 mt-1">※月星座がわからない場合は<a href="https://www.moonwithyou.com/" target="_blank" class="text-purple-600 hover:underline">こちら</a>で調べられます</p>
       </div>
       <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300 font-semibold">診断する</button>
     </form>
@@ -113,5 +107,3 @@ document.querySelector('#app').innerHTML = `
   </footer>
 </div>
 `
-
-setupCounter(document.querySelector('#counter'))

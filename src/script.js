@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 features: [
                     '高い理想を持つ',
                     '完璧主義傾向',
-                    '木に足がついた理想家',
+                    '地に足がついた理想家',
                     '理想と現実の接点を見つける',
                     '理想を通じて世の中を導くために生まれた人たち'
                 ]
