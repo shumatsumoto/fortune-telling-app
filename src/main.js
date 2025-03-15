@@ -1,6 +1,7 @@
 import './tailwind.min.css'
 import './style.css'
 import './script.js'
+import './moonCalculator.js'
 
 document.querySelector('#app').innerHTML = `
 <div class="container mx-auto px-4 py-8">
@@ -12,6 +13,7 @@ document.querySelector('#app').innerHTML = `
   <div class="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-2xl mx-auto">
     <h2 class="text-xl font-semibold text-purple-700 mb-4">あなたの情報を入力してください</h2>
     <form id="diagnosisForm" class="space-y-4">
+      <!-- 生年月日 -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <label for="birthYear" class="block text-gray-700 mb-1">生年</label>
@@ -35,25 +37,51 @@ document.querySelector('#app').innerHTML = `
           </select>
         </div>
       </div>
+      
+      <!-- 出生時間 -->
       <div>
-        <label for="moonSign" class="block text-gray-700 mb-1">月星座</label>
-        <select id="moonSign" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
-          <option value="">選択してください</option>
-          <option value="牡羊座">牡羊座</option>
-          <option value="牡牛座">牡牛座</option>
-          <option value="双子座">双子座</option>
-          <option value="蟹座">蟹座</option>
-          <option value="獅子座">獅子座</option>
-          <option value="乙女座">乙女座</option>
-          <option value="天秤座">天秤座</option>
-          <option value="蠍座">蠍座</option>
-          <option value="射手座">射手座</option>
-          <option value="山羊座">山羊座</option>
-          <option value="水瓶座">水瓶座</option>
-          <option value="魚座">魚座</option>
-        </select>
-        <p class="text-xs text-gray-500 mt-1">※月星座がわからない場合は<a href="https://www.moonwithyou.com/" target="_blank" class="text-purple-600 hover:underline">こちら</a>で調べられます</p>
+        <label for="birthTime" class="block text-gray-700 mb-1">出生時間（できるだけ正確な時間）</label>
+        <div class="grid grid-cols-2 gap-4">
+          <select id="birthHour" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+            <option value="">時</option>
+            <!-- JSで時間の選択肢を生成 -->
+          </select>
+          <select id="birthMinute" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+            <option value="">分</option>
+            <!-- JSで分の選択肢を生成 -->
+          </select>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">※時間がわからない場合は「12時00分」と入力してください</p>
       </div>
+      
+      <!-- 出生地 -->
+      <div>
+        <label for="birthPlace" class="block text-gray-700 mb-1">出生地</label>
+        <div class="grid grid-cols-1 gap-4">
+          <select id="birthCountry" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+            <option value="JP" selected>日本</option>
+            <option value="OTHER">その他の国</option>
+          </select>
+          <div id="japanPrefectureContainer">
+            <select id="birthPrefecture" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+              <option value="">都道府県を選択</option>
+              <!-- JSで都道府県の選択肢を生成 -->
+            </select>
+          </div>
+          <div id="otherCountryContainer" class="hidden">
+            <input type="text" id="otherCountryInput" placeholder="国名を入力" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+            <div class="grid grid-cols-2 gap-4 mt-2">
+              <input type="text" id="latitudeInput" placeholder="緯度（例: 35.6895）" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+              <input type="text" id="longitudeInput" placeholder="経度（例: 139.6917）" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+            </div>
+            <p class="text-xs text-gray-500 mt-1">※緯度・経度は<a href="https://www.google.com/maps" target="_blank" class="text-purple-600 hover:underline">Google Maps</a>などで調べられます</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 計算された月星座を保持する非表示フィールド -->
+      <input type="hidden" id="calculatedMoonSign" value="">
+      
       <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300 font-semibold">診断する</button>
     </form>
   </div>

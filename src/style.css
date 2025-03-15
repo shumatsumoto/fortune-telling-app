@@ -88,9 +88,56 @@ body {
   font-weight: 500;
 }
 
+/* アニメーション効果 */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+/* 月星座計算ボタンのスタイル */
+#calculateMoonSign:hover {
+  box-shadow: 0 0 15px rgba(159, 122, 234, 0.5);
+}
+
+#calculatedMoonSign {
+  font-size: 1.25rem;
+  color: #6b46c1;
+  font-weight: 600;
+}
+
+/* 月星座表示エリアのアニメーション */
+#moonSignArea {
+  transition: all 0.3s ease;
+}
+
+#moonSignArea.hidden {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .container {
       padding: 1rem;
+  }
+  
+  /* モバイル向けスタイル調整 */
+  #app h1 {
+    font-size: 1.75rem;
+  }
+  
+  .grid {
+    gap: 1rem;
   }
 }

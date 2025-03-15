@@ -7,32 +7,98 @@ document.addEventListener('DOMContentLoaded', function() {
     const potentialResult = document.getElementById('potentialResult');
     const manifestResult = document.getElementById('manifestResult');
     const misunderstandingResult = document.getElementById('misunderstandingResult');
+    const calculatedMoonSign = document.getElementById('calculatedMoonSign');
+    const birthCountrySelect = document.getElementById('birthCountry');
+    const japanPrefectureContainer = document.getElementById('japanPrefectureContainer');
+    const otherCountryContainer = document.getElementById('otherCountryContainer');
     
-    // 生年月日のセレクトボックスに選択肢を追加
+    // 生年月日と時間のセレクトボックスに選択肢を追加
     populateYearOptions();
     populateMonthOptions();
     populateDayOptions();
+    populateHourOptions();
+    populateMinuteOptions();
+    populatePrefectureOptions();
     
-    // フォームの送信イベント
+    // 国選択の変更イベント
+    birthCountrySelect.addEventListener('change', function() {
+        if (this.value === 'JP') {
+            japanPrefectureContainer.classList.remove('hidden');
+            otherCountryContainer.classList.add('hidden');
+        } else {
+            japanPrefectureContainer.classList.add('hidden');
+            otherCountryContainer.classList.remove('hidden');
+        }
+    });
+    
+    // フォームの送信イベント（診断実行）
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
         // 入力値の取得
-        const year = parseInt(document.getElementById('birthYear').value);
-        const month = parseInt(document.getElementById('birthMonth').value);
-        const day = parseInt(document.getElementById('birthDay').value);
-        const moonSign = document.getElementById('moonSign').value;
+        const year = document.getElementById('birthYear').value;
+        const month = document.getElementById('birthMonth').value;
+        const day = document.getElementById('birthDay').value;
+        const hour = document.getElementById('birthHour').value || '12';
+        const minute = document.getElementById('birthMinute').value || '0';
         
         // 入力値の検証
-        if (!year || !month || !day || !moonSign) {
-            alert('すべての項目を入力してください');
+        if (!year || !month || !day) {
+            alert('生年月日を入力してください');
             return;
         }
         
+        // 緯度・経度の取得
+        let latitude, longitude;
+        
+        if (birthCountrySelect.value === 'JP') {
+            // 日本の場合は都道府県から緯度経度を取得
+            const prefectureSelect = document.getElementById('birthPrefecture');
+            const prefectureIndex = prefectureSelect.value;
+            
+            if (prefectureIndex && prefectureIndex !== '') {
+                const prefecture = window.MoonCalculator.PREFECTURES[parseInt(prefectureIndex)];
+                latitude = prefecture.latitude;
+                longitude = prefecture.longitude;
+            } else {
+                alert('都道府県を選択してください');
+                return;
+            }
+        } else {
+            // その他の国の場合は入力された緯度経度を使用
+            latitude = document.getElementById('latitudeInput').value;
+            longitude = document.getElementById('longitudeInput').value;
+            
+            if (!latitude || !longitude) {
+                alert('緯度・経度を入力してください');
+                return;
+            }
+        }
+        
+        // 月星座を計算
+        const birthData = {
+            year, month, day, hour, minute, latitude, longitude
+        };
+        
+        const moonSignResult = window.MoonCalculator.calculateMoonZodiacSign(birthData);
+        
+        if (!moonSignResult.success) {
+            alert(moonSignResult.message || '月星座の計算に失敗しました。入力内容を確認してください。');
+            return;
+        }
+        
+        // 計算された月星座をhiddenフィールドに保存
+        calculatedMoonSign.value = moonSignResult.moonSign;
+        
+        // 数値型に変換
+        const numYear = parseInt(year);
+        const numMonth = parseInt(month);
+        const numDay = parseInt(day);
+        
         // 診断結果の計算
-        const potentialType = calculatePotentialType(year, month, day);
-        const manifestType = calculateManifestType(year, month, day);
-        const misunderstandingType = getMisunderstandingType(moonSign);
+        const potentialType = calculatePotentialType(numYear, numMonth, numDay);
+        const manifestType = calculateManifestType(numYear, numMonth, numDay);
+        const misunderstandingType = getMisunderstandingType(moonSignResult.moonSign);
         
         // 結果の表示
         displayPotentialResult(potentialType);
@@ -53,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         form.reset();
         form.closest('.bg-white').classList.remove('hidden');
         resultArea.classList.add('hidden');
+        calculatedMoonSign.value = '';
         
         // ページトップにスクロール
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -93,6 +160,47 @@ document.addEventListener('DOMContentLoaded', function() {
             option.textContent = i + '日';
             daySelect.appendChild(option);
         }
+    }
+    
+    // 時間選択肢の生成（0-23時）
+    function populateHourOptions() {
+        const hourSelect = document.getElementById('birthHour');
+        
+        for (let i = 0; i <= 23; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i + '時';
+            hourSelect.appendChild(option);
+        }
+    }
+    
+    // 分選択肢の生成（0-59分、5分間隔）
+    function populateMinuteOptions() {
+        const minuteSelect = document.getElementById('birthMinute');
+        
+        for (let i = 0; i <= 55; i += 5) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i.toString().padStart(2, '0') + '分';
+            minuteSelect.appendChild(option);
+        }
+    }
+    
+    // 都道府県選択肢の生成
+    function populatePrefectureOptions() {
+        if (!window.MoonCalculator || !window.MoonCalculator.PREFECTURES) {
+            console.error('MoonCalculator not found or PREFECTURES not defined');
+            return;
+        }
+        
+        const prefectureSelect = document.getElementById('birthPrefecture');
+        
+        window.MoonCalculator.PREFECTURES.forEach((prefecture, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = prefecture.name;
+            prefectureSelect.appendChild(option);
+        });
     }
     
     // 干支から潜在個性タイプを計算
