@@ -1,7 +1,10 @@
 import './tailwind.min.css'
 import './style.css'
-import './script.js'
+import './potentialType.js'
+import './manifestType.js'
+import './misunderstandingType.js'
 import './moonCalculator.js'
+import './script.js'
 
 document.querySelector('#app').innerHTML = `
 <div class="container mx-auto px-4 py-8">
