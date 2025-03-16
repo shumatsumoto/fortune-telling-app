@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- 定義 -->
+  <defs>
+    <!-- 水晶玉のグラデーション -->
+    <radialGradient id="ballGradient" cx="40%" cy="40%" r="60%" fx="30%" fy="30%">
+      <stop offset="0%" stop-color="#c9a0ff" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#9370DB" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#663399" stop-opacity="0.9" />
+    </radialGradient>
+    
+    <!-- 輝きのグラデーション -->
+    <radialGradient id="glowGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    
+    <!-- 光沢効果 -->
+    <radialGradient id="shineGradient" cx="25%" cy="25%" r="25%" fx="20%" fy="20%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    
+    <!-- 土台のグラデーション -->
+    <linearGradient id="baseGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8B4513" />
+      <stop offset="100%" stop-color="#4A2511" />
+    </linearGradient>
+    
+    <!-- ぼかしフィルター -->
+    <filter id="blurFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+    </filter>
+  </defs>
+  
+  <!-- 背景の光彩 -->
+  <circle cx="100" cy="85" r="70" fill="url(#glowGradient)" opacity="0.5" filter="url(#blurFilter)" />
+  
+  <!-- 土台部分 -->
+  <path d="M70,135 C70,150 130,150 130,135 L130,145 C130,165 70,165 70,145 Z" fill="url(#baseGradient)" />
+  <ellipse cx="100" cy="135" rx="30" ry="5" fill="#5D3112" />
+  
+  <!-- 水晶玉の本体 -->
+  <circle cx="100" cy="85" r="50" fill="url(#ballGradient)" />
+  
+  <!-- 内部の神秘的な模様 -->
+  <path d="M80,75 Q100,95 120,75" stroke="#ffffff" stroke-width="0.5" fill="none" opacity="0.5" />
+  <path d="M80,95 Q100,75 120,95" stroke="#ffffff" stroke-width="0.5" fill="none" opacity="0.5" />
+  <circle cx="100" cy="85" r="15" stroke="#ffffff" stroke-width="0.5" fill="none" opacity="0.5" />
+  <circle cx="100" cy="85" r="25" stroke="#ffffff" stroke-width="0.5" fill="none" opacity="0.3" />
+  
+  <!-- 星のきらめき -->
+  <path d="M90,65 L92,70 L87,67 L93,67 L88,70 Z" fill="#ffffff" opacity="0.8" />
+  <path d="M110,95 L112,100 L107,97 L113,97 L108,100 Z" fill="#ffffff" opacity="0.6" />
+  <path d="M75,85 L77,90 L72,87 L78,87 L73,90 Z" fill="#ffffff" opacity="0.7" />
+  
+  <!-- 表面の光沢効果 -->
+  <circle cx="85" cy="70" r="15" fill="url(#shineGradient)" />
+  <circle cx="115" cy="95" r="5" fill="#ffffff" opacity="0.5" />
+</svg>

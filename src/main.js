@@ -19,21 +19,21 @@ document.querySelector('#app').innerHTML = `
       <!-- 生年月日 -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label for="birthYear" class="block text-gray-700 mb-1">生年</label>
+          <label for="birthYear" class="block text-gray-700 mb-1 font-bold">生年</label>
           <select id="birthYear" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
             <option value="">選択してください</option>
             <!-- JSで西暦の選択肢を生成 -->
           </select>
         </div>
         <div>
-          <label for="birthMonth" class="block text-gray-700 mb-1">生月</label>
+          <label for="birthMonth" class="block text-gray-700 mb-1 font-bold">生月</label>
           <select id="birthMonth" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
             <option value="">選択してください</option>
             <!-- JSで月の選択肢を生成 -->
           </select>
         </div>
         <div>
-          <label for="birthDay" class="block text-gray-700 mb-1">生日</label>
+          <label for="birthDay" class="block text-gray-700 mb-1 font-bold">生日</label>
           <select id="birthDay" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
             <option value="">選択してください</option>
             <!-- JSで日の選択肢を生成 -->
@@ -43,7 +43,7 @@ document.querySelector('#app').innerHTML = `
       
       <!-- 出生時間 -->
       <div>
-        <label for="birthTime" class="block text-gray-700 mb-1">出生時間（できるだけ正確な時間）</label>
+        <label for="birthTime" class="block text-gray-700 mb-1 font-bold">出生時間（できるだけ正確な時間）</label>
         <div class="grid grid-cols-2 gap-4">
           <select id="birthHour" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
             <option value="">時</option>
@@ -59,7 +59,7 @@ document.querySelector('#app').innerHTML = `
       
       <!-- 出生地 -->
       <div>
-        <label for="birthPlace" class="block text-gray-700 mb-1">出生地</label>
+        <label for="birthPlace" class="block text-gray-700 mb-1 font-bold">出生地</label>
         <div class="grid grid-cols-1 gap-4">
           <select id="birthCountry" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
             <option value="JP" selected>日本</option>
