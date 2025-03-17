@@ -141,3 +141,105 @@ body {
     gap: 1rem;
   }
 }
+
+/* 顕在個性のメイン・サブ関係を視覚的に表現 */
+.manifest-hierarchy {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.manifest-main {
+  padding: 1rem;
+  background-color: rgba(72, 187, 120, 0.1);
+  border-radius: 0.5rem;
+  border-left: 4px solid #48bb78;
+  margin-bottom: 1rem;
+}
+
+.manifest-subs {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.manifest-subs::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #48bb78;
+  opacity: 0.5;
+}
+
+.manifest-sub {
+  position: relative;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background-color: rgba(72, 187, 120, 0.05);
+  border-radius: 0.5rem;
+  border-left: 3px solid rgba(72, 187, 120, 0.5);
+}
+
+.manifest-sub::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  width: 1rem;
+  height: 2px;
+  background-color: #48bb78;
+  opacity: 0.5;
+}
+
+.sub-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #48bb78;
+  margin-bottom: 0.25rem;
+}
+
+/* 結果まとめのスタイル */
+#resultSummary {
+  line-height: 1.8;
+}
+
+#summaryText {
+  margin-top: 1rem;
+}
+
+/* さらに目立つハイライト */
+.super-highlight {
+  font-weight: 600;
+  color: #6b46c1;
+  background-color: rgba(159, 122, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+}
+
+/* まとめセクションのスタイリング */
+.summary-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dashed #e9d5f5;
+}
+
+.summary-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* まとめ全体のカード表示を強化 */
+#resultSummary {
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 1L1 10h18L10 1z" fill="%23f3ebff" fill-opacity="0.4"/></svg>');
+  background-size: 20px 20px;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 0 15px rgba(159, 122, 234, 0.1);
+  padding: 1.5rem;
+}

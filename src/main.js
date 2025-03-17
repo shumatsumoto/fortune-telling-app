@@ -90,11 +90,46 @@ document.querySelector('#app').innerHTML = `
   </div>
   <!-- 結果表示エリア -->
   <div id="resultArea" class="hidden">
-    <div class="mb-10 text-center">
-      <h2 class="text-2xl font-bold text-purple-800 mb-4">あなたの鑑定結果</h2>
+    <div class="mb-6 text-center">
+      <h2 class="text-2xl font-bold text-purple-800 mb-2">あなたの鑑定結果</h2>
       <p class="text-gray-600">自然体で、自分を発揮して生きる一助となるものです</p>
     </div>
+    
+    <!-- 結果のまとめ（最初に表示） -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-4xl mx-auto">
+      <h3 class="text-xl font-semibold text-purple-700 mb-2 flex items-center">
+        <span class="text-2xl mr-2">✨</span>
+        鑑定結果のまとめ
+      </h3>
+      <div id="resultSummary" class="prose prose-purple max-w-none">
+        <p class="font-medium text-purple-800">あなたの本質と特徴を総合的に分析しました：</p>
+        <div id="summaryText" class="text-gray-700 leading-relaxed mt-4">
+          <!-- JSで結果のまとめを表示 -->
+        </div>
+      </div>
+      <div class="mt-4 p-3 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+        <p class="text-sm text-purple-700 font-medium">この鑑定結果を活かすためのポイント：</p>
+        <ul class="text-sm text-gray-700 mt-2 list-disc list-inside">
+          <li>勘違いを知ることで自然体の自分に戻れます</li>
+          <li>潜在個性は先祖からの贈り物です</li>
+          <li>顕在個性はあなたの特徴を表します</li>
+          <li>自分の強みを生かし、苦手なことはやる必要はありません</li>
+        </ul>
+      </div>
+    </div>
+    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- 勘違い -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-blue-500 py-3 px-4">
+          <h3 class="text-lg font-semibold text-white">🌼 勘違い</h3>
+        </div>
+        <div class="p-4">
+          <div id="misunderstandingResult" class="space-y-3">
+            <!-- JSで結果を表示 -->
+          </div>
+        </div>
+      </div>
       <!-- 潜在個性 -->
       <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-yellow-400 py-3 px-4">
@@ -117,18 +152,8 @@ document.querySelector('#app').innerHTML = `
           </div>
         </div>
       </div>
-      <!-- 勘違い -->
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="bg-blue-500 py-3 px-4">
-          <h3 class="text-lg font-semibold text-white">🌼 勘違い</h3>
-        </div>
-        <div class="p-4">
-          <div id="misunderstandingResult" class="space-y-3">
-            <!-- JSで結果を表示 -->
-          </div>
-        </div>
-      </div>
     </div>
+    
     <div class="mt-8 text-center">
       <button id="resetButton" class="bg-gray-200 text-gray-700 py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-medium">もう一度診断する</button>
     </div>

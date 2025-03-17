@@ -135,28 +135,33 @@ function calculateManifestType(year, month, day) {
 
 // 顕在個性の結果表示
 function displayManifestResult(result, manifestResultElement) {
-    // 結果表示用のHTML
-    let html = '';
-    
     // メインテーマ
     const mainType = manifestTypes[result.mainType] || manifestTypes[9]; // 11や12の場合は9として処理
-    html += `
-        <div class="mb-4">
-            <h4 class="result-title mb-2">メインテーマ</h4>
-            <div class="highlight">${mainType.name}</div>
-            <p class="text-gray-700">${mainType.keywords}</p>
-            <ul class="feature-list mt-2">
-                ${mainType.features.map(feature => `<li>${feature}</li>`).slice(0, 3).join('')}
-            </ul>
-        </div>
+    
+    // サブテーマ
+    const subType1 = manifestTypes[result.subType1];
+    const subType2 = manifestTypes[result.subType2];
+    
+    // 結果表示用のHTML - 階層構造を視覚化
+    let html = `
+        <div class="manifest-hierarchy">
+            <div class="manifest-main">
+                <h4 class="result-title mb-2">メインテーマ</h4>
+                <div class="highlight">${mainType.name}</div>
+                <p class="text-gray-700">${mainType.keywords}</p>
+                <ul class="feature-list mt-2">
+                    ${mainType.features.map(feature => `<li>${feature}</li>`).slice(0, 3).join('')}
+                </ul>
+            </div>
+            
+            <div class="manifest-subs">
     `;
     
     // サブテーマ1
     if (result.subType1 !== 0) {
-        const subType1 = manifestTypes[result.subType1];
         html += `
-            <div class="mb-4">
-                <h4 class="result-title mb-2">サブテーマ1</h4>
+            <div class="manifest-sub">
+                <div class="sub-title">サブテーマ1</div>
                 <div class="highlight">${subType1.name}</div>
                 <p class="text-gray-700">${subType1.keywords}</p>
             </div>
@@ -165,16 +170,20 @@ function displayManifestResult(result, manifestResultElement) {
     
     // サブテーマ2
     if (result.subType2 !== 0) {
-        const subType2 = manifestTypes[result.subType2];
         html += `
-            <div>
-                <h4 class="result-title mb-2">サブテーマ2</h4>
+            <div class="manifest-sub">
+                <div class="sub-title">サブテーマ2</div>
                 <div class="highlight">${subType2.name}</div>
                 <p class="text-gray-700">${subType2.keywords}</p>
                 <p class="text-sm text-purple-600 mt-2">※メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
             </div>
         `;
     }
+    
+    html += `
+            </div>
+        </div>
+    `;
     
     manifestResultElement.innerHTML = html;
 }
