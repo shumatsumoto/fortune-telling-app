@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 歯車の可視化を追加する関数
     function addGearVisualization() {
-        // manifestTypes オブジェクトの定義（表示に必要）
+        // manifestTypes object definition (needed for display)
         const manifestTypes = {
             1: '創造（自信）',
             2: '人間関係（バランス）',
@@ -142,22 +142,21 @@ document.addEventListener('DOMContentLoaded', function() {
             0: '霊感・異質な力'
         };
         
-        // 計算された顕在個性の値を取得（非表示フィールドから）
-        // フォーム送信時に保存した値を取得するためにhiddenフィールドを追加する必要があります
+        // Get calculated manifest type values (from hidden fields)
         const mainTypeEl = document.getElementById('mainTypeHidden');
         const subType1El = document.getElementById('subType1Hidden');
         const subType2El = document.getElementById('subType2Hidden');
         
-        // 値が取得できなかった場合のデフォルト値
+        // Default values if not found
         const mainType = mainTypeEl ? mainTypeEl.value : '?';
         const subType1 = subType1El ? subType1El.value : '?';
         const subType2 = subType2El ? subType2El.value : '?';
         
-        // 歯車の可視化コンテナを作成
+        // Create gear visualization container
         const gearContainer = document.createElement('div');
         gearContainer.className = 'gear-visualization-container bg-white rounded-lg shadow-lg p-4 mb-6 max-w-4xl mx-auto';
         
-        // SVGの内容 - 実際の顕在個性タイプを反映
+        // SVG content - reflecting actual manifest type values with improved readability
         gearContainer.innerHTML = `
             <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
                 <span class="text-2xl mr-2">⚙️</span>
@@ -167,12 +166,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
                     <!-- Main gear (largest) -->
                     <g transform="translate(400, 110)" class="main-gear">
-                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.1" stroke="#6b46c1" stroke-width="3"/>
-                        <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="2"/>
-                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#4c1d95">メインテーマ</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#4c1d95">${mainType}. ${manifestTypes[mainType] || manifestTypes[9]}</text>
-                        <!-- Teeth for main gear -->
-                        <g>
+                        <!-- Gear outline with lighter fill -->
+                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.05" stroke="#6b46c1" stroke-width="2"/>
+                        <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="1.5"/>
+                        
+                        <!-- Text background for better readability -->
+                        <rect x="-60" y="-20" width="120" height="55" rx="4" fill="#f5f3ff" fill-opacity="0.9"/>
+                        
+                        <!-- Text content -->
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${mainType}. ${manifestTypes[mainType] || manifestTypes[9]}</text>
+                        
+                        <!-- Teeth for main gear (lighter color) -->
+                        <g opacity="0.6">
                             <path d="M 95,-15 L 110,-17 L 110,17 L 95,15 Z" fill="#6b46c1"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(30)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(60)"/>
@@ -188,15 +194,22 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(360)"/>
                         </g>
                     </g>
-    
+
                     <!-- Sub-theme 1 gear (medium) -->
                     <g transform="translate(200, 110)" class="sub-gear-1">
-                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.1" stroke="#7c3aed" stroke-width="3"/>
-                        <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="2"/>
-                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#5b21b6">${subType1}. ${manifestTypes[subType1]}</text>
-                        <!-- Teeth for sub gear 1 -->
-                        <g>
+                        <!-- Gear outline with lighter fill -->
+                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.05" stroke="#7c3aed" stroke-width="1.5"/>
+                        <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="1"/>
+                        
+                        <!-- Text background for better readability -->
+                        <rect x="-55" y="-20" width="110" height="55" rx="4" fill="#f5f3ff" fill-opacity="0.9"/>
+                        
+                        <!-- Text content -->
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ1</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${subType1}. ${manifestTypes[subType1]}</text>
+                        
+                        <!-- Teeth for sub gear 1 (lighter color) -->
+                        <g opacity="0.6">
                             <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(0)"/>
                             <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(36)"/>
                             <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(72)"/>
@@ -209,15 +222,22 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(324)"/>
                         </g>
                     </g>
-    
+
                     <!-- Sub-theme 2 gear (smallest) -->
                     <g transform="translate(600, 110)" class="sub-gear-2">
-                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.1" stroke="#8b5cf6" stroke-width="3"/>
-                        <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="2"/>
+                        <!-- Gear outline with lighter fill -->
+                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.05" stroke="#8b5cf6" stroke-width="1.5"/>
+                        <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="1"/>
+                        
+                        <!-- Text background for better readability -->
+                        <rect x="-55" y="-20" width="110" height="55" rx="4" fill="#f5f3ff" fill-opacity="0.9"/>
+                        
+                        <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#6d28d9">${subType2}. ${manifestTypes[subType2]}</text>
-                        <!-- Teeth for sub gear 2 -->
-                        <g>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${subType2}. ${manifestTypes[subType2]}</text>
+                        
+                        <!-- Teeth for sub gear 2 (lighter color) -->
+                        <g opacity="0.6">
                             <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(0)"/>
                             <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(45)"/>
                             <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(90)"/>
@@ -228,16 +248,16 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(315)"/>
                         </g>
                     </g>
-    
-                    <!-- Connecting lines between gears -->
-                    <line x1="260" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
-                    <line x1="460" y1="110" x2="540" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
+
+                    <!-- Connecting lines between gears (lighter) -->
+                    <line x1="260" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                    <line x1="460" y1="110" x2="540" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
                 </svg>
             </div>
             <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
         `;
         
-        // 結果のまとめの後、3つのカードのグリッドの前に挿入
+        // Insert after the summary section, before the three-card grid
         const resultArea = document.getElementById('resultArea');
         const summarySection = document.querySelector('#resultArea > div:nth-child(2)');
         resultArea.insertBefore(gearContainer, summarySection.nextSibling);
