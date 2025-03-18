@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
                     <!-- Main gear (largest) -->
                     <g transform="translate(400, 110)" class="main-gear">
-                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.7" stroke="#6b46c1" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.5" stroke="#6b46c1" stroke-width="3"/>
                         <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="2"/>
                         <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="#4c1d95">メインテーマ</text>
                         <!-- Teeth for main gear -->
@@ -154,12 +154,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(270)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(300)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(330)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(360)"/>
                         </g>
                     </g>
 
                     <!-- Sub-theme 1 gear (medium) -->
                     <g transform="translate(200, 110)" class="sub-gear-1">
-                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.7" stroke="#7c3aed" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.5" stroke="#7c3aed" stroke-width="3"/>
                         <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="2"/>
                         <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
                         <!-- Teeth for sub gear 1 -->
@@ -179,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <!-- Sub-theme 2 gear (smallest) -->
                     <g transform="translate(600, 110)" class="sub-gear-2">
-                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.7" stroke="#8b5cf6" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.5" stroke="#8b5cf6" stroke-width="3"/>
                         <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="2"/>
                         <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
                         <!-- Teeth for sub gear 2 -->
@@ -198,10 +199,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <!-- Connecting lines between gears -->
                     <line x1="260" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
                     <line x1="460" y1="110" x2="540" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
-
-                    <!-- Labels for explanation -->
-                    <text x="400" y="30" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="#4c1d95">あなたの顕在個性</text>
-                    <text x="400" y="200" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#6b46c1">※小さな歯車（サブテーマ2）を動かすと、全体が効果的に回転します</text>
                 </svg>
             </div>
             <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
