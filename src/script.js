@@ -114,9 +114,104 @@ document.addEventListener('DOMContentLoaded', function() {
         resultArea.classList.remove('hidden');
         resultArea.classList.add('result-appear');
         
+        // 歯車の可視化を追加
+        addGearVisualization();
+        
         // ページトップにスクロール
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+    
+    // 歯車の可視化を追加する関数
+    function addGearVisualization() {
+        // 歯車の可視化コンテナを作成
+        const gearContainer = document.createElement('div');
+        gearContainer.className = 'gear-visualization-container bg-white rounded-lg shadow-lg p-4 mb-6 max-w-4xl mx-auto';
+        
+        // SVGの内容 - 直接埋め込み
+        gearContainer.innerHTML = `
+            <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
+                <span class="text-2xl mr-2">⚙️</span>
+                顕在個性の歯車構造
+            </h3>
+            <div class="gear-svg-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
+                    <!-- Main gear (largest) -->
+                    <g transform="translate(400, 110)" class="main-gear">
+                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.7" stroke="#6b46c1" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="2"/>
+                        <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="#4c1d95">メインテーマ</text>
+                        <!-- Teeth for main gear -->
+                        <g>
+                            <path d="M 95,-15 L 110,-17 L 110,17 L 95,15 Z" fill="#6b46c1"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(30)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(60)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(90)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(120)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(150)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(180)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(210)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(240)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(270)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(300)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(330)"/>
+                        </g>
+                    </g>
+
+                    <!-- Sub-theme 1 gear (medium) -->
+                    <g transform="translate(200, 110)" class="sub-gear-1">
+                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.7" stroke="#7c3aed" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="2"/>
+                        <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
+                        <!-- Teeth for sub gear 1 -->
+                        <g>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(0)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(36)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(72)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(108)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(144)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(180)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(216)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(252)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(288)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(324)"/>
+                        </g>
+                    </g>
+
+                    <!-- Sub-theme 2 gear (smallest) -->
+                    <g transform="translate(600, 110)" class="sub-gear-2">
+                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.7" stroke="#8b5cf6" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="2"/>
+                        <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
+                        <!-- Teeth for sub gear 2 -->
+                        <g>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(0)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(45)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(90)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(135)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(180)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(225)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(270)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(315)"/>
+                        </g>
+                    </g>
+
+                    <!-- Connecting lines between gears -->
+                    <line x1="260" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
+                    <line x1="460" y1="110" x2="540" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
+
+                    <!-- Labels for explanation -->
+                    <text x="400" y="30" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="#4c1d95">あなたの顕在個性</text>
+                    <text x="400" y="200" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#6b46c1">※小さな歯車（サブテーマ2）を動かすと、全体が効果的に回転します</text>
+                </svg>
+            </div>
+            <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
+        `;
+        
+        // 結果のまとめの後、3つのカードのグリッドの前に挿入
+        const resultArea = document.getElementById('resultArea');
+        const summarySection = document.querySelector('#resultArea > div:nth-child(2)');
+        resultArea.insertBefore(gearContainer, summarySection.nextSibling);
+    }
     
     // 結果のまとめを生成する関数
     function generateSummary(misunderstandingType, potentialType, manifestType, moonSign) {
@@ -233,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <br>
                     ${lifeEnvironmentDescriptions[potentialType.type3] || 'これは今回の人生であなたが置かれている環境の特性です。この環境の特質を理解し活用することで、人生をより豊かに生きることができるでしょう。'}
                 </p>
-                
                 <p class="text-sm bg-purple-50 p-2 rounded-md mt-2">
                     これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
                 </p>
