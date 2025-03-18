@@ -164,18 +164,72 @@ document.addEventListener('DOMContentLoaded', function() {
             </h3>
             <div class="gear-svg-container">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
-                    <!-- Main gear (largest) -->
-                    <g transform="translate(400, 110)" class="main-gear">
+                    <!-- Sub-theme 2 gear (smallest) - now on left -->
+                    <g transform="translate(200, 110)" class="sub-gear-2">
+                        <!-- Gear outline with lighter fill -->
+                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.05" stroke="#8b5cf6" stroke-width="1.5"/>
+                        <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="1"/>
+                        
+                        <!-- Text background for better readability -->
+                        <rect x="-55" y="-20" width="110" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        
+                        <!-- Text content -->
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#6d28d9">${subType2}. ${manifestTypes[subType2]}</text>
+                        
+                        <!-- Teeth for sub gear 2 (lighter color) -->
+                        <g opacity="0.6">
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(0)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(45)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(90)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(135)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(180)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(225)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(270)"/>
+                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(315)"/>
+                        </g>
+                    </g>
+
+                    <!-- Sub-theme 1 gear (medium) - now in middle -->
+                    <g transform="translate(400, 110)" class="sub-gear-1">
+                        <!-- Gear outline with lighter fill -->
+                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.05" stroke="#7c3aed" stroke-width="1.5"/>
+                        <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="1"/>
+                        
+                        <!-- Text background for better readability -->
+                        <rect x="-55" y="-20" width="110" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        
+                        <!-- Text content -->
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#5b21b6">${subType1}. ${manifestTypes[subType1]}</text>
+                        
+                        <!-- Teeth for sub gear 1 (lighter color) -->
+                        <g opacity="0.6">
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(0)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(36)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(72)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(108)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(144)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(180)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(216)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(252)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(288)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(324)"/>
+                        </g>
+                    </g>
+
+                    <!-- Main gear (largest) - now on right -->
+                    <g transform="translate(600, 110)" class="main-gear">
                         <!-- Gear outline with lighter fill -->
                         <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.05" stroke="#6b46c1" stroke-width="2"/>
                         <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="1.5"/>
                         
                         <!-- Text background for better readability -->
-                        <rect x="-60" y="-20" width="120" height="55" rx="4" fill="#f5f3ff" fill-opacity="0.9"/>
+                        <rect x="-60" y="-20" width="120" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
-                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${mainType}. ${manifestTypes[mainType] || manifestTypes[9]}</text>
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#4c1d95">メインテーマ</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#4c1d95">${mainType}. ${manifestTypes[mainType] || manifestTypes[9]}</text>
                         
                         <!-- Teeth for main gear (lighter color) -->
                         <g opacity="0.6">
@@ -195,63 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         </g>
                     </g>
 
-                    <!-- Sub-theme 1 gear (medium) -->
-                    <g transform="translate(200, 110)" class="sub-gear-1">
-                        <!-- Gear outline with lighter fill -->
-                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.05" stroke="#7c3aed" stroke-width="1.5"/>
-                        <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="1"/>
-                        
-                        <!-- Text background for better readability -->
-                        <rect x="-55" y="-20" width="110" height="55" rx="4" fill="#f5f3ff" fill-opacity="0.9"/>
-                        
-                        <!-- Text content -->
-                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ1</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${subType1}. ${manifestTypes[subType1]}</text>
-                        
-                        <!-- Teeth for sub gear 1 (lighter color) -->
-                        <g opacity="0.6">
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(0)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(36)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(72)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(108)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(144)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(180)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(216)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(252)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(288)"/>
-                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(324)"/>
-                        </g>
-                    </g>
-
-                    <!-- Sub-theme 2 gear (smallest) -->
-                    <g transform="translate(600, 110)" class="sub-gear-2">
-                        <!-- Gear outline with lighter fill -->
-                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.05" stroke="#8b5cf6" stroke-width="1.5"/>
-                        <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="1"/>
-                        
-                        <!-- Text background for better readability -->
-                        <rect x="-55" y="-20" width="110" height="55" rx="4" fill="#f5f3ff" fill-opacity="0.9"/>
-                        
-                        <!-- Text content -->
-                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${subType2}. ${manifestTypes[subType2]}</text>
-                        
-                        <!-- Teeth for sub gear 2 (lighter color) -->
-                        <g opacity="0.6">
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(0)"/>
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(45)"/>
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(90)"/>
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(135)"/>
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(180)"/>
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(225)"/>
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(270)"/>
-                            <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(315)"/>
-                        </g>
-                    </g>
-
                     <!-- Connecting lines between gears (lighter) -->
-                    <line x1="260" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
-                    <line x1="460" y1="110" x2="540" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                    <line x1="240" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                    <line x1="460" y1="110" x2="520" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
                 </svg>
             </div>
             <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
