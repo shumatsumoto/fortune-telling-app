@@ -11,7 +11,7 @@ document.querySelector('#app').innerHTML = `
   <header class="text-center mb-10">
     <div class="text-5xl flex justify-center mb-2">🔮</div>
     <h1 class="text-3xl font-bold text-purple-800 mb-2">勘違い鑑定</h1>
-    <p class="text-lg text-gray-600">勘違いに気づいて、自然体な自分を発見する</p>
+    <p class="text-lg text-gray-600">勘違いに気づき、自然体な自分を発見する</p>
   </header>
   <div class="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-2xl mx-auto">
     <h2 class="text-xl font-semibold text-purple-700 mb-4">あなたの情報を入力してください</h2>

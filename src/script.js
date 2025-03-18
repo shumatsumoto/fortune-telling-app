@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#6d28d9">${subType2}. ${manifestTypes[subType2]}</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#6d28d9">${manifestTypes[subType2]}</text>
                         
                         <!-- Teeth for sub gear 2 (lighter color) -->
                         <g opacity="0.6">
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </g>
 
                     <!-- Sub-theme 1 gear (medium) - now in middle -->
-                    <g transform="translate(400, 110)" class="sub-gear-1">
+                    <g transform="translate(375, 110)" class="sub-gear-1">
                         <!-- Gear outline with lighter fill -->
                         <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.05" stroke="#7c3aed" stroke-width="1.5"/>
                         <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="1"/>
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#5b21b6">${subType1}. ${manifestTypes[subType1]}</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#5b21b6">${manifestTypes[subType1]}</text>
                         
                         <!-- Teeth for sub gear 1 (lighter color) -->
                         <g opacity="0.6">
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#4c1d95">メインテーマ</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#4c1d95">${mainType}. ${manifestTypes[mainType] || manifestTypes[9]}</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#4c1d95">${manifestTypes[mainType] || manifestTypes[9]}</text>
                         
                         <!-- Teeth for main gear (lighter color) -->
                         <g opacity="0.6">
@@ -251,10 +251,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <!-- Connecting lines between gears (lighter) -->
                     <line x1="240" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
-                    <line x1="460" y1="110" x2="520" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                    <line x1="400" y1="110" x2="520" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
                 </svg>
             </div>
-            <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
+            <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です。<br>→大きな歯車よりも、小さな歯車の方が動かしやすい。</p>
         `;
         
         // Insert after the summary section, before the three-card grid
