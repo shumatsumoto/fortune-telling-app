@@ -293,9 +293,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="summary-section">
                 <h4 class="text-lg font-semibold text-purple-800 mb-3">あなたの本質</h4>
                 <p class="mb-4">
-                    あなたの月星座は<span class="super-highlight">${moonSign}</span>で、これにより
-                    「<span class="super-highlight">${misunderstandingType.type}</span>」という勘違いタイプがあります。
-                    これは「${misunderstandingType.description}」と思い込んでいる状態です。
+                    あなたは「<span class="super-highlight">${misunderstandingType.type}</span>」という勘違いタイプです。
+                    これは「<strong>${misunderstandingType.description}</strong>」と思い込んでいる状態です。
                     <br><br>
                     <span class="font-semibold text-purple-700">実際には：</span>「${misunderstandingType.reality}」
                     <br>
@@ -333,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="summary-section">
                 <h4 class="text-lg font-semibold text-purple-800 mb-3">あなたの顕在個性</h4>
                 <p class="mb-4">
-                    あなたの顕在個性のメインテーマは<span class="super-highlight">${manifestTypes[manifestType.mainType]}</span>です。
+                    あなたの顕在個性のメインテーマは<span class="super-highlight">${manifestTypes[manifestType.mainType] || manifestTypes[9]}</span>です。
                     これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1]}</span>と
                     <span class="super-highlight">${manifestTypes[manifestType.subType2]}</span>があります。
                     <br><br>
