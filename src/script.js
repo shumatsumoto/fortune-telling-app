@@ -100,7 +100,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const potentialType = window.PotentialTypeCalculator.calculatePotentialType(numYear, numMonth, numDay);
         const manifestType = window.ManifestTypeCalculator.calculateManifestType(numYear, numMonth, numDay);
         const misunderstandingType = window.MisunderstandingTypeCalculator.getMisunderstandingType(moonSignResult.moonSign);
-        
+
+        // 計算結果を隠しフィールドに保存
+        document.getElementById('mainTypeHidden').value = manifestType.mainType;
+        document.getElementById('subType1Hidden').value = manifestType.subType1;
+        document.getElementById('subType2Hidden').value = manifestType.subType2;
+
         // 結果の表示 - 分離したファイルの関数を使用
         window.PotentialTypeCalculator.displayPotentialResult(potentialType, potentialResult);
         window.ManifestTypeCalculator.displayManifestResult(manifestType, manifestResult);
@@ -123,11 +128,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 歯車の可視化を追加する関数
     function addGearVisualization() {
+        // manifestTypes オブジェクトの定義（表示に必要）
+        const manifestTypes = {
+            1: '創造（自信）',
+            2: '人間関係（バランス）',
+            3: '感情、感性（表現）',
+            4: '安心安定と家庭',
+            5: '自由（学び）',
+            6: '理想、満足',
+            7: '信頼・委任',
+            8: '豊かさ・需要',
+            9: '高尚・叡智',
+            0: '霊感・異質な力'
+        };
+        
+        // 計算された顕在個性の値を取得（非表示フィールドから）
+        // フォーム送信時に保存した値を取得するためにhiddenフィールドを追加する必要があります
+        const mainTypeEl = document.getElementById('mainTypeHidden');
+        const subType1El = document.getElementById('subType1Hidden');
+        const subType2El = document.getElementById('subType2Hidden');
+        
+        // 値が取得できなかった場合のデフォルト値
+        const mainType = mainTypeEl ? mainTypeEl.value : '?';
+        const subType1 = subType1El ? subType1El.value : '?';
+        const subType2 = subType2El ? subType2El.value : '?';
+        
         // 歯車の可視化コンテナを作成
         const gearContainer = document.createElement('div');
         gearContainer.className = 'gear-visualization-container bg-white rounded-lg shadow-lg p-4 mb-6 max-w-4xl mx-auto';
         
-        // SVGの内容 - 直接埋め込み
+        // SVGの内容 - 実際の顕在個性タイプを反映
         gearContainer.innerHTML = `
             <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
                 <span class="text-2xl mr-2">⚙️</span>
@@ -137,9 +167,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
                     <!-- Main gear (largest) -->
                     <g transform="translate(400, 110)" class="main-gear">
-                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.5" stroke="#6b46c1" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.1" stroke="#6b46c1" stroke-width="3"/>
                         <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="2"/>
-                        <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="#4c1d95">メインテーマ</text>
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#4c1d95">メインテーマ</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#4c1d95">${mainType}. ${manifestTypes[mainType] || manifestTypes[9]}</text>
                         <!-- Teeth for main gear -->
                         <g>
                             <path d="M 95,-15 L 110,-17 L 110,17 L 95,15 Z" fill="#6b46c1"/>
@@ -157,12 +188,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(360)"/>
                         </g>
                     </g>
-
+    
                     <!-- Sub-theme 1 gear (medium) -->
                     <g transform="translate(200, 110)" class="sub-gear-1">
-                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.5" stroke="#7c3aed" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.1" stroke="#7c3aed" stroke-width="3"/>
                         <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="2"/>
-                        <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#5b21b6">${subType1}. ${manifestTypes[subType1]}</text>
                         <!-- Teeth for sub gear 1 -->
                         <g>
                             <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(0)"/>
@@ -177,12 +209,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(324)"/>
                         </g>
                     </g>
-
+    
                     <!-- Sub-theme 2 gear (smallest) -->
                     <g transform="translate(600, 110)" class="sub-gear-2">
-                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.5" stroke="#8b5cf6" stroke-width="3"/>
+                        <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.1" stroke="#8b5cf6" stroke-width="3"/>
                         <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="2"/>
-                        <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#6d28d9">${subType2}. ${manifestTypes[subType2]}</text>
                         <!-- Teeth for sub gear 2 -->
                         <g>
                             <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(0)"/>
@@ -195,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 8,-47 L 10,-55 L -10,-55 L -8,-47 Z" fill="#8b5cf6" transform="rotate(315)"/>
                         </g>
                     </g>
-
+    
                     <!-- Connecting lines between gears -->
                     <line x1="260" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
                     <line x1="460" y1="110" x2="540" y2="110" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="5,5"/>
@@ -229,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
             3: '感情、感性（表現）',
             4: '安心安定と家庭',
             5: '自由（学び）',
-            6: '理想、格好、満足',
+            6: '理想、満足',
             7: '信頼・委任',
             8: '豊かさ・需要',
             9: '高尚・叡智',
@@ -291,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // まとめの文章を生成
         let summary = `
             <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">あなたの本質</h4>
+                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの本質</h4>
                 <p class="mb-4">
                     あなたは「<span class="super-highlight">${misunderstandingType.type}</span>」という勘違いタイプです。
                     これは「<strong>${misunderstandingType.description}</strong>」と思い込んでいる状態です。
@@ -303,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">あなたの潜在個性</h4>
+                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの潜在個性</h4>
                 <p class="mb-3">
                     <span class="font-semibold text-purple-700">生まれ変わっても変わらない望み：</span>
                     <span class="super-highlight">${potentialTypes[potentialType.type1]}</span>
@@ -330,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">あなたの顕在個性</h4>
+                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
                 <p class="mb-4">
                     あなたの顕在個性のメインテーマは<span class="super-highlight">${manifestTypes[manifestType.mainType] || manifestTypes[9]}</span>です。
                     これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1]}</span>と
@@ -342,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">総合的な見立て</h4>
+                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 総合的な評価</h4>
                 <p>
                     これらの特性を知り、勘違いから解放されることで、あなた本来の自然体な姿を取り戻すことができます。
                     自分の強みを生かし、「やらなくていいこと」を知ることで、より幸せな人生を歩むヒントとなるでしょう。

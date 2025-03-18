@@ -57,7 +57,7 @@ const manifestTypes = {
         ]
     },
     6: {
-        name: '理想、格好、満足',
+        name: '理想、満足',
         keywords: '完璧、理想、現実、満足',
         features: [
             '高い理想を持つ',

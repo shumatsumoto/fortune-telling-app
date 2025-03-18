@@ -84,7 +84,12 @@ document.querySelector('#app').innerHTML = `
       
       <!-- 計算された月星座を保持する非表示フィールド -->
       <input type="hidden" id="calculatedMoonSign" value="">
-      
+
+      <!-- 顕在個性の計算結果を保持する非表示フィールド -->
+      <input type="hidden" id="mainTypeHidden" value="">
+      <input type="hidden" id="subType1Hidden" value="">
+      <input type="hidden" id="subType2Hidden" value="">
+
       <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300 font-semibold">診断する</button>
     </form>
   </div>
