@@ -11,7 +11,7 @@ document.querySelector('#app').innerHTML = `
   <header class="text-center mb-10">
     <div class="text-5xl flex justify-center mb-2">🔮</div>
     <h1 class="text-3xl font-bold text-purple-800 mb-2">勘違い鑑定</h1>
-    <p class="text-lg text-gray-600">自然体な自分を発見する</p>
+    <p class="text-lg text-gray-600">勘違いに気づいて、自然体な自分を発見する</p>
   </header>
   <div class="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-2xl mx-auto">
     <h2 class="text-xl font-semibold text-purple-700 mb-4">あなたの情報を入力してください</h2>
@@ -103,7 +103,7 @@ document.querySelector('#app').innerHTML = `
     <!-- 結果のまとめ（最初に表示） -->
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-4xl mx-auto">
       <h3 class="text-xl font-semibold text-purple-700 mb-2 flex items-center">
-        <span class="text-2xl mr-2">✨</span>
+        <span class="text-2xl mr-2">😇</span>
         鑑定結果のまとめ
       </h3>
       <div id="resultSummary" class="prose prose-purple max-w-none">
@@ -115,10 +115,10 @@ document.querySelector('#app').innerHTML = `
       <div class="mt-4 p-3 bg-purple-50 rounded-lg border-l-4 border-purple-500">
         <p class="text-sm text-purple-700 font-medium">この鑑定結果を活かすためのポイント：</p>
         <ul class="text-sm text-gray-700 mt-2 list-disc list-inside">
-          <li>勘違いを知ることで自然体の自分に戻れます</li>
-          <li>潜在個性は先祖からの贈り物です</li>
-          <li>顕在個性はあなたの特徴を表します</li>
-          <li>自分の強みを生かし、苦手なことはやる必要はありません</li>
+          <li>勘違いを知ることで自然体の自分に戻れます。</li>
+          <li>潜在個性は先祖からの贈り物です。</li>
+          <li>顕在個性はあなたの特徴を表します。</li>
+          <li>自分の強みを生かし、苦手なことはやる必要はありません。</li>
         </ul>
       </div>
     </div>
