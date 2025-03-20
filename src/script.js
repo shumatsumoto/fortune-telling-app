@@ -377,6 +377,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <br>
                     ${lifeEnvironmentDescriptions[potentialType.type3] || 'これは今回の人生であなたが置かれている環境の特性です。この環境の特質を理解し活用することで、人生をより豊かに生きることができるでしょう。'}
                 </p>
+
+                <p class="mb-3">
+                    <span class="font-semibold text-purple-700">まとめ・ポイント：</span>
+                    <span class="super-highlight">${potentialTypes[potentialType.totalPoint]}</span>
+                    <br>
+                    全体を通して、あなたの潜在個性は「${potentialTypes[potentialType.totalPoint]}」を中心に形成されています。これは生年月日の数字を組み合わせて算出された、あなたの本質を表す重要な要素です。この特性を意識して生きることで、より自然体であなたらしさを発揮できるでしょう。
+                </p>
+
                 <p class="text-sm bg-purple-50 p-2 rounded-md mt-2">
                     これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
                 </p>
