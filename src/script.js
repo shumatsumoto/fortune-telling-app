@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="font-semibold text-purple-700">まとめ・ポイント：</span>
                     <span class="super-highlight">${potentialTypes[potentialType.totalPoint]}</span>
                     <br>
-                    全体を通して、あなたの潜在個性は「${potentialTypes[potentialType.totalPoint]}」を中心に形成されています。これは生年月日の数字を組み合わせて算出された、あなたの本質を表す重要な要素です。この特性を意識して生きることで、より自然体であなたらしさを発揮できるでしょう。
+                    全体を通して、あなたの潜在個性は「${potentialTypes[potentialType.totalPoint]}」を中心に形成されています。この特性を意識して生きることで、より自然体であなたらしさを発揮できるでしょう。
                 </p>
 
                 <p class="text-sm bg-purple-50 p-2 rounded-md mt-2">

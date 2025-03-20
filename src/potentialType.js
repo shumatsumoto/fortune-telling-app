@@ -156,11 +156,11 @@ function displayPotentialResult(result, potentialResultElement) {
         </div>
     `;
     
-    // 全体を通して言えること
+    // まとめ・ポイント
     const totalType = potentialTypes[result.totalPoint];
     html += `
         <div>
-            <h4 class="result-title mb-2">全体を通して言えること</h4>
+            <h4 class="result-title mb-2">まとめ・ポイント</h4>
             <div class="highlight">${totalType.name}</div>
             <p class="text-gray-700">${totalType.keywords}</p>
         </div>
