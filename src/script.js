@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1]}</span>（サブテーマ1）と
                     <span class="super-highlight">${manifestTypes[manifestType.subType2]}</span>（サブテーマ2）があります。
                     <br><br>
-                    特にサブテーマ2は、メインテーマを動かす小さな歯車として非常に重要です。サブテーマ2に意識を向けることで、
+                    特に<strong>サブテーマ2</strong>は、メインテーマを動かす小さな歯車として非常に重要です。サブテーマ2に意識を向けることで、
                     あなたの特性をより効果的に発揮することができるでしょう。
                 </p>
             </div>
