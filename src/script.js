@@ -264,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 結果のまとめを生成する関数
+    // 結果のまとめを生成する関数
     function generateSummary(misunderstandingType, potentialType, manifestType, moonSign) {
         const potentialTypes = {
             1: '宇宙（天）',
@@ -344,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // まとめの文章を生成
         let summary = `
             <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの本質</h4>
+                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの勘違い</h4>
                 <p class="mb-4">
                     あなたは「<span class="super-highlight">${misunderstandingType.type}</span>」という勘違いタイプです。
                     これは「<strong>${misunderstandingType.description}</strong>」と思い込んでいる状態です。
@@ -352,6 +353,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="font-semibold text-purple-700">実際には：</span>「${misunderstandingType.reality}」
                     <br>
                     <span class="font-semibold text-purple-700">アドバイス：</span>${misunderstandingAdvice[misunderstandingType.type] || '勘違いを知ることで自然体の自分に戻ることができます。'}
+                </p>
+            </div>
+
+            <div class="summary-section">
+                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
+                <p class="mb-4">
+                    あなたの顕在個性のメインテーマは
+                    ${manifestType.mainType === 11 ? 
+                        `<span class="super-highlight">創造（自信）<span class="text-red-600 font-bold">×2倍の強さ</span></span>` : 
+                        manifestType.mainType === 12 ? 
+                            `<span class="super-highlight">創造（自信） と 人間関係（バランス） の両方</span>` : 
+                            `<span class="super-highlight">${manifestTypes[manifestType.mainType] || '高尚・叡智'}</span>`
+                    }です。
+                    これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1] || ''}</span>（サブテーマ1）と
+                    <span class="super-highlight">${manifestTypes[manifestType.subType2] || ''}</span>（サブテーマ2）があります。
+                    <br><br>
+                    特に<strong>サブテーマ2</strong>は、メインテーマを動かす小さな歯車として非常に重要です。サブテーマ2に意識を向けることで、
+                    あなたの特性をより効果的に発揮することができるでしょう。
                 </p>
             </div>
 
@@ -387,24 +406,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 <p class="text-sm bg-purple-50 p-2 rounded-md mt-2">
                     これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
-                </p>
-            </div>
-
-            <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
-                <p class="mb-4">
-                    あなたの顕在個性のメインテーマは
-                    ${manifestType.mainType === 11 ? 
-                        `<span class="super-highlight">創造（自信）<span class="text-red-600 font-bold">×2倍の強さ</span></span>` : 
-                        manifestType.mainType === 12 ? 
-                            `<span class="super-highlight">創造（自信） と 人間関係（バランス） の両方</span>` : 
-                            `<span class="super-highlight">${manifestTypes[manifestType.mainType] || '高尚・叡智'}</span>`
-                    }です。
-                    これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1] || ''}</span>（サブテーマ1）と
-                    <span class="super-highlight">${manifestTypes[manifestType.subType2] || ''}</span>（サブテーマ2）があります。
-                    <br><br>
-                    特に<strong>サブテーマ2</strong>は、メインテーマを動かす小さな歯車として非常に重要です。サブテーマ2に意識を向けることで、
-                    あなたの特性をより効果的に発揮することができるでしょう。
                 </p>
             </div>
 

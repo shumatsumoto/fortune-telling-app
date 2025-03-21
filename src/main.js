@@ -135,17 +135,7 @@ document.querySelector('#app').innerHTML = `
           </div>
         </div>
       </div>
-      <!-- 潜在個性 -->
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="bg-yellow-400 py-3 px-4">
-          <h3 class="text-lg font-semibold text-white">🌼 潜在個性</h3>
-        </div>
-        <div class="p-4">
-          <div id="potentialResult" class="space-y-3">
-            <!-- JSで結果を表示 -->
-          </div>
-        </div>
-      </div>
+      
       <!-- 顕在個性 -->
       <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-green-500 py-3 px-4">
@@ -153,6 +143,18 @@ document.querySelector('#app').innerHTML = `
         </div>
         <div class="p-4">
           <div id="manifestResult" class="space-y-3">
+            <!-- JSで結果を表示 -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- 潜在個性 -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-yellow-400 py-3 px-4">
+          <h3 class="text-lg font-semibold text-white">🌼 潜在個性</h3>
+        </div>
+        <div class="p-4">
+          <div id="potentialResult" class="space-y-3">
             <!-- JSで結果を表示 -->
           </div>
         </div>
