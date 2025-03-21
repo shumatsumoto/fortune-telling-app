@@ -141,23 +141,146 @@ document.addEventListener('DOMContentLoaded', function() {
             9: '高尚・叡智',
             0: '霊感・異質な力'
         };
-        
+
         // Get calculated manifest type values (from hidden fields)
         const mainTypeEl = document.getElementById('mainTypeHidden');
         const subType1El = document.getElementById('subType1Hidden');
         const subType2El = document.getElementById('subType2Hidden');
-        
+
         // Default values if not found
         const mainType = mainTypeEl ? mainTypeEl.value : '?';
         const subType1 = subType1El ? subType1El.value : '?';
         const subType2 = subType2El ? subType2El.value : '?';
-        
+
+        // Check if any subtype is zero
+        const hasZero = subType1 === '0' || subType2 === '0';
+
+        // Determine if main type contains zero
+        const mainHasZero = mainType === '0' || mainType === '10' || mainType === '20' ||
+          mainType === '30' || mainType === '40' || mainType === '50' ||
+          mainType === '60' || mainType === '70' || mainType === '80' ||
+          mainType === '90';
+
+        // Determine which non-zero subtype to display when one is zero
+        const nonZeroSub = subType1 === '0' ? subType2 : subType1;
+
         // Create gear visualization container
         const gearContainer = document.createElement('div');
         gearContainer.className = 'gear-visualization-container bg-white rounded-lg shadow-lg p-4 mb-6 max-w-4xl mx-auto';
-        
-        // SVG content - reflecting actual manifest type values with improved readability
-        gearContainer.innerHTML = `
+
+        // SVG content - with adjustments for zero cases
+        if (hasZero) {
+            // Only one subtheme gear when there's a zero
+            gearContainer.innerHTML = `
+            <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
+                <span class="text-2xl mr-2">⚙️</span>
+                顕在個性の歯車構造
+                ${hasZero ? '<span class="ml-2 text-sm font-normal text-purple-500">(特殊パターン)</span>' : ''}
+            </h3>
+            <div class="gear-svg-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
+                    <!-- Single Subtheme gear (with zero amplification) -->
+                    <g transform="translate(300, 110)" class="sub-gear">
+                        <!-- Gear outline with special styling for zero enhancement -->
+                        <circle cx="0" cy="0" r="60" fill="url(#zero-gradient)" fill-opacity="0.2" stroke="#7c3aed" stroke-width="1.5"/>
+                        <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="1"/>
+                        
+                        <!-- Magical aura to represent zero's amplification -->
+                        <circle cx="0" cy="0" r="70" fill="none" stroke="#7c3aed" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.7">
+                            <animate attributeName="r" values="65;75;65" dur="3s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" values="0.7;0.3;0.7" dur="3s" repeatCount="indefinite" />
+                        </circle>
+                        
+                        <!-- Text background for better readability -->
+                        <rect x="-55" y="-20" width="110" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        
+                        <!-- Text content -->
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ</text>
+                        <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[nonZeroSub]}</text>
+                        <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">＋霊感・増幅</text>
+                        
+                        <!-- Teeth for sub gear with special styling -->
+                        <g opacity="0.7">
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(0)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(36)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(72)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(108)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(144)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(180)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(216)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(252)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(288)"/>
+                            <path d="M 10,-70 L 12,-80 L -12,-80 L -10,-70 Z" fill="#7c3aed" transform="rotate(324)"/>
+                        </g>
+                    </g>
+
+                    <!-- Main gear (largest) -->
+                    <g transform="translate(600, 110)" class="main-gear">
+                        <!-- Gear outline with special styling if main has zero -->
+                        <circle cx="0" cy="0" r="80" fill="${mainHasZero ? 'url(#zero-gradient)' : '#8a5cf6'}" fill-opacity="${mainHasZero ? '0.2' : '0.05'}" stroke="#6b46c1" stroke-width="2"/>
+                        <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="1.5"/>
+                        
+                        ${mainHasZero ? `
+                        <!-- Magical aura for zero in main type -->
+                        <circle cx="0" cy="0" r="95" fill="none" stroke="#6b46c1" stroke-width="0.5" stroke-dasharray="3,4" opacity="0.6">
+                            <animate attributeName="r" values="90;100;90" dur="4s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" values="0.6;0.2;0.6" dur="4s" repeatCount="indefinite" />
+                        </circle>
+                        ` : ''}
+                        
+                        <!-- Text background for better readability -->
+                        <rect x="-75" y="-25" width="150" height="${mainHasZero ? '55' : '40'}" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        
+                        <!-- Text content -->
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
+                        <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">
+                            ${mainType === '0' ? manifestTypes[0] :
+              mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
+              mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
+              mainType === '90' ?
+                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
+                        </text>
+                        ${mainHasZero ? `
+                        <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">＋霊感・増幅</text>
+                        ` : ''}
+                        
+                        <!-- Teeth for main gear -->
+                        <g opacity="0.6">
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(0)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(30)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(60)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(90)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(120)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(150)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(180)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(210)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(240)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(270)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(300)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(330)"/>
+                        </g>
+                    </g>
+
+                    <!-- Connecting line between gears (with special styling) -->
+                    <line x1="350" y1="110" x2="520" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                    
+                    <!-- Gradient definitions -->
+                    <defs>
+                        <radialGradient id="zero-gradient" cx="50%" cy="50%" r="75%" fx="50%" fy="50%">
+                            <stop offset="0%" style="stop-color:#c4b5fd;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.1" />
+                        </radialGradient>
+                    </defs>
+                </svg>
+            </div>
+            <p class="text-sm text-purple-600 mt-2 text-center">
+                このケースでは、「霊感・異質な力」(0)によってサブテーマが増幅されています。<br>
+                このサブテーマを意識することでメインテーマを効果的に動かせます。
+            </p>
+        `;
+        } else {
+            // Original three-gear visualization for non-zero cases
+            gearContainer.innerHTML = `
             <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
                 <span class="text-2xl mr-2">⚙️</span>
                 顕在個性の歯車構造
@@ -221,19 +344,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     <!-- Main gear (largest) - now on right -->
                     <g transform="translate(600, 110)" class="main-gear">
                         <!-- Gear outline with lighter fill -->
-                        <circle cx="0" cy="0" r="80" fill="#8a5cf6" fill-opacity="0.05" stroke="#6b46c1" stroke-width="2"/>
+                        <circle cx="0" cy="0" r="80" fill="${mainHasZero ? 'url(#zero-gradient)' : '#8a5cf6'}" fill-opacity="${mainHasZero ? '0.2' : '0.05'}" stroke="#6b46c1" stroke-width="2"/>
                         <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="1.5"/>
                         
+                        ${mainHasZero ? `
+                        <!-- Magical aura for zero in main type -->
+                        <circle cx="0" cy="0" r="95" fill="none" stroke="#6b46c1" stroke-width="0.5" stroke-dasharray="3,4" opacity="0.6">
+                            <animate attributeName="r" values="90;100;90" dur="4s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" values="0.6;0.2;0.6" dur="4s" repeatCount="indefinite" />
+                        </circle>
+                        ` : ''}
+                        
                         <!-- Text background for better readability -->
-                        <rect x="-60" y="-20" width="120" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        <rect x="-75" y="-25" width="150" height="${mainHasZero ? '55' : '40'}" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[mainType] || manifestTypes[9]}</text>
+                        <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">
+                            ${mainType === '0' ? manifestTypes[0] :
+              mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
+              mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
+              mainType === '90' ?
+                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
+                        </text>
+                        ${mainHasZero ? `
+                        <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">＋霊感・増幅</text>
+                        ` : ''}
                         
-                        <!-- Teeth for main gear (lighter color) -->
+                        <!-- Teeth for main gear -->
                         <g opacity="0.6">
-                            <path d="M 95,-15 L 110,-17 L 110,17 L 95,15 Z" fill="#6b46c1"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(0)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(30)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(60)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(90)"/>
@@ -245,25 +385,32 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(270)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(300)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(330)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(360)"/>
                         </g>
                     </g>
 
                     <!-- Connecting lines between gears (lighter) -->
                     <line x1="240" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
                     <line x1="400" y1="110" x2="520" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+
+                    <!-- Gradient definitions -->
+                    <defs>
+                        <radialGradient id="zero-gradient" cx="50%" cy="50%" r="75%" fx="50%" fy="50%">
+                            <stop offset="0%" style="stop-color:#c4b5fd;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.1" />
+                        </radialGradient>
+                    </defs>
                 </svg>
             </div>
             <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です。<br>→大きな歯車よりも、小さな歯車の方が動かしやすい。</p>
         `;
-        
+        }
+
         // Insert after the summary section, before the three-card grid
         const resultArea = document.getElementById('resultArea');
         const summarySection = document.querySelector('#resultArea > div:nth-child(2)');
         resultArea.insertBefore(gearContainer, summarySection.nextSibling);
     }
     
-    // 結果のまとめを生成する関数
     // 結果のまとめを生成する関数
     function generateSummary(misunderstandingType, potentialType, manifestType, moonSign) {
         const potentialTypes = {
@@ -276,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
             7: '山',
             8: '土（地面）'
         };
-        
+
         const manifestTypes = {
             1: '創造（自信）',
             2: '人間関係（バランス）',
@@ -301,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function() {
             7: 'どっしり構えて安定感があり、何かを長く続けて積み上げていく力があります。忍耐強い特徴があります。',
             8: '立場やアイデンティティを得ることで安定を手に入れます。柔軟に受け入れ、場を和ませる力があります。'
         };
-        
+
         // 先祖からの応援内容の詳細説明
         const ancestorSupportDescriptions = {
             1: '先祖はあなたの高い志や理想を追求する姿を応援しています。真理や悟りを探求する際に、先祖の力が特に強く働きます。視野の広さや展望の高さを生かした行動をとると、背中を押してもらえるでしょう。',
@@ -313,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
             7: '先祖は、あなたの忍耐強さと継続する力を応援しています。長期的な視点で物事を積み上げていく姿勢が、先祖からの大きな後押しを受けるでしょう。安定感のある行動やマイペースな生き方が応援されています。',
             8: '先祖は、あなたが安定した立場や役割を通じて生きることを応援しています。周囲と調和しながら、場を和ませる力を発揮すると、先祖の力を感じられるでしょう。アイデンティティの確立や受容性の高さが応援されています。'
         };
-        
+
         // 今回の人生の環境設定の詳細説明
         const lifeEnvironmentDescriptions = {
             1: '今回の人生では、「宇宙（天）」の環境に置かれています。高いレベルの知識や真理に触れる機会が多く訪れ、上昇志向を発揮しやすい環境です。エネルギッシュに活動し、視野を広げることで、自分の潜在能力を最大限に発揮できるでしょう。',
@@ -341,87 +488,114 @@ document.addEventListener('DOMContentLoaded', function() {
             'ユニークタイプ': '独自性や変わった見方をする必要はありません。平凡であっても、あなたの存在そのものに価値があります。',
             'マザー・テレサタイプ': '全ての人に寄り添おうとする必要はありません。自分を大切にし、無理なく関われる範囲で人と接しましょう。'
         };
-        
+
+        // Check if we have zero in the manifest type
+        const hasZeroMain = manifestType.mainType === 0 || manifestType.mainType === 10 ||
+          manifestType.mainType === 20 || manifestType.mainType === 30 ||
+          manifestType.mainType === 40 || manifestType.mainType === 50 ||
+          manifestType.mainType === 60 || manifestType.mainType === 70 ||
+          manifestType.mainType === 80 || manifestType.mainType === 90;
+
+        const hasZeroSub = manifestType.subType1 === 0 || manifestType.subType2 === 0;
+        const nonZeroSub = manifestType.subType1 === 0 ? manifestType.subType2 : manifestType.subType1;
+
         // まとめの文章を生成
         let summary = `
-            <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの勘違い</h4>
-                <p class="mb-4">
-                    あなたは「<span class="super-highlight">${misunderstandingType.type}</span>」という勘違いタイプです。
-                    これは「<strong>${misunderstandingType.description}</strong>」と思い込んでいる状態です。
-                    <br><br>
-                    <span class="font-semibold text-purple-700">実際には：</span>「${misunderstandingType.reality}」
-                    <br>
-                    <span class="font-semibold text-purple-700">アドバイス：</span>${misunderstandingAdvice[misunderstandingType.type] || '勘違いを知ることで自然体の自分に戻ることができます。'}
-                </p>
-            </div>
+        <div class="summary-section">
+            <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの勘違い</h4>
+            <p class="mb-4">
+                あなたは「<span class="super-highlight">${misunderstandingType.type}</span>」という勘違いタイプです。
+                これは「<strong>${misunderstandingType.description}</strong>」と思い込んでいる状態です。
+                <br><br>
+                <span class="font-semibold text-purple-700">実際には：</span>「${misunderstandingType.reality}」
+                <br>
+                <span class="font-semibold text-purple-700">アドバイス：</span>${misunderstandingAdvice[misunderstandingType.type] || '勘違いを知ることで自然体の自分に戻ることができます。'}
+            </p>
+        </div>
 
-            <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
-                <p class="mb-4">
-                    あなたの顕在個性のメインテーマは
-                    ${manifestType.mainType === 11 ? 
-                        `<span class="super-highlight">創造（自信）<span class="text-red-600 font-bold">×2倍の強さ</span></span>` : 
-                        manifestType.mainType === 12 ? 
-                            `<span class="super-highlight">創造（自信） と 人間関係（バランス） の両方</span>` : 
-                            `<span class="super-highlight">${manifestTypes[manifestType.mainType] || '高尚・叡智'}</span>`
-                    }です。
-                    これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1] || ''}</span>（サブテーマ1）と
+        <div class="summary-section">
+            <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
+            <p class="mb-4">
+                あなたの顕在個性のメインテーマは
+                ${manifestType.mainType === 11 ?
+          `<span class="super-highlight">創造（自信）<span class="text-red-600 font-bold">×2倍の強さ</span></span>` :
+          manifestType.mainType === 12 ?
+            `<span class="super-highlight">創造（自信） と 人間関係（バランス） の両方</span>` :
+            hasZeroMain ?
+              `<span class="super-highlight">${manifestTypes[parseInt(manifestType.mainType.toString()[0]) || 0]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span></span>` :
+              `<span class="super-highlight">${manifestTypes[manifestType.mainType] || '高尚・叡智'}</span>`
+        }です。
+                
+                ${hasZeroSub ?
+          `これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[nonZeroSub]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span></span>があります。
+                    このサブテーマには霊的資質（0）が組み合わさっており、その特性が霊的に増幅されています。` :
+
+          `これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1] || ''}</span>（サブテーマ1）と
                     <span class="super-highlight">${manifestTypes[manifestType.subType2] || ''}</span>（サブテーマ2）があります。
                     <br><br>
                     特に<strong>サブテーマ2</strong>は、メインテーマを動かす小さな歯車として非常に重要です。サブテーマ2に意識を向けることで、
-                    あなたの特性をより効果的に発揮することができるでしょう。
-                </p>
-            </div>
+                    あなたの特性をより効果的に発揮することができるでしょう。`
+        }
 
-            <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの潜在個性</h4>
-                <p class="mb-3">
-                    <span class="font-semibold text-purple-700">生まれ変わっても変わらない望み：</span>
-                    <span class="super-highlight">${potentialTypes[potentialType.type1]}</span>
-                    <br>
-                    ${potentialDescriptions[potentialType.type1] || ''}
-                </p>
-                
-                <p class="mb-3">
-                    <span class="font-semibold text-purple-700">先祖から応援されている特質：</span>
-                    <span class="super-highlight">${potentialTypes[potentialType.type2]}</span>
-                    <br>
-                    ${ancestorSupportDescriptions[potentialType.type2] || '先祖はこの特質があなたの中で発揮されることを応援しています。この性質を活かした行動をとると、先祖からの後押しを感じられるでしょう。'}
-                </p>
-                
-                <p class="mb-3">
-                    <span class="font-semibold text-purple-700">今回の人生の環境設定：</span>
-                    <span class="super-highlight">${potentialTypes[potentialType.type3]}</span>
-                    <br>
-                    ${lifeEnvironmentDescriptions[potentialType.type3] || 'これは今回の人生であなたが置かれている環境の特性です。この環境の特質を理解し活用することで、人生をより豊かに生きることができるでしょう。'}
-                </p>
+                ${hasZeroMain || hasZeroSub ?
+          `<br><br>
+                    <span class="bg-purple-50 p-2 rounded-md block mt-2 text-purple-800">
+                        <strong>0（霊感・異質な力）</strong>が含まれる特殊パターンです。これは霊的資質や潜在能力を表し、
+                        組み合わさる数字の個性をより洗練された感性や直感力などで増幅させる効果があります。
+                        普通の数字よりも複雑で深い特性を持っているといえるでしょう。
+                    </span>` : ''
+        }
+            </p>
+        </div>
 
-                <p class="mb-3">
-                    <span class="font-semibold text-purple-700">まとめ・ポイント：</span>
-                    <span class="super-highlight">${potentialTypes[potentialType.totalPoint]}</span>
-                    <br>
-                    全体を通して、あなたの潜在個性は「${potentialTypes[potentialType.totalPoint]}」を中心に形成されています。この特性を意識して生きることで、より自然体であなたらしさを発揮できるでしょう。
-                </p>
+        <div class="summary-section">
+            <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの潜在個性</h4>
+            <p class="mb-3">
+                <span class="font-semibold text-purple-700">生まれ変わっても変わらない望み：</span>
+                <span class="super-highlight">${potentialTypes[potentialType.type1]}</span>
+                <br>
+                ${potentialDescriptions[potentialType.type1] || ''}
+            </p>
+            
+            <p class="mb-3">
+                <span class="font-semibold text-purple-700">先祖から応援されている特質：</span>
+                <span class="super-highlight">${potentialTypes[potentialType.type2]}</span>
+                <br>
+                ${ancestorSupportDescriptions[potentialType.type2] || '先祖はこの特質があなたの中で発揮されることを応援しています。この性質を活かした行動をとると、先祖からの後押しを感じられるでしょう。'}
+            </p>
+            
+            <p class="mb-3">
+                <span class="font-semibold text-purple-700">今回の人生の環境設定：</span>
+                <span class="super-highlight">${potentialTypes[potentialType.type3]}</span>
+                <br>
+                ${lifeEnvironmentDescriptions[potentialType.type3] || 'これは今回の人生であなたが置かれている環境の特性です。この環境の特質を理解し活用することで、人生をより豊かに生きることができるでしょう。'}
+            </p>
 
-                <p class="text-sm bg-purple-50 p-2 rounded-md mt-2">
-                    これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
-                </p>
-            </div>
+            <p class="mb-3">
+                <span class="font-semibold text-purple-700">まとめ・ポイント：</span>
+                <span class="super-highlight">${potentialTypes[potentialType.totalPoint]}</span>
+                <br>
+                全体を通して、あなたの潜在個性は「${potentialTypes[potentialType.totalPoint]}」を中心に形成されています。この特性を意識して生きることで、より自然体であなたらしさを発揮できるでしょう。
+            </p>
 
-            <div class="summary-section">
-                <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 総合的な評価</h4>
-                <p>
-                    これらの特性を知り、勘違いから解放されることで、あなた本来の自然体な姿を取り戻すことができます。
-                    自分の強みを生かし、「やらなくていいこと」を知ることで、より幸せな人生を歩むヒントとなるでしょう。
-                    <br><br>
-                    <span class="font-semibold text-purple-700">重要なポイント：</span>
-                    勘違いを知ると、それだけでその呪縛から外れていきます。あなたが苦手なことはやらなくても大丈夫です。
-                    あなた本来の才能や特性を活かした生き方を選んでいきましょう。
-                </p>
-            </div>
-        `;
-        
+            <p class="text-sm bg-purple-50 p-2 rounded-md mt-2">
+                これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
+            </p>
+        </div>
+
+        <div class="summary-section">
+            <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 総合的な評価</h4>
+            <p>
+                これらの特性を知り、勘違いから解放されることで、あなた本来の自然体な姿を取り戻すことができます。
+                自分の強みを生かし、「やらなくていいこと」を知ることで、より幸せな人生を歩むヒントとなるでしょう。
+                <br><br>
+                <span class="font-semibold text-purple-700">重要なポイント：</span>
+                勘違いを知ると、それだけでその呪縛から外れていきます。あなたが苦手なことはやらなくても大丈夫です。
+                あなた本来の才能や特性を活かした生き方を選んでいきましょう。
+            </p>
+        </div>
+    `;
+
         // HTMLに結果を表示
         summaryText.innerHTML = summary;
     }

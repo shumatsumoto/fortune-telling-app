@@ -99,11 +99,12 @@ const manifestTypes = {
     },
     0: {
         name: '霊感・異質な力',
-        keywords: '特殊能力、見える、聞こえる',
+        keywords: '特殊能力、見える、聞こえる、感じる',
         features: [
             '一般的な人とは異なる潜在的な力を持つ',
             '見える、聞こえる、わかる、感じるなどの能力がある',
-            '表現力も高い'
+            '表現力も高い',
+            '他の数字と組み合わさるとその個性を霊的に増幅させる'
         ]
     }
 };
@@ -112,20 +113,20 @@ const manifestTypes = {
 function calculateManifestType(year, month, day) {
     // 生年月日の各桁を足す
     const digits = (year.toString() + month.toString().padStart(2, '0') + day.toString().padStart(2, '0'))
-        .split('')
-        .map(Number)
-        .reduce((sum, digit) => sum + digit, 0);
-    
+      .split('')
+      .map(Number)
+      .reduce((sum, digit) => sum + digit, 0);
+
     // 特殊ケース11と12の場合はそのまま、それ以外の2桁の場合はさらに足す
     let finalSum = digits;
     if (finalSum >= 10 && finalSum !== 11 && finalSum !== 12) {
         finalSum = Math.floor(finalSum / 10) + (finalSum % 10);
     }
-    
+
     // サブテーマの計算
     const subTheme1 = digits % 10; // 1の位
     const subTheme2 = Math.floor(digits / 10); // 10の位
-    
+
     return {
         mainType: finalSum,
         subType1: subTheme1,
@@ -137,7 +138,7 @@ function calculateManifestType(year, month, day) {
 function displayManifestResult(result, manifestResultElement) {
     // メインテーマを処理
     let mainTypeHTML = '';
-    
+
     if (result.mainType === 11) {
         // 11の場合: 1が2倍強まる
         const typeOne = manifestTypes[1];
@@ -164,6 +165,23 @@ function displayManifestResult(result, manifestResultElement) {
                 ${typeTwo.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('')}
             </ul>
         `;
+    } else if (result.mainType === 0 || (typeof result.mainType === 'string' && result.mainType.endsWith('0'))) {
+        // 0の場合: 霊感・異質な力が加わる
+        const typeZero = manifestTypes[0];
+        const pairedType = manifestTypes[parseInt(result.mainType.toString()[0]) || 0];
+
+        mainTypeHTML = `
+            <div class="highlight">
+                ${pairedType ? pairedType.name : ''}
+                <span class="text-indigo-600 font-bold"> ＋ 霊感・増幅</span>
+            </div>
+            <p class="text-gray-700">${pairedType ? pairedType.keywords : ''} および ${typeZero.keywords}</p>
+            <p class="text-purple-700 font-semibold mt-2">※霊的資質・潜在能力が加わり、他の特性が増幅されます</p>
+            <ul class="feature-list mt-2">
+                ${pairedType ? pairedType.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('') : ''}
+                ${typeZero.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('')}
+            </ul>
+        `;
     } else {
         // 通常ケース
         const mainType = manifestTypes[result.mainType] || manifestTypes[9]; // 他の特殊な数字の場合は9として処理
@@ -175,29 +193,59 @@ function displayManifestResult(result, manifestResultElement) {
             </ul>
         `;
     }
-    
-    // サブテーマを処理
-    // サブテーマ1
-    const subTypeOne = manifestTypes[result.subType1];
-    const subTypeOneHTML = result.subType1 !== 0 ? `
-        <div class="manifest-sub">
-            <div class="sub-title">サブテーマ1</div>
-            <div class="highlight">${subTypeOne.name}</div>
-            <p class="text-gray-700">${subTypeOne.keywords}</p>
-        </div>
-    ` : '';
-    
-    // サブテーマ2
-    const subTypeTwo = manifestTypes[result.subType2];
-    const subTypeTwoHTML = result.subType2 !== 0 ? `
-        <div class="manifest-sub">
-            <div class="sub-title">サブテーマ2</div>
-            <div class="highlight">${subTypeTwo.name}</div>
-            <p class="text-gray-700">${subTypeTwo.keywords}</p>
-            <p class="text-sm text-purple-600 mt-2">※メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
-        </div>
-    ` : '';
-    
+
+    // サブテーマの処理
+    let subThemesHTML = '';
+
+    // ゼロが含まれるかチェック
+    const hasZero = result.subType1 === 0 || result.subType2 === 0;
+
+    if (hasZero) {
+        // ゼロが含まれる場合は1つのサブテーマとして表示
+        const nonZeroType = result.subType1 === 0 ? result.subType2 : result.subType1;
+        const nonZeroTypeData = manifestTypes[nonZeroType];
+        const zeroTypeData = manifestTypes[0];
+
+        if (nonZeroTypeData) {
+            subThemesHTML = `
+                <div class="manifest-sub">
+                    <div class="sub-title">サブテーマ</div>
+                    <div class="highlight">
+                        ${nonZeroTypeData.name}
+                        <span class="text-indigo-600 font-bold"> ＋ 霊感・増幅</span>
+                    </div>
+                    <p class="text-gray-700">${nonZeroTypeData.keywords} および ${zeroTypeData.keywords}</p>
+                    <p class="text-sm text-purple-600 mt-2">※霊的資質（0）により、このサブテーマの性質が増幅されています</p>
+                    <p class="text-sm text-purple-600 mt-1">※メインテーマを動かすには、このサブテーマを意識することが大切です</p>
+                </div>
+            `;
+        }
+    } else {
+        // 通常のサブテーマ表示（ゼロなし）
+        // サブテーマ1
+        const subTypeOne = manifestTypes[result.subType1];
+        const subTypeOneHTML = result.subType1 !== 0 ? `
+            <div class="manifest-sub">
+                <div class="sub-title">サブテーマ1</div>
+                <div class="highlight">${subTypeOne.name}</div>
+                <p class="text-gray-700">${subTypeOne.keywords}</p>
+            </div>
+        ` : '';
+
+        // サブテーマ2
+        const subTypeTwo = manifestTypes[result.subType2];
+        const subTypeTwoHTML = result.subType2 !== 0 ? `
+            <div class="manifest-sub">
+                <div class="sub-title">サブテーマ2</div>
+                <div class="highlight">${subTypeTwo.name}</div>
+                <p class="text-gray-700">${subTypeTwo.keywords}</p>
+                <p class="text-sm text-purple-600 mt-2">※メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
+            </div>
+        ` : '';
+
+        subThemesHTML = subTypeOneHTML + subTypeTwoHTML;
+    }
+
     // 最終的なHTML構築
     let html = `
         <div class="manifest-hierarchy">
@@ -207,12 +255,11 @@ function displayManifestResult(result, manifestResultElement) {
             </div>
             
             <div class="manifest-subs">
-                ${subTypeOneHTML}
-                ${subTypeTwoHTML}
+                ${subThemesHTML}
             </div>
         </div>
     `;
-    
+
     manifestResultElement.innerHTML = html;
 }
 
