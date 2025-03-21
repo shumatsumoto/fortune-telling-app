@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#6d28d9">${manifestTypes[subType2]}</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[subType2]}</text>
                         
                         <!-- Teeth for sub gear 2 (lighter color) -->
                         <g opacity="0.6">
@@ -200,8 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <rect x="-55" y="-20" width="110" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
-                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#5b21b6">サブテーマ1</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#5b21b6">${manifestTypes[subType1]}</text>
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ1</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[subType1]}</text>
                         
                         <!-- Teeth for sub gear 1 (lighter color) -->
                         <g opacity="0.6">
@@ -228,8 +228,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <rect x="-60" y="-20" width="120" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
-                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#4c1d95">メインテーマ</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" fill="#4c1d95">${manifestTypes[mainType] || manifestTypes[9]}</text>
+                        <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
+                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[mainType] || manifestTypes[9]}</text>
                         
                         <!-- Teeth for main gear (lighter color) -->
                         <g opacity="0.6">
