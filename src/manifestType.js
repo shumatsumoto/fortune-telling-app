@@ -116,9 +116,9 @@ function calculateManifestType(year, month, day) {
         .map(Number)
         .reduce((sum, digit) => sum + digit, 0);
     
-    // 2桁の場合はさらに足す
+    // 特殊ケース11と12の場合はそのまま、それ以外の2桁の場合はさらに足す
     let finalSum = digits;
-    if (finalSum >= 10) {
+    if (finalSum >= 10 && finalSum !== 11 && finalSum !== 12) {
         finalSum = Math.floor(finalSum / 10) + (finalSum % 10);
     }
     
@@ -135,52 +135,80 @@ function calculateManifestType(year, month, day) {
 
 // 顕在個性の結果表示
 function displayManifestResult(result, manifestResultElement) {
-    // メインテーマ
-    const mainType = manifestTypes[result.mainType] || manifestTypes[9]; // 11や12の場合は9として処理
+    // メインテーマを処理
+    let mainTypeHTML = '';
     
-    // サブテーマ
-    const subType1 = manifestTypes[result.subType1];
-    const subType2 = manifestTypes[result.subType2];
+    if (result.mainType === 11) {
+        // 11の場合: 1が2倍強まる
+        const typeOne = manifestTypes[1];
+        mainTypeHTML = `
+            <div class="highlight">${typeOne.name} <span class="text-red-600 font-bold">×2倍の強さ</span></div>
+            <p class="text-gray-700">${typeOne.keywords}</p>
+            <p class="text-purple-700 font-semibold mt-2">※1をダブルで持っているため、その特性が2倍強く現れます</p>
+            <ul class="feature-list mt-2">
+                ${typeOne.features.map(feature => `<li>${feature}</li>`).slice(0, 3).join('')}
+            </ul>
+        `;
+    } else if (result.mainType === 12) {
+        // 12の場合: 1と2の両方を持つ
+        const typeOne = manifestTypes[1];
+        const typeTwo = manifestTypes[2];
+        mainTypeHTML = `
+            <div class="highlight">
+                ${typeOne.name} と ${typeTwo.name} <span class="text-purple-700 font-bold">の両方</span>
+            </div>
+            <p class="text-gray-700">${typeOne.keywords} および ${typeTwo.keywords}</p>
+            <p class="text-purple-700 font-semibold mt-2">※1と2の両方の特性を併せ持っています</p>
+            <ul class="feature-list mt-2">
+                ${typeOne.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('')}
+                ${typeTwo.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('')}
+            </ul>
+        `;
+    } else {
+        // 通常ケース
+        const mainType = manifestTypes[result.mainType] || manifestTypes[9]; // 他の特殊な数字の場合は9として処理
+        mainTypeHTML = `
+            <div class="highlight">${mainType.name}</div>
+            <p class="text-gray-700">${mainType.keywords}</p>
+            <ul class="feature-list mt-2">
+                ${mainType.features.map(feature => `<li>${feature}</li>`).slice(0, 3).join('')}
+            </ul>
+        `;
+    }
     
-    // 結果表示用のHTML - 階層構造を視覚化
+    // サブテーマを処理
+    // サブテーマ1
+    const subTypeOne = manifestTypes[result.subType1];
+    const subTypeOneHTML = result.subType1 !== 0 ? `
+        <div class="manifest-sub">
+            <div class="sub-title">サブテーマ1</div>
+            <div class="highlight">${subTypeOne.name}</div>
+            <p class="text-gray-700">${subTypeOne.keywords}</p>
+        </div>
+    ` : '';
+    
+    // サブテーマ2
+    const subTypeTwo = manifestTypes[result.subType2];
+    const subTypeTwoHTML = result.subType2 !== 0 ? `
+        <div class="manifest-sub">
+            <div class="sub-title">サブテーマ2</div>
+            <div class="highlight">${subTypeTwo.name}</div>
+            <p class="text-gray-700">${subTypeTwo.keywords}</p>
+            <p class="text-sm text-purple-600 mt-2">※メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
+        </div>
+    ` : '';
+    
+    // 最終的なHTML構築
     let html = `
         <div class="manifest-hierarchy">
             <div class="manifest-main">
                 <h4 class="result-title mb-2">メインテーマ</h4>
-                <div class="highlight">${mainType.name}</div>
-                <p class="text-gray-700">${mainType.keywords}</p>
-                <ul class="feature-list mt-2">
-                    ${mainType.features.map(feature => `<li>${feature}</li>`).slice(0, 3).join('')}
-                </ul>
+                ${mainTypeHTML}
             </div>
             
             <div class="manifest-subs">
-    `;
-    
-    // サブテーマ1
-    if (result.subType1 !== 0) {
-        html += `
-            <div class="manifest-sub">
-                <div class="sub-title">サブテーマ1</div>
-                <div class="highlight">${subType1.name}</div>
-                <p class="text-gray-700">${subType1.keywords}</p>
-            </div>
-        `;
-    }
-    
-    // サブテーマ2
-    if (result.subType2 !== 0) {
-        html += `
-            <div class="manifest-sub">
-                <div class="sub-title">サブテーマ2</div>
-                <div class="highlight">${subType2.name}</div>
-                <p class="text-gray-700">${subType2.keywords}</p>
-                <p class="text-sm text-purple-600 mt-2">※メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
-            </div>
-        `;
-    }
-    
-    html += `
+                ${subTypeOneHTML}
+                ${subTypeTwoHTML}
             </div>
         </div>
     `;

@@ -393,9 +393,15 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="summary-section">
                 <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
                 <p class="mb-4">
-                    あなたの顕在個性のメインテーマは<span class="super-highlight">${manifestTypes[manifestType.mainType] || manifestTypes[9]}</span>です。
-                    これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1]}</span>（サブテーマ1）と
-                    <span class="super-highlight">${manifestTypes[manifestType.subType2]}</span>（サブテーマ2）があります。
+                    あなたの顕在個性のメインテーマは
+                    ${manifestType.mainType === 11 ? 
+                        `<span class="super-highlight">創造（自信） (2倍の強さ)</span>` : 
+                        manifestType.mainType === 12 ? 
+                            `<span class="super-highlight">創造（自信） と 人間関係（バランス） の両方</span>` : 
+                            `<span class="super-highlight">${manifestTypes[manifestType.mainType] || '高尚・叡智'}</span>`
+                    }です。
+                    これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1] || ''}</span>（サブテーマ1）と
+                    <span class="super-highlight">${manifestTypes[manifestType.subType2] || ''}</span>（サブテーマ2）があります。
                     <br><br>
                     特に<strong>サブテーマ2</strong>は、メインテーマを動かす小さな歯車として非常に重要です。サブテーマ2に意識を向けることで、
                     あなたの特性をより効果的に発揮することができるでしょう。
