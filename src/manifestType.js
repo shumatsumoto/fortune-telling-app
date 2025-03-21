@@ -35,7 +35,7 @@ const manifestTypes = {
         ]
     },
     4: {
-        name: '安心安定と過程',
+        name: '安心安定（過程）',
         keywords: '安定、安全、基礎、基盤、土台、家族、柔軟性、意欲',
         features: [
             'コツコツ型',
