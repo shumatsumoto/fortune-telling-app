@@ -10,12 +10,12 @@ body {
 
 @keyframes fadeIn {
   from {
-      opacity: 0;
-      transform: translateY(10px);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -129,20 +129,75 @@ body {
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .container {
-      padding: 1rem;
+    padding: 1rem;
   }
-  
+
   /* モバイル向けスタイル調整 */
   #app h1 {
     font-size: 1.75rem;
   }
-  
+
   .grid {
     gap: 1rem;
   }
 }
 
-/* 顕在個性のメイン・サブ関係を視覚的に表現 */
+/* ======= 新しく追加した階層構造のスタイル ======= */
+
+/* 共通の階層構造スタイル */
+.hierarchy-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.main-theme {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sub-elements {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.sub-elements::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  opacity: 0.5;
+}
+
+.sub-element {
+  position: relative;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.sub-element::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  width: 1rem;
+  height: 2px;
+  opacity: 0.5;
+}
+
+.element-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* 顕在個性の階層構造 */
 .manifest-hierarchy {
   display: flex;
   flex-direction: column;
@@ -202,13 +257,155 @@ body {
   margin-bottom: 0.25rem;
 }
 
-/* 結果まとめのスタイル */
+/* 潜在個性の階層構造 */
+.potential-hierarchy {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.potential-main {
+  padding: 1rem;
+  background-color: rgba(234, 179, 8, 0.1);
+  border-radius: 0.5rem;
+  border-left: 4px solid #eab308;
+  margin-bottom: 1rem;
+}
+
+.potential-elements {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.potential-elements::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #eab308;
+  opacity: 0.5;
+}
+
+.potential-element {
+  position: relative;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background-color: rgba(234, 179, 8, 0.05);
+  border-radius: 0.5rem;
+  border-left: 3px solid rgba(234, 179, 8, 0.5);
+}
+
+.potential-element::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  width: 1rem;
+  height: 2px;
+  background-color: #eab308;
+  opacity: 0.5;
+}
+
+.element-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #b45309;
+  margin-bottom: 0.25rem;
+}
+
+/* 勘違いの階層構造 */
+.misunderstanding-hierarchy {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.misunderstanding-main {
+  padding: 1rem;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 0.5rem;
+  border-left: 4px solid #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.misunderstanding-elements {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.misunderstanding-elements::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #3b82f6;
+  opacity: 0.5;
+}
+
+.misunderstanding-element {
+  position: relative;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background-color: rgba(59, 130, 246, 0.05);
+  border-radius: 0.5rem;
+  border-left: 3px solid rgba(59, 130, 246, 0.5);
+}
+
+.misunderstanding-element::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  width: 1rem;
+  height: 2px;
+  background-color: #3b82f6;
+  opacity: 0.5;
+}
+
+.misunderstanding-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1d4ed8;
+  margin-bottom: 0.25rem;
+}
+
+/* まとめセクションのスタイル */
 #resultSummary {
   line-height: 1.8;
 }
 
 #summaryText {
   margin-top: 1rem;
+}
+
+/* まとめセクションに階層スタイルを適用 */
+#summaryText .summary-section:nth-child(1) {
+  background-color: rgba(59, 130, 246, 0.05);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border-left: 4px solid rgba(59, 130, 246, 0.5);
+}
+
+#summaryText .summary-section:nth-child(2) {
+  background-color: rgba(72, 187, 120, 0.05);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border-left: 4px solid rgba(72, 187, 120, 0.5);
+}
+
+#summaryText .summary-section:nth-child(3) {
+  background-color: rgba(234, 179, 8, 0.05);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border-left: 4px solid rgba(234, 179, 8, 0.5);
 }
 
 /* さらに目立つハイライト */

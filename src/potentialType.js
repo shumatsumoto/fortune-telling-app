@@ -94,22 +94,22 @@ const potentialTypes = {
 function calculatePotentialType(year, month, day) {
     // 干支に基づく番号の計算（1から12）
     const zodiacNumber = (year - 4) % 12 + 1;
-    
+
     // 8以下はそのまま、9以上は8を引く
     let type1 = zodiacNumber <= 8 ? zodiacNumber : zodiacNumber - 8;
-    
+
     // 誕生月を8で割った余りを計算
     let type2 = month % 8;
     if (type2 === 0) type2 = 8;
-    
+
     // 誕生日を8で割った余りを計算
     let type3 = day % 8;
     if (type3 === 0) type3 = 8;
-    
+
     // 全体のポイント計算
     let totalPoint = (zodiacNumber + month + day) % 8;
     if (totalPoint === 0) totalPoint = 8;
-    
+
     return {
         type1: type1,
         type2: type2,
@@ -118,54 +118,52 @@ function calculatePotentialType(year, month, day) {
     };
 }
 
-// 潜在個性の結果表示を行う関数
+// 潜在個性の結果表示を行う関数（階層構造版）
 function displayPotentialResult(result, potentialResultElement) {
     // 結果表示用のHTML
     let html = '';
-    
-    // 生まれ変わっても変わらない望み
-    const type1 = potentialTypes[result.type1];
-    html += `
-        <div class="mb-4">
-            <h4 class="result-title mb-2">生まれ変わっても変わらない望み</h4>
-            <div class="highlight">${type1.name}</div>
-            <p class="text-gray-700">${type1.keywords}</p>
-            <ul class="feature-list mt-2">
-                ${type1.features.map(feature => `<li>${feature}</li>`).join('')}
-            </ul>
-        </div>
-    `;
-    
-    // 先祖が応援してくれること
-    const type2 = potentialTypes[result.type2];
-    html += `
-        <div class="mb-4">
-            <h4 class="result-title mb-2">先祖が応援してくれること</h4>
-            <div class="highlight">${type2.name}</div>
-            <p class="text-gray-700">${type2.keywords}</p>
-        </div>
-    `;
-    
-    // 今回の人生の環境設定
-    const type3 = potentialTypes[result.type3];
-    html += `
-        <div class="mb-4">
-            <h4 class="result-title mb-2">今回の人生の環境設定</h4>
-            <div class="highlight">${type3.name}</div>
-            <p class="text-gray-700">${type3.keywords}</p>
-        </div>
-    `;
-    
-    // まとめ・ポイント
+
+    // 潜在個性のまとめ・ポイント（ベースとなる3つの要素が分かるように設計）
     const totalType = potentialTypes[result.totalPoint];
     html += `
-        <div>
-            <h4 class="result-title mb-2">まとめ・ポイント</h4>
-            <div class="highlight">${totalType.name}</div>
-            <p class="text-gray-700">${totalType.keywords}</p>
+        <div class="potential-hierarchy">
+            <!-- メインとなる「まとめ・ポイント」 -->
+            <div class="potential-main">
+                <h4 class="result-title mb-2">まとめ・ポイント</h4>
+                <div class="highlight">${totalType.name}</div>
+                <p class="text-gray-700">${totalType.keywords}</p>
+                <p class="text-sm text-purple-600 mt-2">これは3つの要素から導き出された、あなたの潜在個性の総合的な特性です</p>
+            </div>
+            
+            <!-- 3つの構成要素 -->
+            <div class="potential-elements">
+                <!-- 生まれ変わっても変わらない望み -->
+                <div class="potential-element">
+                    <div class="element-title">生まれ変わっても変わらない望み</div>
+                    <div class="highlight">${potentialTypes[result.type1].name}</div>
+                    <p class="text-gray-700">${potentialTypes[result.type1].keywords}</p>
+                    <ul class="feature-list mt-2">
+                        ${potentialTypes[result.type1].features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <!-- 先祖が応援してくれること -->
+                <div class="potential-element">
+                    <div class="element-title">先祖が応援してくれること</div>
+                    <div class="highlight">${potentialTypes[result.type2].name}</div>
+                    <p class="text-gray-700">${potentialTypes[result.type2].keywords}</p>
+                </div>
+                
+                <!-- 今回の人生の環境設定 -->
+                <div class="potential-element">
+                    <div class="element-title">今回の人生の環境設定</div>
+                    <div class="highlight">${potentialTypes[result.type3].name}</div>
+                    <p class="text-gray-700">${potentialTypes[result.type3].keywords}</p>
+                </div>
+            </div>
         </div>
     `;
-    
+
     potentialResultElement.innerHTML = html;
 }
 
