@@ -78,7 +78,7 @@ const manifestTypes = {
         ]
     },
     8: {
-        name: '豊かさ・需要',
+        name: '豊かさ・受容',
         keywords: '受け入れる、分け与える、力',
         features: [
             '豊かさや力を手に入れて世の中に役立てる',

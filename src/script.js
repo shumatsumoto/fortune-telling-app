@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
             5: '自由（学び）',
             6: '理想、満足',
             7: '信頼・委任',
-            8: '豊かさ・需要',
+            8: '豊かさ・受容',
             9: '高尚・叡智',
             0: '霊感・異質な力'
         };
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
             5: '自由（学び）',
             6: '理想、満足',
             7: '信頼・委任',
-            8: '豊かさ・需要',
+            8: '豊かさ・受容',
             9: '高尚・叡智',
             0: '霊感・異質な力'
         };
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p class="mb-4">
                     あなたの顕在個性のメインテーマは
                     ${manifestType.mainType === 11 ? 
-                        `<span class="super-highlight">創造（自信） (2倍の強さ)</span>` : 
+                        `<span class="super-highlight">創造（自信）<span class="text-red-600 font-bold">×2倍の強さ</span></span>` : 
                         manifestType.mainType === 12 ? 
                             `<span class="super-highlight">創造（自信） と 人間関係（バランス） の両方</span>` : 
                             `<span class="super-highlight">${manifestTypes[manifestType.mainType] || '高尚・叡智'}</span>`
