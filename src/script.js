@@ -437,7 +437,51 @@ document.addEventListener('DOMContentLoaded', function() {
             0: '霊感・異質な力'
         };
 
-        // 潜在個性の特徴説明を追加
+        // 勘違いタイプのアドバイス定義
+        const misunderstandingAdvice = {
+            'できるタイプ': '自分が「できる人」「カッコいい人」である必要はありません。自己像にとらわれず、ありのままの自分を受け入れましょう。',
+            '自称HSPタイプ': '実は繊細さが強みではないことを受け入れると、本来の強みが見えてきます。空気を読まなくても大丈夫です。',
+            '知的タイプ': '答えを出す必要はありません。知性を誇示するより、自分の本当の魅力を見つけましょう。',
+            '優しいタイプ': '言葉にされていない感情を理解するのが苦手でも問題ありません。あなたなりの関わり方を大切にしましょう。',
+            '人事エキスパートタイプ': '人を見る目がなくても大丈夫です。人間関係のコントロールよりも、あなた自身の個性を活かしましょう。',
+            '開けっぱなし症候群': '複数のことを同時にするより、一つずつ確実に終わらせることを意識しましょう。クロージングの重要性を理解します。',
+            '公平タイプ': '公平であろうとする必要はありません。あなたの好き嫌いを大切にして、正直な気持ちで判断しても良いのです。',
+            '違和感センサータイプ': '疑いから入るより、素直に受け入れることで真実に近づけます。些細なことを重大に捉えすぎないよう意識しましょう。',
+            '社会貢献タイプ': '社会的な善や正義を追求するより、自分が本当に好きなことや得意なことに集中しましょう。',
+            '仕事人間タイプ': '仕事ができる必要はありません。むしろ、仕事以外の場面であなたの本当の強みを見つけましょう。',
+            'ユニークタイプ': '独自性や変わった見方をする必要はありません。平凡であっても、あなたの存在そのものに価値があります。',
+            'マザー・テレサタイプ': '全ての人に寄り添おうとする必要はありません。自分を大切にし、無理なく関われる範囲で人と接しましょう。'
+        };
+
+        // 顕在個性の特徴説明を追加
+        const manifestFeatures = {
+            1: ['何かを生み出す能力が高い', 'エネルギーが強く、存在感がある', '独創的で常識にとらわれない', '自己満足の自信が重要'],
+            2: ['人との関わりを通じて自分の良さを発揮する', '協力や貢献の意識が高い', '他者との境界があいまいで、距離感がつかみにくい', 'サポート役が向いている'],
+            3: ['感情や感性が豊か', '気持ちが言葉や行動に乗りやすい', '芸術的な活動に向いている', '素直な感情表現が重要'],
+            4: ['コツコツ型', 'プロセス重視', '両極端な傾向がある', '過程やプロセスを大事にする'],
+            5: ['探究者、冒険者', '学習能力が高い', '頭の回転が早い', '感覚的な鋭敏さがある'],
+            6: ['高い理想を持つ', '完璧主義傾向', '地に足がついた理想家', '理想と現実の接点を見つける'],
+            7: ['自分と他者、自分と人生を信頼し、内面の美しさを世の中に分け与える', '精神の深い世界で洞察力と知恵を持つ', '周囲に分け与える'],
+            8: ['豊かさや力を手に入れて世の中に役立てる', '博愛主義の傾向がある', '自然に集まる富や名声を世のために役立てる'],
+            9: ['溢れ出る知恵に従い、豪傑な人生を送る', '他の人を導く', '理屈や勉強を超えた知恵を使って生きる'],
+            0: ['一般的な人とは異なる潜在的な力を持つ', '見える、聞こえる、わかる、感じるなどの能力がある', '表現力も高い']
+        };
+
+        // 顕在個性の課題説明を追加
+        const manifestChallenges = {
+            1: ['他者評価を求めすぎないこと', '自己満足の自信を大切にすること', 'エネルギーの発散方法を見つけること'],
+            2: ['過干渉や過剰な貢献を避けること', '具体的な線引きをすること', '自分の気持ちと義務感を区別すること'],
+            3: ['感情を押し殺さないこと', '過去の否定的な経験にとらわれすぎないこと', '小さなことから気持ちを表現する練習をすること'],
+            4: ['小さなことで立ち止まりやすい', '極端に無責任になったり過度に干渉したりする', '家族関係（特に父親）の問題'],
+            5: ['自由を求めるあまり、自分勝手やわがままになる可能性', '学びを始めても途中で投げ出しやすい', '器用貧乏になりやすい'],
+            6: ['理想と現実のギャップに苦しむ', '完璧主義による自己否定', '「〜すべき」という思考に縛られやすい'],
+            7: ['理論や学問的知識に頼りすぎる', '占いやセミナーにハマりやすい', '自信たっぷりに見えるが、実は自己防衛反応の表れ'],
+            8: ['豊かさへの恐れや自己否定', '受け取ることが苦手', '権力的になったり、弱者を装ったりする'],
+            9: ['世間一般の常識と合わない', '自分のレベルの高さを受け入れられず、村人と同じように振る舞おうとする'],
+            0: ['自覚しないと変に影響を受けやすい', 'HSP的になりやすい']
+        };
+
+        // 潜在個性の説明を追加
         const potentialDescriptions = {
             1: '上昇志向が高く、本質的なことを知る能力があります。エネルギッシュで視野が広い特徴があります。',
             2: '言葉によるコミュニケーション能力に優れ、五感を生かして華やかさを持って人を引きつけます。',
@@ -473,34 +517,195 @@ document.addEventListener('DOMContentLoaded', function() {
             8: '今回の人生では、「土（地面）」の環境に置かれています。確かな立場やアイデンティティを築き、安定を得る機会に恵まれています。柔軟に人や状況を受け入れ、場を和ませる役割を担う環境です。人と人をつなげる橋渡し役として活躍できるでしょう。'
         };
 
-        // 勘違いタイプの対処法
-        const misunderstandingAdvice = {
-            'できるタイプ': '自分が「できる人」「カッコいい人」である必要はありません。自己像にとらわれず、ありのままの自分を受け入れましょう。',
-            '自称HSPタイプ': '実は繊細さが強みではないことを受け入れると、本来の強みが見えてきます。空気を読まなくても大丈夫です。',
-            '知的タイプ': '答えを出す必要はありません。知性を誇示するより、自分の本当の魅力を見つけましょう。',
-            '優しいタイプ': '言葉にされていない感情を理解するのが苦手でも問題ありません。あなたなりの関わり方を大切にしましょう。',
-            '人事エキスパートタイプ': '人を見る目がなくても大丈夫です。人間関係のコントロールよりも、あなた自身の個性を活かしましょう。',
-            '開けっぱなし症候群': '複数のことを同時にするより、一つずつ確実に終わらせることを意識しましょう。クロージングの重要性を理解します。',
-            '公平タイプ': '公平であろうとする必要はありません。あなたの好き嫌いを大切にして、正直な気持ちで判断しても良いのです。',
-            '違和感センサータイプ': '疑いから入るより、素直に受け入れることで真実に近づけます。些細なことを重大に捉えすぎないよう意識しましょう。',
-            '社会貢献タイプ': '社会的な善や正義を追求するより、自分が本当に好きなことや得意なことに集中しましょう。',
-            '仕事人間タイプ': '仕事ができる必要はありません。むしろ、仕事以外の場面であなたの本当の強みを見つけましょう。',
-            'ユニークタイプ': '独自性や変わった見方をする必要はありません。平凡であっても、あなたの存在そのものに価値があります。',
-            'マザー・テレサタイプ': '全ての人に寄り添おうとする必要はありません。自分を大切にし、無理なく関われる範囲で人と接しましょう。'
-        };
-
-        // Check if we have zero in the manifest type
-        const hasZeroMain = manifestType.mainType === 0 || manifestType.mainType === 10 ||
-          manifestType.mainType === 20 || manifestType.mainType === 30 ||
-          manifestType.mainType === 40 || manifestType.mainType === 50 ||
-          manifestType.mainType === 60 || manifestType.mainType === 70 ||
-          manifestType.mainType === 80 || manifestType.mainType === 90;
+        // 特殊パターンのチェック
+        const hasZeroMain = manifestType.mainType === 0 ||
+          manifestType.mainType === 10 ||
+          manifestType.mainType === 20 ||
+          manifestType.mainType === 30 ||
+          manifestType.mainType === 40 ||
+          manifestType.mainType === 50 ||
+          manifestType.mainType === 60 ||
+          manifestType.mainType === 70 ||
+          manifestType.mainType === 80 ||
+          manifestType.mainType === 90;
 
         const hasZeroSub = manifestType.subType1 === 0 || manifestType.subType2 === 0;
         const nonZeroSub = manifestType.subType1 === 0 ? manifestType.subType2 : manifestType.subType1;
 
-        // まとめの文章を生成
-        let summary = `
+        // メインタイプの名前を取得
+        let mainTypeName = '';
+        if (manifestType.mainType === 11) {
+            mainTypeName = `${manifestTypes[1]} <span class="text-red-600 font-bold">×2倍の強さ</span>`;
+        } else if (manifestType.mainType === 12) {
+            mainTypeName = `${manifestTypes[1]} と ${manifestTypes[2]} <span class="text-purple-700 font-bold">の両方</span>`;
+        } else if (hasZeroMain) {
+            const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
+            mainTypeName = `${manifestTypes[baseType]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span>`;
+        } else {
+            mainTypeName = manifestTypes[manifestType.mainType] || '高尚・叡智';
+        }
+
+        // サブタイプの名前を取得
+        let subType1Name = hasZeroSub && manifestType.subType1 === 0 ?
+          `${manifestTypes[nonZeroSub]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span>` :
+          manifestTypes[manifestType.subType1] || '';
+
+        let subType2Name = hasZeroSub && manifestType.subType2 === 0 ?
+          `${manifestTypes[nonZeroSub]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span>` :
+          manifestTypes[manifestType.subType2] || '';
+
+        // 顕在個性の特徴と課題のテキストを生成
+        let manifestFeaturesText = '';
+        let manifestChallengesText = '';
+
+        // 1. 良い面の文章化（メイン→サブ1→サブ2の順）
+        if (manifestType.mainType === 11) {
+            // 11の場合: 1が2倍強まる
+            manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
+            manifestFeaturesText += manifestFeatures[1].slice(0, 3).map(f => f).join('。') + '。';
+            manifestFeaturesText += ' この特性が通常よりも2倍強く現れるため、創造力とエネルギーの源泉となっています。</p>';
+        } else if (manifestType.mainType === 12) {
+            // 12の場合: 1と2の両方を持つ
+            manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
+            manifestFeaturesText += manifestFeatures[1].slice(0, 2).map(f => f).join('。') + '。';
+            manifestFeaturesText += manifestFeatures[2].slice(0, 2).map(f => f).join('。') + '。';
+            manifestFeaturesText += ' 創造性と協調性の両方を持ち合わせた稀有なタイプです。</p>';
+        } else if (hasZeroMain) {
+            // 0を含む場合
+            const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
+            manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
+            if (baseType !== 0) {
+                manifestFeaturesText += manifestFeatures[baseType].slice(0, 2).map(f => f).join('。') + '。';
+            }
+            manifestFeaturesText += manifestFeatures[0].slice(0, 2).map(f => f).join('。') + '。';
+            manifestFeaturesText += ' 霊的な感性が他の特性を増幅させる特殊なタイプです。</p>';
+        } else {
+            // 通常のケース
+            manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
+            manifestFeaturesText += manifestFeatures[manifestType.mainType].slice(0, 3).map(f => f).join('。') + '。';
+            manifestFeaturesText += ' これがあなたの中心的な個性です。</p>';
+        }
+
+        // サブテーマ1の特徴
+        if (!hasZeroSub || manifestType.subType2 === 0) {
+            manifestFeaturesText += `<p class="mb-2"><strong>サブテーマ1「<span class="super-highlight">${subType1Name}</span>」</strong>: `;
+            if (manifestType.subType1 === 0) {
+                manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
+                manifestFeaturesText += manifestFeatures[0].slice(0, 1).map(f => f).join('。') + '。';
+                manifestFeaturesText += ' 霊的な感性がこの特性を増幅させています。</p>';
+            } else {
+                manifestFeaturesText += manifestFeatures[manifestType.subType1].slice(0, 3).map(f => f).join('。') + '。';
+                manifestFeaturesText += ' この特性がメインテーマをサポートします。</p>';
+            }
+        }
+
+        // サブテーマ2の特徴
+        if (!hasZeroSub && manifestType.subType1 !== 0) {
+            manifestFeaturesText += `<p class="mb-2"><strong>サブテーマ2「<span class="super-highlight">${subType2Name}</span>」</strong>: `;
+            if (manifestType.subType2 === 0) {
+                manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
+                manifestFeaturesText += manifestFeatures[0].slice(0, 1).map(f => f).join('。') + '。';
+                manifestFeaturesText += ' 霊的な感性がこの特性を増幅させています。</p>';
+            } else {
+                manifestFeaturesText += manifestFeatures[manifestType.subType2].slice(0, 3).map(f => f).join('。') + '。';
+                manifestFeaturesText += ' これがメインテーマを動かす小さな歯車となります。</p>';
+            }
+        }
+
+        // 2. 課題・注意点の文章化（サブ2→サブ1→メインの順）
+        // サブテーマ2の課題
+        if (!hasZeroSub && manifestType.subType1 !== 0) {
+            manifestChallengesText += `<p class="mb-2"><strong>サブテーマ2「<span class="super-highlight">${subType2Name}</span>」の課題</strong>: `;
+            if (manifestType.subType2 === 0) {
+                manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
+                manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
+                manifestChallengesText += ' 霊的な感性の扱いに注意しましょう。</p>';
+            } else {
+                manifestChallengesText += manifestChallenges[manifestType.subType2].slice(0, 3).map(c => c).join('。') + '。';
+                manifestChallengesText += ' この小さな歯車の課題に取り組むことで、全体が効率よく動き出します。</p>';
+            }
+        }
+
+        // サブテーマ1の課題
+        if (!hasZeroSub || manifestType.subType2 === 0) {
+            manifestChallengesText += `<p class="mb-2"><strong>サブテーマ1「<span class="super-highlight">${subType1Name}</span>」の課題</strong>: `;
+            if (manifestType.subType1 === 0) {
+                manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
+                manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
+                manifestChallengesText += ' 霊的な感性の扱いに注意しましょう。</p>';
+            } else {
+                manifestChallengesText += manifestChallenges[manifestType.subType1].slice(0, 3).map(c => c).join('。') + '。';
+                manifestChallengesText += ' これらの課題に対処することで、サブテーマの力がより発揮されます。</p>';
+            }
+        }
+
+        // メインテーマの課題
+        manifestChallengesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」の課題</strong>: `;
+        if (manifestType.mainType === 11) {
+            manifestChallengesText += manifestChallenges[1].slice(0, 3).map(c => c).join('。') + '。';
+            manifestChallengesText += ' これらの課題は通常よりも注意が必要です。</p>';
+        } else if (manifestType.mainType === 12) {
+            manifestChallengesText += manifestChallenges[1].slice(0, 2).map(c => c).join('。') + '。';
+            manifestChallengesText += manifestChallenges[2].slice(0, 2).map(c => c).join('。') + '。';
+            manifestChallengesText += ' 両方の特性のバランスを取ることが重要です。</p>';
+        } else if (hasZeroMain) {
+            const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
+            if (baseType !== 0) {
+                manifestChallengesText += manifestChallenges[baseType].slice(0, 2).map(c => c).join('。') + '。';
+            }
+            manifestChallengesText += manifestChallenges[0].slice(0, 2).map(c => c).join('。') + '。';
+            manifestChallengesText += ' 霊的な感性の扱いに注意しましょう。</p>';
+        } else {
+            manifestChallengesText += manifestChallenges[manifestType.mainType].slice(0, 3).map(c => c).join('。') + '。';
+            manifestChallengesText += ' これらの課題に向き合うことで、あなたの個性がより輝きます。</p>';
+        }
+
+        // 特殊パターンの注釈
+        let specialNoteText = '';
+        if (hasZeroMain || hasZeroSub) {
+            specialNoteText = `
+            <div class="bg-purple-50 p-2 rounded-md mt-3 mb-2">
+                <p class="text-sm text-purple-800 font-medium">
+                    <strong>※特別な注意点：</strong>
+                    「霊感・異質な力」(0)が含まれる特殊なパターンです。これは霊的資質や潜在能力を表し、
+                    組み合わさる数字の個性をより洗練された感性や直感力などで増幅させる効果があります。
+                    繊細さを生かしつつ、霊的な影響に振り回されないよう注意しましょう。
+                </p>
+            </div>
+        `;
+        }
+
+        // 顕在個性セクションを作成
+        const manifestSection = `
+        <div class="summary-section">
+            <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
+            <div class="mb-4">
+                <h5 class="font-medium text-purple-700 mb-2">▼ 強み・特徴：</h5>
+                <div class="text-gray-700 leading-relaxed">
+                    ${manifestFeaturesText}
+                </div>
+                
+                <h5 class="font-medium text-purple-700 mt-4 mb-2">▼ 課題・注意点：</h5>
+                <div class="text-gray-700 leading-relaxed">
+                    ${manifestChallengesText}
+                </div>
+                
+                ${specialNoteText}
+                
+                <div class="text-sm bg-green-50 p-2 rounded-md mt-3">
+                    <p class="text-green-800 font-medium">
+                        <strong>💡 歯車のポイント：</strong>
+                        顕在個性は連動する歯車のような仕組みです。小さな歯車（サブテーマ2）から動かすと、
+                        中くらいの歯車（サブテーマ1）を経て、大きな歯車（メインテーマ）が効率よく動き出します。
+                        まずはサブテーマ2の課題に取り組むことをおすすめします。
+                    </p>
+                </div>
+            </div>
+        </div>
+    `;
+
+        // 勘違いセクションを作成
+        const misunderstandingSection = `
         <div class="summary-section">
             <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの勘違い</h4>
             <p class="mb-4">
@@ -512,44 +717,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span class="font-semibold text-purple-700">アドバイス：</span>${misunderstandingAdvice[misunderstandingType.type] || '勘違いを知ることで自然体の自分に戻ることができます。'}
             </p>
         </div>
+    `;
 
-        <div class="summary-section">
-            <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
-            <p class="mb-4">
-                あなたの顕在個性のメインテーマは
-                ${manifestType.mainType === 11 ?
-          `<span class="super-highlight">創造（自信）<span class="text-red-600 font-bold">×2倍の強さ</span></span>` :
-          manifestType.mainType === 12 ?
-            `<span class="super-highlight">創造（自信） と 人間関係（バランス） の両方</span>` :
-            hasZeroMain ?
-              `<span class="super-highlight">${manifestTypes[parseInt(manifestType.mainType.toString()[0]) || 0]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span></span>` :
-              `<span class="super-highlight">${manifestTypes[manifestType.mainType] || '高尚・叡智'}</span>`
-        }です。
-                
-                ${hasZeroSub ?
-          `これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[nonZeroSub]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span></span>があります。
-                    このサブテーマには霊的資質（0）が組み合わさっており、その特性が霊的に増幅されています。` :
-
-          `これを動かすサブテーマとして<span class="super-highlight">${manifestTypes[manifestType.subType1] || ''}</span>（サブテーマ1）と
-                    <span class="super-highlight">${manifestTypes[manifestType.subType2] || ''}</span>（サブテーマ2）があります。
-                    <br>
-                    <div class="text-sm bg-purple-50 p-2 rounded-md mt-2">
-                      特に<strong>サブテーマ2</strong>は、メインテーマを動かす小さな歯車として非常に重要です。サブテーマ2に意識を向けることで、
-                      あなたの特性をより効果的に発揮することができるでしょう。
-                    </div>`
-        }
-
-                ${hasZeroMain || hasZeroSub ?
-          `<br><br>
-                    <span class="bg-purple-50 p-2 rounded-md block mt-2 text-purple-800">
-                        <strong>0（霊感・異質な力）</strong>が含まれる特殊パターンです。これは霊的資質や潜在能力を表し、
-                        組み合わさる数字の個性をより洗練された感性や直感力などで増幅させる効果があります。
-                        普通の数字よりも複雑で深い特性を持っているといえるでしょう。
-                    </span>` : ''
-        }
-            </p>
-        </div>
-
+        // 潜在個性セクションを作成
+        const potentialSection = `
         <div class="summary-section">
             <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの潜在個性</h4>
             <p class="mb-3">
@@ -584,7 +755,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
             </p>
         </div>
+    `;
 
+        // 総合評価セクションを作成
+        const summarySection = `
         <div class="summary-section">
             <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 総合的な評価</h4>
             <p>
@@ -596,6 +770,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 あなた本来の才能や特性を活かした生き方を選んでいきましょう。
             </p>
         </div>
+    `;
+
+        // 最終的なまとめテキスト
+        let summary = `
+        ${misunderstandingSection}
+        ${manifestSection}
+        ${potentialSection}
+        ${summarySection}
     `;
 
         // HTMLに結果を表示
