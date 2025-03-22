@@ -733,4 +733,131 @@ document.addEventListener('DOMContentLoaded', function() {
             daySelect.value = currentDay;
         }
     }
+
+    // デバッグ機能追加
+    const diagnosisForm = document.getElementById('diagnosisForm');
+    diagnosisForm.addEventListener('submit', function(e) {
+        // 入力値の取得
+        const year = document.getElementById('birthYear').value;
+        const month = document.getElementById('birthMonth').value;
+        const day = document.getElementById('birthDay').value;
+        const hour = document.getElementById('birthHour').value || '12';
+        const minute = document.getElementById('birthMinute').value || '0';
+
+        // フォームの通常処理は続行させる
+
+        // 少し遅延させてコンソールにログを出力（計算完了後に実行するため）
+        setTimeout(() => {
+            // 計算された値を取得
+            const moonSign = document.getElementById('calculatedMoonSign').value;
+            const mainType = document.getElementById('mainTypeHidden').value;
+            const subType1 = document.getElementById('subType1Hidden').value;
+            const subType2 = document.getElementById('subType2Hidden').value;
+
+            if (moonSign && mainType) {
+                // タイプ名称の定義
+                const manifestTypes = {
+                    1: '創造（自信）',
+                    2: '人間関係（バランス）',
+                    3: '感情、感性（表現）',
+                    4: '安心安定（過程）',
+                    5: '自由（学び）',
+                    6: '理想、満足',
+                    7: '信頼・委任',
+                    8: '豊かさ・受容',
+                    9: '高尚・叡智',
+                    0: '霊感・異質な力',
+                    11: '創造（自信）×2倍',
+                    12: '創造（自信）と人間関係（バランス）'
+                };
+
+                const potentialTypes = {
+                    1: '宇宙（天）',
+                    2: '金（ゴールド）',
+                    3: '炎（火）',
+                    4: '樹木',
+                    5: '風',
+                    6: '水',
+                    7: '山',
+                    8: '土（地面）'
+                };
+
+                const misunderstandingTypes = {
+                    '牡羊座': 'できるタイプ',
+                    '牡牛座': '自称HSPタイプ',
+                    '双子座': '知的タイプ',
+                    '蟹座': '優しいタイプ',
+                    '獅子座': '人事エキスパートタイプ',
+                    '乙女座': '開けっぱなし症候群',
+                    '天秤座': '公平タイプ',
+                    '蠍座': '違和感センサータイプ',
+                    '射手座': '社会貢献タイプ',
+                    '山羊座': '仕事人間タイプ',
+                    '水瓶座': 'ユニークタイプ',
+                    '魚座': 'マザー・テレサタイプ'
+                };
+
+                // 特殊マニフェストタイプの処理
+                let mainTypeName = manifestTypes[mainType] || '';
+                if (!mainTypeName && typeof mainType === 'string' && mainType.endsWith('0')) {
+                    const firstDigit = mainType.toString()[0];
+                    const baseName = manifestTypes[parseInt(firstDigit)] || '不明';
+                    mainTypeName = `${baseName} ＋霊感・増幅`;
+                }
+
+                // 潜在個性の計算
+                const potentialType = window.PotentialTypeCalculator.calculatePotentialType(
+                  parseInt(year), parseInt(month), parseInt(day)
+                );
+
+                // 勘違いタイプの取得
+                const misunderstandingType = window.MisunderstandingTypeCalculator.getMisunderstandingType(moonSign);
+
+                // コンソール出力
+                console.log('============= 勘違い鑑定結果 =============');
+                console.log(`入力情報: ${year}年${month}月${day}日 ${hour}時${minute}分`);
+                console.log('----------------------------------------');
+
+                // 月星座と勘違い
+                console.log(`【月星座】${moonSign}`);
+                console.log(`【勘違い】${moonSign}: ${misunderstandingTypes[moonSign] || misunderstandingType.type}`);
+                console.log(`  説明: ${misunderstandingType.description}`);
+                console.log(`  実際: ${misunderstandingType.reality}`);
+                console.log('----------------------------------------');
+
+                // 顕在個性の詳細出力
+                console.log('【顕在個性】');
+                console.log(`  メインタイプ: ${mainType} ${mainTypeName}`);
+
+                // 特殊なメインタイプの追加説明
+                if (mainType === 11) {
+                    console.log('  特殊パターン: 1が2倍強まったタイプ');
+                } else if (mainType === 12) {
+                    console.log('  特殊パターン: 1と2の両方を持つタイプ');
+                } else if (mainType === 0 || (typeof mainType === 'string' && mainType.endsWith('0'))) {
+                    console.log(`  特殊パターン: 霊感・増幅 (0) を含むパターン`);
+                }
+
+                console.log(`  サブタイプ1: ${subType1} ${manifestTypes[subType1] || ''}`);
+                console.log(`  サブタイプ2: ${subType2} ${manifestTypes[subType2] || ''}`);
+
+                // 0が含まれるかチェック
+                const hasZero = subType1 == 0 || subType2 == 0;
+                if (hasZero) {
+                    console.log('  特殊サブタイプ: 霊感・増幅 (0) を含むサブパターン');
+                }
+
+                console.log('----------------------------------------');
+
+                // 潜在個性の詳細出力
+                console.log('【潜在個性】');
+                console.log(`  生まれ変わっても変わらない望み: ${potentialType.type1} ${potentialTypes[potentialType.type1] || ''}`);
+                console.log(`  先祖が応援してくれること: ${potentialType.type2} ${potentialTypes[potentialType.type2] || ''}`);
+                console.log(`  今回の人生の環境設定: ${potentialType.type3} ${potentialTypes[potentialType.type3] || ''}`);
+                console.log(`  総合ポイント: ${potentialType.totalPoint} ${potentialTypes[potentialType.totalPoint] || ''}`);
+
+                console.log('=========================================');
+            }
+        }, 500); // 0.5秒遅延
+    });
 });
