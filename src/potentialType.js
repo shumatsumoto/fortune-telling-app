@@ -132,7 +132,7 @@ function displayPotentialResult(result, potentialResultElement) {
                 <h4 class="result-title mb-2">まとめ・ポイント</h4>
                 <div class="highlight">${totalType.name}</div>
                 <p class="text-gray-700">${totalType.keywords}</p>
-                <p class="text-sm text-purple-600 mt-2">これは3つの要素から導き出された、あなたの潜在個性の総合的な特性です</p>
+                <p class="text-sm text-purple-600 mt-2">あなたの潜在個性のベースとなる、総合的な特性です</p>
             </div>
             
             <!-- 3つの構成要素 -->
