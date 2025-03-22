@@ -1,5 +1,3 @@
-// manifestType.js - 顕在個性の計算と表示を担当するファイル
-
 // 顕在個性の名称とキーワード定義
 const manifestTypes = {
     1: {
@@ -157,7 +155,43 @@ const manifestTypes = {
         ],
         challenges: [
             '自覚しないと変に影響を受けやすい',
-            'HSP的になりやすい'
+            'HSP的になりやすい',
+            '特殊な感性に頼りすぎると現実感覚を失う可能性がある'
+        ]
+    },
+    // 特殊パターン用の定義を追加
+    11: {
+        name: '創造（自信）×2倍の強さ',
+        keywords: '想像力、エネルギー、存在感、増幅',
+        features: [
+            '何かを生み出す能力が非常に高い',
+            'エネルギーが特に強く、存在感が際立つ',
+            '独創的で常識に全くとらわれない',
+            '自己満足の自信が極めて重要',
+            '創造力が2倍に増幅されている特殊パターン'
+        ],
+        challenges: [
+            '他者評価を求めすぎないことが特に重要',
+            '自己満足の自信を確立すること',
+            'エネルギーの効果的な発散方法を見つけること',
+            '強すぎるエネルギーをコントロールすること'
+        ]
+    },
+    12: {
+        name: '創造（自信）と人間関係（バランス）の両方',
+        keywords: '想像力、エネルギー、協力、貢献、融合',
+        features: [
+            '創造力と協調性の両方を持ち合わせている',
+            '独創的でありながら人との関わりも大切にする',
+            'エネルギッシュかつサポーティブ',
+            '自分の創造性と人との関わりのバランスを取れる',
+            '両方の特性を持つ稀有なタイプ'
+        ],
+        challenges: [
+            '創造性と協調性のバランスを取ること',
+            '時に相反する二つの特性を調和させること',
+            '自己表現と他者貢献の間で揺れ動く可能性',
+            '両方の特性を活かす場を見つけること'
         ]
     }
 };
@@ -183,37 +217,44 @@ function calculateManifestType(year, month, day) {
     return {
         mainType: finalSum,
         subType1: subTheme1,
-        subType2: subTheme2
+        subType2: subTheme2,
+        originalSum: digits // デバッグや詳細表示のために元の合計値も返す
     };
 }
 
-// 顕在個性の結果表示（リスト形式で分割表示）
+// 顕在個性の結果表示（リスト形式で分割表示）- 改良版
 function displayManifestResult(result, manifestResultElement) {
     // 特殊ケース（11, 12, 0を含む）の処理
-    const hasZeroMain = result.mainType === 0 || (typeof result.mainType === 'string' && result.mainType.endsWith('0'));
+    const hasZeroMain = result.mainType === 0 || (typeof result.mainType === 'string' && result.mainType.includes('0'));
     const hasZeroSub = result.subType1 === 0 || result.subType2 === 0;
     const nonZeroSub = result.subType1 === 0 ? result.subType2 : result.subType1;
+
+    // 特殊パターンのクラス名を決定
+    let specialClass = '';
+    if (result.mainType === 11) {
+        specialClass = 'type-11';
+    } else if (result.mainType === 12) {
+        specialClass = 'type-12';
+    } else if (hasZeroMain || hasZeroSub) {
+        specialClass = 'type-zero';
+    }
 
     // HTMLを構築（他のセクションのスタイルに合わせて修正）
     let html = `
         <div class="manifest-content mb-4">
             <!-- メインテーマ -->
-            <div class="highlight">
+            <div class="highlight ${specialClass}">
     `;
 
     // メインテーマの情報
     if (result.mainType === 11) {
         // 11の場合: 1が2倍強まる
-        const typeOne = manifestTypes[1];
-        html += `メインテーマ：${typeOne.name} <span class="text-red-600 font-bold">×2倍の強さ</span>`;
+        html += `メインテーマ：${manifestTypes[11].name}`;
     } else if (result.mainType === 12) {
         // 12の場合: 1と2の両方を持つ
-        const typeOne = manifestTypes[1];
-        const typeTwo = manifestTypes[2];
-        html += `メインテーマ：${typeOne.name} と ${typeTwo.name} <span class="text-purple-700 font-bold">の両方</span>`;
+        html += `メインテーマ：${manifestTypes[12].name}`;
     } else if (hasZeroMain) {
         // 0を含む場合: 霊感・異質な力が加わる
-        const typeZero = manifestTypes[0];
         const baseType = parseInt(result.mainType.toString()[0]) || 0;
         const pairedType = manifestTypes[baseType] || manifestTypes[0];
 
@@ -232,27 +273,22 @@ function displayManifestResult(result, manifestResultElement) {
     // メインテーマの特徴文
     if (result.mainType === 11) {
         // 11の場合: 1が2倍強まる
-        const typeOne = manifestTypes[1];
-        html += typeOne.features.slice(0, 3).map(f => f).join('。') + '。';
-        html += ` <span class="text-purple-600">この特性が通常より2倍強く現れます。</span>`;
+        html += manifestTypes[11].features.slice(0, 4).map(f => f).join('。') + '。';
+        html += ` <span class="text-purple-600">他にない強力な創造性とエネルギーを持っています。</span>`;
     } else if (result.mainType === 12) {
         // 12の場合: 1と2の両方を持つ
-        const typeOne = manifestTypes[1];
-        const typeTwo = manifestTypes[2];
-        html += typeOne.features.slice(0, 2).map(f => f).join('。') + '。';
-        html += typeTwo.features.slice(0, 2).map(f => f).join('。') + '。';
-        html += ` <span class="text-purple-600">創造性と協調性の両方を持つ稀なタイプです。</span>`;
+        html += manifestTypes[12].features.slice(0, 4).map(f => f).join('。') + '。';
+        html += ` <span class="text-purple-600">両方の特性を調和させることで大きな力を発揮します。</span>`;
     } else if (hasZeroMain) {
         // 0を含む場合: 霊感・異質な力が加わる
-        const typeZero = manifestTypes[0];
         const baseType = parseInt(result.mainType.toString()[0]) || 0;
         const pairedType = manifestTypes[baseType] || manifestTypes[0];
 
         if (baseType !== 0) {
             html += pairedType.features.slice(0, 2).map(f => f).join('。') + '。';
         }
-        html += typeZero.features.slice(0, 2).map(f => f).join('。') + '。';
-        html += ` <span class="text-purple-600">霊的な感性が他の特性を増幅させます。</span>`;
+        html += manifestTypes[0].features.slice(0, 2).map(f => f).join('。') + '。';
+        html += ` <span class="text-purple-600">霊的な感性や直感力が強く、他の特性を増幅させます。</span>`;
     } else {
         // 通常のケース
         const mainType = manifestTypes[result.mainType] || manifestTypes[9];
@@ -285,8 +321,8 @@ function displayManifestResult(result, manifestResultElement) {
         const typeZero = manifestTypes[0];
 
         html += `
-            <div class="highlight mt-3">サブテーマ：${nonZeroTypeData.name} <span class="text-indigo-600 font-bold">＋霊感・増幅</span></div>
-            <p class="text-gray-700 mt-2">${nonZeroTypeData.features.slice(0, 2).map(f => f).join('。')}。${typeZero.features.slice(0, 1).map(f => f).join('。')}。 <span class="text-purple-600">霊的な感性がこの特性を増幅させます。</span></p>
+            <div class="highlight type-zero mt-3">サブテーマ：${nonZeroTypeData.name} <span class="text-indigo-600 font-bold">＋霊感・増幅</span></div>
+            <p class="text-gray-700 mt-2">${nonZeroTypeData.features.slice(0, 2).map(f => f).join('。')}。${typeZero.features.slice(0, 1).map(f => f).join('。')}。 <span class="text-purple-600">霊的な感性がこの特性を増幅させ、より洗練された直感力を発揮します。</span></p>
         `;
     }
 
@@ -301,14 +337,22 @@ function displayManifestResult(result, manifestResultElement) {
     `;
 
     // 課題のテキスト
-    if (hasZeroSub) {
+    if (result.mainType === 11) {
+        // 11の場合: 強化された1の課題
+        html += manifestTypes[11].challenges.slice(0, 3).map(c => c).join('。') + '。';
+        html += ` <span class="text-purple-600">通常より強いエネルギーをどう扱うかがポイントです。</span>`;
+    } else if (result.mainType === 12) {
+        // 12の場合: 1と2の融合パターンの課題
+        html += manifestTypes[12].challenges.slice(0, 3).map(c => c).join('。') + '。';
+        html += ` <span class="text-purple-600">二つの特性のバランスを取ることが大切です。</span>`;
+    } else if (hasZeroSub) {
         // 0を含むサブテーマの課題（特殊ケース）
         const nonZeroTypeData = manifestTypes[nonZeroSub];
         const typeZero = manifestTypes[0];
 
         html += nonZeroTypeData.challenges.slice(0, 2).map(c => c).join('。') + '。';
         html += typeZero.challenges.slice(0, 1).map(c => c).join('。') + '。';
-        html += ` <span class="text-purple-600">まずはこの課題から取り組みましょう。</span>`;
+        html += ` <span class="text-purple-600">霊的な感性と現実とのバランスを取りましょう。</span>`;
     } else if (result.subType2 !== 0) {
         // サブテーマ2の課題（通常のケース）
         const subType2 = manifestTypes[result.subType2];
@@ -326,13 +370,38 @@ function displayManifestResult(result, manifestResultElement) {
     `;
 
     // 特殊パターンの注釈
-    if (hasZeroMain || hasZeroSub) {
+    if (result.mainType === 11) {
+        html += `
+            <div class="manifest-element">
+                <div class="manifest-title">特別な注意点</div>
+                <p class="text-sm text-red-600">
+                    <strong>「創造（自信）×2倍の強さ」</strong>は特殊な数秘パターンです。
+                    このパターンでは、創造性とエネルギーが通常より2倍強く現れます。
+                    その強さをうまくコントロールし、発散する方法を見つけることが重要です。
+                    あなたの独創性と存在感は他の人に大きな影響を与えることでしょう。
+                </p>
+            </div>
+        `;
+    } else if (result.mainType === 12) {
         html += `
             <div class="manifest-element">
                 <div class="manifest-title">特別な注意点</div>
                 <p class="text-sm text-purple-600">
-                    「霊感・異質な力」(0)が含まれる特殊なパターンです。これは霊的資質や潜在能力を表し、
+                    <strong>「創造（自信）と人間関係（バランス）の両方」</strong>は特殊な数秘パターンです。
+                    このパターンでは、創造性と協調性の両方の特性を持っています。
+                    時に相反するこの二つの特性をうまく調和させることができると、
+                    独創的でありながら人との関わりも大切にするバランスの取れた個性を発揮できるでしょう。
+                </p>
+            </div>
+        `;
+    } else if (hasZeroMain || hasZeroSub) {
+        html += `
+            <div class="manifest-element">
+                <div class="manifest-title">特別な注意点</div>
+                <p class="text-sm text-indigo-600">
+                    <strong>「霊感・異質な力」(0)</strong>が含まれる特殊なパターンです。これは霊的資質や潜在能力を表し、
                     組み合わさる数字の個性をより洗練された感性や直感力などで増幅させる効果があります。
+                    繊細さを生かしつつも、霊的な影響に振り回されないよう、現実とのバランスを取ることが大切です。
                 </p>
             </div>
         `;
@@ -343,8 +412,8 @@ function displayManifestResult(result, manifestResultElement) {
             <div class="manifest-element">
                 <div class="manifest-title">ポイント</div>
                 <p class="text-sm text-purple-600">
-                    勘違いを知ると、それだけで外れるのが特徴です。あなたが苦手なことはやらなくて大丈夫です。
-                    ${!hasZeroSub ? 'サブテーマ2（小さな歯車）から取り組むのが効果的です。' : ''}
+                    ${!hasZeroSub && result.subType2 !== 0 ? 'サブテーマ2（小さな歯車）から取り組むのが効果的です。' : ''}
+                    ${result.mainType === 11 || result.mainType === 12 ? '特殊パターンの持ち主として、その独自性を活かすことがポイントです。' : ''}
                 </p>
             </div>
         </div>
@@ -357,5 +426,6 @@ function displayManifestResult(result, manifestResultElement) {
 // エクスポート設定（window.ManifestTypeCalculatorの一部として定義）
 window.ManifestTypeCalculator = {
     calculateManifestType,
-    displayManifestResult
+    displayManifestResult,
+    manifestTypes // 他のファイルからも参照できるようにタイプ定義もエクスポート
 };

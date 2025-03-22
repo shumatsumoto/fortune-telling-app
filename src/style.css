@@ -666,3 +666,168 @@ button[type="submit"]:hover::before {
   padding: 0.5rem 1rem;
   font-weight: 500;
 }
+
+/* Special patterns styling enhancement */
+
+/* Special highlight for type 11 */
+.type-11 {
+  background: linear-gradient(135deg, rgba(252, 231, 243, 0.6), rgba(254, 226, 226, 0.4));
+  border-left: 4px solid #e11d48;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.type-11::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+          45deg,
+          rgba(225, 29, 72, 0.1),
+          rgba(225, 29, 72, 0.1) 10px,
+          transparent 10px,
+          transparent 20px
+  );
+  opacity: 0.2;
+  z-index: -1;
+}
+
+/* Special highlight for type 12 */
+.type-12 {
+  background: linear-gradient(135deg, rgba(243, 232, 255, 0.6), rgba(237, 233, 254, 0.4));
+  border-left: 4px solid #8b5cf6;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.type-12::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+          -45deg,
+          rgba(139, 92, 246, 0.1),
+          rgba(139, 92, 246, 0.1) 10px,
+          transparent 10px,
+          transparent 20px
+  );
+  opacity: 0.2;
+  z-index: -1;
+}
+
+/* Special highlight for types with zero */
+.type-zero {
+  background: linear-gradient(135deg, rgba(196, 181, 253, 0.3), rgba(224, 231, 255, 0.2));
+  border-left: 4px solid #6366f1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.type-zero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+          circle at center,
+          rgba(139, 92, 246, 0.1) 0%,
+          transparent 70%
+  );
+  z-index: -1;
+  animation: pulse-zero 3s infinite;
+}
+
+@keyframes pulse-zero {
+  0% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.1; }
+}
+
+/* Enhanced visualization for artifacts */
+.gear-visualization-container {
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(196, 181, 253, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.gear-visualization-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M10%208.586L5.636%204.222l-.707.708L9.293%209.293a1%201%200%20001.414%200l4.364-4.364-.707-.707L10%208.586z%22%20fill%3D%22%23c4b5fd%22%20fill-opacity%3D%220.2%22%2F%3E%3C%2Fsvg%3E');
+  opacity: 0.05;
+  z-index: -1;
+}
+
+/* Enhanced super-highlight for better readability */
+.super-highlight {
+  font-weight: 600;
+  color: #6b46c1;
+  background-color: rgba(159, 122, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(107, 70, 193, 0.1);
+  border: 1px solid rgba(196, 181, 253, 0.3);
+}
+
+/* Special styling for special patterns in super-highlight */
+.super-highlight.type-11 {
+  color: #e11d48;
+  background-color: rgba(252, 231, 243, 0.3);
+  border: 1px solid rgba(252, 165, 165, 0.4);
+}
+
+.super-highlight.type-12 {
+  color: #8b5cf6;
+  background-color: rgba(243, 232, 255, 0.3);
+  border: 1px solid rgba(196, 181, 253, 0.4);
+}
+
+.super-highlight.type-zero {
+  color: #6366f1;
+  background-color: rgba(224, 231, 255, 0.3);
+  border: 1px solid rgba(165, 180, 252, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.super-highlight.type-zero::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: radial-gradient(
+          circle at center,
+          rgba(139, 92, 246, 0.2) 0%,
+          transparent 70%
+  );
+  z-index: -1;
+  animation: pulse-zero 3s infinite;
+}

@@ -1,6 +1,5 @@
-// DOM要素が読み込まれた後に実行
 document.addEventListener('DOMContentLoaded', function() {
-    // フォーム要素の取得
+    // Form elements
     const form = document.getElementById('diagnosisForm');
     const resultArea = document.getElementById('resultArea');
     const resetButton = document.getElementById('resetButton');
@@ -12,16 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const japanPrefectureContainer = document.getElementById('japanPrefectureContainer');
     const otherCountryContainer = document.getElementById('otherCountryContainer');
     const summaryText = document.getElementById('summaryText');
-    
-    // 生年月日と時間のセレクトボックスに選択肢を追加
+
+    // Initialize form fields
     populateYearOptions();
     populateMonthOptions();
     populateDayOptions();
     populateHourOptions();
     populateMinuteOptions();
     populatePrefectureOptions();
-    
-    // 国選択の変更イベント
+
+    // Country selection change event
     birthCountrySelect.addEventListener('change', function() {
         if (this.value === 'JP') {
             japanPrefectureContainer.classList.remove('hidden');
@@ -31,32 +30,32 @@ document.addEventListener('DOMContentLoaded', function() {
             otherCountryContainer.classList.remove('hidden');
         }
     });
-    
-    // フォームの送信イベント（診断実行）
+
+    // Form submission event (run diagnosis)
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // 入力値の取得
+
+        // Get input values
         const year = document.getElementById('birthYear').value;
         const month = document.getElementById('birthMonth').value;
         const day = document.getElementById('birthDay').value;
         const hour = document.getElementById('birthHour').value || '12';
         const minute = document.getElementById('birthMinute').value || '0';
-        
-        // 入力値の検証
+
+        // Validate inputs
         if (!year || !month || !day) {
             alert('生年月日を入力してください');
             return;
         }
-        
-        // 緯度・経度の取得
+
+        // Get latitude and longitude
         let latitude, longitude;
-        
+
         if (birthCountrySelect.value === 'JP') {
-            // 日本の場合は都道府県から緯度経度を取得
+            // For Japan, get coordinates from prefecture
             const prefectureSelect = document.getElementById('birthPrefecture');
             const prefectureIndex = prefectureSelect.value;
-            
+
             if (prefectureIndex && prefectureIndex !== '') {
                 const prefecture = window.MoonCalculator.PREFECTURES[parseInt(prefectureIndex)];
                 latitude = prefecture.latitude;
@@ -66,69 +65,69 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
         } else {
-            // その他の国の場合は入力された緯度経度を使用
+            // For other countries, use input coordinates
             latitude = document.getElementById('latitudeInput').value;
             longitude = document.getElementById('longitudeInput').value;
-            
+
             if (!latitude || !longitude) {
                 alert('緯度・経度を入力してください');
                 return;
             }
         }
-        
-        // 月星座を計算
+
+        // Calculate moon sign
         const birthData = {
             year, month, day, hour, minute, latitude, longitude
         };
-        
+
         const moonSignResult = window.MoonCalculator.calculateMoonZodiacSign(birthData);
-        
+
         if (!moonSignResult.success) {
             alert(moonSignResult.message || '月星座の計算に失敗しました。入力内容を確認してください。');
             return;
         }
-        
-        // 計算された月星座をhiddenフィールドに保存
+
+        // Save calculated moon sign to hidden field
         calculatedMoonSign.value = moonSignResult.moonSign;
-        
-        // 数値型に変換
+
+        // Convert to numeric
         const numYear = parseInt(year);
         const numMonth = parseInt(month);
         const numDay = parseInt(day);
-        
-        // 診断結果の計算 - 分離したファイルの関数を使用
+
+        // Calculate diagnosis results using functions from imported files
         const potentialType = window.PotentialTypeCalculator.calculatePotentialType(numYear, numMonth, numDay);
         const manifestType = window.ManifestTypeCalculator.calculateManifestType(numYear, numMonth, numDay);
         const misunderstandingType = window.MisunderstandingTypeCalculator.getMisunderstandingType(moonSignResult.moonSign);
 
-        // 計算結果を隠しフィールドに保存
+        // Save results to hidden fields
         document.getElementById('mainTypeHidden').value = manifestType.mainType;
         document.getElementById('subType1Hidden').value = manifestType.subType1;
         document.getElementById('subType2Hidden').value = manifestType.subType2;
 
-        // 結果の表示 - 分離したファイルの関数を使用
+        // Display results using functions from imported files
         window.PotentialTypeCalculator.displayPotentialResult(potentialType, potentialResult);
         window.ManifestTypeCalculator.displayManifestResult(manifestType, manifestResult);
         window.MisunderstandingTypeCalculator.displayMisunderstandingResult(misunderstandingType, misunderstandingResult);
-        
-        // 結果のまとめを生成して表示
+
+        // Generate and display summary
         generateSummary(misunderstandingType, potentialType, manifestType, moonSignResult.moonSign);
-        
-        // 結果エリアの表示
+
+        // Show results area
         form.closest('.bg-white').classList.add('hidden');
         resultArea.classList.remove('hidden');
         resultArea.classList.add('result-appear');
-        
-        // 歯車の可視化を追加
+
+        // Add gear visualization
         addGearVisualization();
-        
-        // ページトップにスクロール
+
+        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    
-    // 歯車の可視化を追加する関数
+
+    // Enhanced gear visualization function with better special pattern handling
     function addGearVisualization() {
-        // manifestTypes object definition (needed for display)
+        // manifestTypes object definition for display
         const manifestTypes = {
             1: '創造（自信）',
             2: '人間関係（バランス）',
@@ -142,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             0: '霊感・異質な力'
         };
 
-        // Get calculated manifest type values (from hidden fields)
+        // Get calculated manifest type values from hidden fields
         const mainTypeEl = document.getElementById('mainTypeHidden');
         const subType1El = document.getElementById('subType1Hidden');
         const subType2El = document.getElementById('subType2Hidden');
@@ -152,35 +151,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const subType1 = subType1El ? subType1El.value : '?';
         const subType2 = subType2El ? subType2El.value : '?';
 
-        // Check if any subtype is zero
-        const hasZero = subType1 === '0' || subType2 === '0';
+        // Check for special patterns
+        const hasZeroSub = subType1 === '0' || subType2 === '0';
+        const nonZeroSub = subType1 === '0' ? subType2 : subType1;
 
         // Determine if main type contains zero or is a special pattern
-        const mainHasZero = mainType === '0' || (typeof mainType === 'string' && mainType.endsWith('0'));
+        const mainHasZero = mainType === '0' || (typeof mainType === 'string' && mainType.includes('0'));
         const isSpecialCase11 = mainType === '11';
         const isSpecialCase12 = mainType === '12';
         const needsExtraHeight = mainHasZero || isSpecialCase11 || isSpecialCase12;
-
-        // Determine which non-zero subtype to display when one is zero
-        const nonZeroSub = subType1 === '0' ? subType2 : subType1;
 
         // Create gear visualization container
         const gearContainer = document.createElement('div');
         gearContainer.className = 'gear-visualization-container bg-white rounded-lg shadow-lg p-4 mb-6 max-w-4xl mx-auto';
 
-        // SVG content - with adjustments for special cases
-        if (hasZero) {
-            // Only one subtheme gear when there's a zero
+        // SVG content with enhanced styling and accessibility
+        if (hasZeroSub) {
+            // One subtheme gear when there's a zero (special pattern)
             gearContainer.innerHTML = `
             <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
                 <span class="text-2xl mr-2">⚙️</span>
                 顕在個性の歯車構造
-                ${hasZero ? '<span class="ml-2 text-sm font-normal text-purple-500">(特殊パターン)</span>' : ''}
+                <span class="ml-2 text-sm font-normal text-purple-500">(特殊パターン: 霊感・増幅)</span>
             </h3>
-            <div class="gear-svg-container">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
+            <div class="gear-svg-container" role="img" aria-label="霊感・増幅の特殊パターンの歯車構造図">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240">
                     <!-- Single Subtheme gear (with zero amplification) -->
-                    <g transform="translate(300, 110)" class="sub-gear">
+                    <g transform="translate(300, 120)" class="sub-gear">
                         <!-- Gear outline with special styling for zero enhancement -->
                         <circle cx="0" cy="0" r="60" fill="url(#zero-gradient)" fill-opacity="0.2" stroke="#7c3aed" stroke-width="1.5"/>
                         <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="1"/>
@@ -192,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </circle>
                         
                         <!-- Text background for better readability -->
-                        <rect x="-55" y="-20" width="110" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        <rect x="-65" y="-20" width="130" height="60" rx="4" fill="#ECFDF5" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ</text>
@@ -215,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </g>
 
                     <!-- Main gear (largest) -->
-                    <g transform="translate(600, 110)" class="main-gear">
+                    <g transform="translate(600, 120)" class="main-gear">
                         <!-- Gear outline with special styling if main has zero -->
                         <circle cx="0" cy="0" r="80" fill="${mainHasZero ? 'url(#zero-gradient)' : '#8a5cf6'}" fill-opacity="${mainHasZero ? '0.2' : '0.05'}" stroke="#6b46c1" stroke-width="2"/>
                         <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="1.5"/>
@@ -235,12 +232,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
                         <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">
                             ${isSpecialCase11 ? `${manifestTypes[1]} ×2倍の強さ` :
-                            isSpecialCase12 ? `${manifestTypes[1]} と ${manifestTypes[2]}` :
-                            mainType === '0' ? manifestTypes[0] :
-                            mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
-                            mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
-                            mainType === '90' ?
-                                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
+              isSpecialCase12 ? `${manifestTypes[1]} と ${manifestTypes[2]}` :
+                mainType === '0' ? manifestTypes[0] :
+                  mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
+                  mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
+                  mainType === '90' ?
+                    `${manifestTypes[mainType.charAt(0)]}` : manifestTypes[mainType] || manifestTypes[9]}
                         </text>
                         ${isSpecialCase11 ? `
                         <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#e11d48">特殊パターン：1が2倍強まる</text>
@@ -270,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </g>
 
                     <!-- Connecting line between gears (with special styling) -->
-                    <line x1="350" y1="110" x2="520" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                    <line x1="350" y1="120" x2="520" y2="120" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
                     
                     <!-- Gradient definitions -->
                     <defs>
@@ -281,33 +278,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     </defs>
                 </svg>
             </div>
-            <p class="text-sm text-purple-600 mt-2 text-center">
+            <p class="text-sm text-purple-700 mt-2 text-center">
                 このケースでは、「霊感・異質な力」(0)によってサブテーマが増幅されています。<br>
+                サブテーマ「${manifestTypes[nonZeroSub]}」の特性が、霊的な感性により強められ、繊細さや直感力がより発揮されます。<br>
                 このサブテーマを意識することでメインテーマを効果的に動かせます。
             </p>
         `;
         } else {
-            // Original three-gear visualization for non-zero cases
+            // Normal three-gear visualization for non-zero cases
             gearContainer.innerHTML = `
             <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
                 <span class="text-2xl mr-2">⚙️</span>
                 顕在個性の歯車構造
-                ${isSpecialCase11 || isSpecialCase12 ? '<span class="ml-2 text-sm font-normal text-purple-500">(特殊パターン)</span>' : ''}
+                ${isSpecialCase11 ? '<span class="ml-2 text-sm font-normal text-red-500">(特殊パターン: 2倍の強さ)</span>' :
+              isSpecialCase12 ? '<span class="ml-2 text-sm font-normal text-purple-500">(特殊パターン: 両方の特性)</span>' :
+                mainHasZero ? '<span class="ml-2 text-sm font-normal text-purple-500">(特殊パターン: 霊感・増幅)</span>' : ''}
             </h3>
-            <div class="gear-svg-container">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
+            <div class="gear-svg-container" role="img" aria-label="顕在個性の歯車構造の図">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240">
                     <!-- Sub-theme 2 gear (smallest) - now on left -->
-                    <g transform="translate(200, 110)" class="sub-gear-2">
+                    <g transform="translate(200, 120)" class="sub-gear-2">
                         <!-- Gear outline with lighter fill -->
                         <circle cx="0" cy="0" r="40" fill="#c4b5fd" fill-opacity="0.05" stroke="#8b5cf6" stroke-width="1.5"/>
                         <circle cx="0" cy="0" r="18" fill="#f9fafb" stroke="#8b5cf6" stroke-width="1"/>
                         
                         <!-- Text background for better readability -->
-                        <rect x="-55" y="-20" width="110" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        <rect x="-55" y="-20" width="110" height="60" rx="4" fill="#ECFDF5" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ2</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[subType2]}</text>
+                        <text x="0" y="18" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[subType2]}</text>
                         
                         <!-- Teeth for sub gear 2 (lighter color) -->
                         <g opacity="0.6">
@@ -323,17 +323,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     </g>
 
                     <!-- Sub-theme 1 gear (medium) - now in middle -->
-                    <g transform="translate(375, 110)" class="sub-gear-1">
+                    <g transform="translate(375, 120)" class="sub-gear-1">
                         <!-- Gear outline with lighter fill -->
                         <circle cx="0" cy="0" r="60" fill="#a78bfa" fill-opacity="0.05" stroke="#7c3aed" stroke-width="1.5"/>
                         <circle cx="0" cy="0" r="25" fill="#f9fafb" stroke="#7c3aed" stroke-width="1"/>
                         
                         <!-- Text background for better readability -->
-                        <rect x="-55" y="-20" width="110" height="40" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        <rect x="-55" y="-20" width="110" height="60" rx="4" fill="#ECFDF5" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">サブテーマ1</text>
-                        <text x="0" y="20" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[subType1]}</text>
+                        <text x="0" y="18" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">${manifestTypes[subType1]}</text>
                         
                         <!-- Teeth for sub gear 1 (lighter color) -->
                         <g opacity="0.6">
@@ -351,11 +351,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     </g>
 
                     <!-- Main gear (largest) - now on right -->
-                    <g transform="translate(600, 110)" class="main-gear">
-                        <!-- Gear outline with lighter fill or special styles -->
-                        <circle cx="0" cy="0" r="80" fill="${isSpecialCase11 ? '#fee2e2' : isSpecialCase12 ? '#f3e8ff' : mainHasZero ? 'url(#zero-gradient)' : '#8a5cf6'}" 
-                            fill-opacity="${isSpecialCase11 || isSpecialCase12 ? '0.2' : mainHasZero ? '0.2' : '0.05'}" 
-                            stroke="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" 
+                    <g transform="translate(600, 120)" class="main-gear">
+                        <!-- Gear outline with style based on special patterns -->
+                        <circle cx="0" cy="0" r="80" fill="${
+              isSpecialCase11 ? '#fee2e2' :
+                isSpecialCase12 ? '#f3e8ff' :
+                  mainHasZero ? 'url(#zero-gradient)' : '#8a5cf6'}" 
+                            fill-opacity="${
+              isSpecialCase11 || isSpecialCase12 ? '0.2' :
+                mainHasZero ? '0.2' : '0.05'}" 
+                            stroke="${
+              isSpecialCase11 ? '#ef4444' :
+                isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" 
                             stroke-width="2"/>
                         <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="1.5"/>
                         
@@ -386,18 +393,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         ` : ''}
                         
                         <!-- Text background for better readability -->
-                        <rect x="-85" y="-25" width="170" height="${needsExtraHeight ? '60' : '40'}" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        <rect x="-85" y="-25" width="170" height="60" rx="4" fill="#ECFDF5" fill-opacity="0.9"/>
                         
-                        <!-- Text content -->
+                        <!-- Text content - improved readability for special patterns -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
                         <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="${isSpecialCase11 ? '#ef4444' : '#6d28d9'}">
                             ${isSpecialCase11 ? `${manifestTypes[1]} ×2倍の強さ` :
-                            isSpecialCase12 ? `${manifestTypes[1]} と ${manifestTypes[2]}` :
-                            mainType === '0' ? manifestTypes[0] :
-                            mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
-                            mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
-                            mainType === '90' ?
-                                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
+              isSpecialCase12 ? `${manifestTypes[1]} と ${manifestTypes[2]}` :
+                mainType === '0' ? manifestTypes[0] :
+                  mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
+                  mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
+                  mainType === '90' ?
+                    `${manifestTypes[mainType.charAt(0)]}` : manifestTypes[mainType] || manifestTypes[9]}
                         </text>
                         ${isSpecialCase11 ? `
                         <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#e11d48">特殊パターン：1が2倍強まる</text>
@@ -409,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">＋霊感・増幅</text>
                         ` : ''}
                         
-                        <!-- Teeth for main gear -->
+                        <!-- Teeth for main gear with color based on type -->
                         <g opacity="0.6">
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(0)"/>
                             <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(30)"/>
@@ -426,9 +433,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         </g>
                     </g>
 
-                    <!-- Connecting lines between gears (lighter) -->
-                    <line x1="240" y1="110" x2="340" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
-                    <line x1="400" y1="110" x2="520" y2="110" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                    <!-- Connecting lines between gears with animated pulse -->
+                    <line x1="240" y1="120" x2="340" y2="120" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite" />
+                    </line>
+                    <line x1="410" y1="120" x2="520" y2="120" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite" />
+                    </line>
 
                     <!-- Gradient definitions -->
                     <defs>
@@ -439,12 +450,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     </defs>
                 </svg>
             </div>
-            <p class="text-sm text-purple-600 mt-2 text-center">
-                ${isSpecialCase11 ? 
-                'このケースでは、「創造（自信）」の特性が2倍に強まるという特殊パターンです。<br>独自のエネルギーと創造性が特に強く現れます。' :
-                isSpecialCase12 ? 
-                'このケースでは、「創造（自信）」と「人間関係（バランス）」の両方を持つ特殊パターンです。<br>創造力と協調性のバランスが取れています。' :
-                'メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です。<br>→大きな歯車よりも、小さな歯車の方が動かしやすい。'}
+            <p class="text-sm text-purple-700 mt-2 text-center">
+                ${isSpecialCase11 ?
+              'このケースでは、「創造（自信）」の特性が2倍に強まる特殊パターンです。<br>独自のエネルギーと創造性が特に強く現れ、存在感のある表現力を発揮します。' :
+              isSpecialCase12 ?
+                'このケースでは、「創造（自信）」と「人間関係（バランス）」の両方を持つ特殊パターンです。<br>創造力と協調性のバランスが取れ、独創的でありながら人との関わりも大切にします。' :
+                mainHasZero ?
+                  'このケースでは、メインテーマに「霊感・増幅」(0)が組み合わさった特殊パターンです。<br>直感力や感性が強まり、メインテーマの特性がより洗練されて発揮されます。' :
+                  'メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です。<br>→大きな歯車よりも、小さな歯車の方が動かしやすいため、サブテーマ2の課題から取り組むのが効果的です。'}
             </p>
         `;
         }
@@ -454,9 +467,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const summarySection = document.querySelector('#resultArea > div:nth-child(2)');
         resultArea.insertBefore(gearContainer, summarySection.nextSibling);
     }
-    
-    // 結果のまとめを生成する関数
+
+    // Enhanced summary generation with better special pattern explanations
     function generateSummary(misunderstandingType, potentialType, manifestType, moonSign) {
+        // Type name mappings
         const potentialTypes = {
             1: '宇宙（天）',
             2: '金（ゴールド）',
@@ -481,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
             0: '霊感・異質な力'
         };
 
-        // 勘違いタイプのアドバイス定義
+        // Misunderstanding type advice
         const misunderstandingAdvice = {
             'できるタイプ': '自分が「できる人」「カッコいい人」である必要はありません。自己像にとらわれず、ありのままの自分を受け入れましょう。',
             '自称HSPタイプ': '実は繊細さが強みではないことを受け入れると、本来の強みが見えてきます。空気を読まなくても大丈夫です。',
@@ -497,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'マザー・テレサタイプ': '全ての人に寄り添おうとする必要はありません。自分を大切にし、無理なく関われる範囲で人と接しましょう。'
         };
 
-        // 顕在個性の特徴説明を追加
+        // Manifest type features
         const manifestFeatures = {
             1: ['何かを生み出す能力が高い', 'エネルギーが強く、存在感がある', '独創的で常識にとらわれない', '自己満足の自信が重要'],
             2: ['人との関わりを通じて自分の良さを発揮する', '協力や貢献の意識が高い', '他者との境界があいまいで、距離感がつかみにくい', 'サポート役が向いている'],
@@ -508,10 +522,10 @@ document.addEventListener('DOMContentLoaded', function() {
             7: ['自分と他者、自分と人生を信頼し、内面の美しさを世の中に分け与える', '精神の深い世界で洞察力と知恵を持つ', '周囲に分け与える'],
             8: ['豊かさや力を手に入れて世の中に役立てる', '博愛主義の傾向がある', '自然に集まる富や名声を世のために役立てる'],
             9: ['溢れ出る知恵に従い、豪傑な人生を送る', '他の人を導く', '理屈や勉強を超えた知恵を使って生きる'],
-            0: ['一般的な人とは異なる潜在的な力を持つ', '見える、聞こえる、わかる、感じるなどの能力がある', '表現力も高い']
+            0: ['一般的な人とは異なる潜在的な力を持つ', '見える、聞こえる、わかる、感じるなどの能力がある', '表現力も高い', '他の特性と組み合わさると増幅効果がある']
         };
 
-        // 顕在個性の課題説明を追加
+        // Manifest type challenges
         const manifestChallenges = {
             1: ['他者評価を求めすぎないこと', '自己満足の自信を大切にすること', 'エネルギーの発散方法を見つけること'],
             2: ['過干渉や過剰な貢献を避けること', '具体的な線引きをすること', '自分の気持ちと義務感を区別すること'],
@@ -522,10 +536,10 @@ document.addEventListener('DOMContentLoaded', function() {
             7: ['理論や学問的知識に頼りすぎる', '占いやセミナーにハマりやすい', '自信たっぷりに見えるが、実は自己防衛反応の表れ'],
             8: ['豊かさへの恐れや自己否定', '受け取ることが苦手', '権力的になったり、弱者を装ったりする'],
             9: ['世間一般の常識と合わない', '自分のレベルの高さを受け入れられず、村人と同じように振る舞おうとする'],
-            0: ['自覚しないと変に影響を受けやすい', 'HSP的になりやすい']
+            0: ['自覚しないと変に影響を受けやすい', 'HSP的になりやすい', '特殊な感性に頼りすぎないようバランスを取ること']
         };
 
-        // 潜在個性の説明を追加
+        // Potential type descriptions
         const potentialDescriptions = {
             1: '上昇志向が高く、本質的なことを知る能力があります。エネルギッシュで視野が広い特徴があります。',
             2: '言葉によるコミュニケーション能力に優れ、五感を生かして華やかさを持って人を引きつけます。',
@@ -537,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
             8: '立場やアイデンティティを得ることで安定を手に入れます。柔軟に受け入れ、場を和ませる力があります。'
         };
 
-        // 先祖からの応援内容の詳細説明
+        // Ancestor support descriptions
         const ancestorSupportDescriptions = {
             1: '先祖はあなたの高い志や理想を追求する姿を応援しています。真理や悟りを探求する際に、先祖の力が特に強く働きます。視野の広さや展望の高さを生かした行動をとると、背中を押してもらえるでしょう。',
             2: '先祖は、あなたが言葉や会話の力を通じて人々と交流することを応援しています。コミュニケーションや表現力を生かした活動をすると、先祖の力を強く感じられるでしょう。経済的な豊かさも応援されています。',
@@ -549,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
             8: '先祖は、あなたが安定した立場や役割を通じて生きることを応援しています。周囲と調和しながら、場を和ませる力を発揮すると、先祖の力を感じられるでしょう。アイデンティティの確立や受容性の高さが応援されています。'
         };
 
-        // 今回の人生の環境設定の詳細説明
+        // Life environment descriptions
         const lifeEnvironmentDescriptions = {
             1: '今回の人生では、「宇宙（天）」の環境に置かれています。高いレベルの知識や真理に触れる機会が多く訪れ、上昇志向を発揮しやすい環境です。エネルギッシュに活動し、視野を広げることで、自分の潜在能力を最大限に発揮できるでしょう。',
             2: '今回の人生では、「金（ゴールド）」の環境に置かれています。言葉によるコミュニケーションや経済的な面での成長機会に恵まれています。五感を活用し、華やかさを持って人を引きつける力を発揮できる環境です。',
@@ -561,22 +575,14 @@ document.addEventListener('DOMContentLoaded', function() {
             8: '今回の人生では、「土（地面）」の環境に置かれています。確かな立場やアイデンティティを築き、安定を得る機会に恵まれています。柔軟に人や状況を受け入れ、場を和ませる役割を担う環境です。人と人をつなげる橋渡し役として活躍できるでしょう。'
         };
 
-        // 特殊パターンのチェック
+        // Check for special patterns
         const hasZeroMain = manifestType.mainType === 0 ||
-          manifestType.mainType === 10 ||
-          manifestType.mainType === 20 ||
-          manifestType.mainType === 30 ||
-          manifestType.mainType === 40 ||
-          manifestType.mainType === 50 ||
-          manifestType.mainType === 60 ||
-          manifestType.mainType === 70 ||
-          manifestType.mainType === 80 ||
-          manifestType.mainType === 90;
+          (typeof manifestType.mainType === 'string' && manifestType.mainType.includes('0'));
 
         const hasZeroSub = manifestType.subType1 === 0 || manifestType.subType2 === 0;
         const nonZeroSub = manifestType.subType1 === 0 ? manifestType.subType2 : manifestType.subType1;
 
-        // メインタイプの名前を取得
+        // Get main type name with appropriate formatting for special patterns
         let mainTypeName = '';
         if (manifestType.mainType === 11) {
             mainTypeName = `${manifestTypes[1]} <span class="text-red-600 font-bold">×2倍の強さ</span>`;
@@ -589,7 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mainTypeName = manifestTypes[manifestType.mainType] || '高尚・叡智';
         }
 
-        // サブタイプの名前を取得
+        // Get subtype names with appropriate formatting
         let subType1Name = hasZeroSub && manifestType.subType1 === 0 ?
           `${manifestTypes[nonZeroSub]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span>` :
           manifestTypes[manifestType.subType1] || '';
@@ -598,128 +604,148 @@ document.addEventListener('DOMContentLoaded', function() {
           `${manifestTypes[nonZeroSub]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span>` :
           manifestTypes[manifestType.subType2] || '';
 
-        // 顕在個性の特徴と課題のテキストを生成
+        // Generate text for manifest features and challenges
         let manifestFeaturesText = '';
         let manifestChallengesText = '';
 
-        // 1. 良い面の文章化（メイン→サブ1→サブ2の順）
+        // Main type features
         if (manifestType.mainType === 11) {
-            // 11の場合: 1が2倍強まる
+            // Type 11: Double strength of type 1
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
             manifestFeaturesText += manifestFeatures[1].slice(0, 3).map(f => f).join('。') + '。';
-            manifestFeaturesText += ' この特性が通常よりも2倍強く現れるため、創造力とエネルギーの源泉となっています。</p>';
+            manifestFeaturesText += ' この特性が通常よりも2倍強く現れ、想像力とエネルギーの源泉となっています。創造性がより高いレベルで発揮されます。</p>';
         } else if (manifestType.mainType === 12) {
-            // 12の場合: 1と2の両方を持つ
+            // Type 12: Combination of types 1 and 2
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
             manifestFeaturesText += manifestFeatures[1].slice(0, 2).map(f => f).join('。') + '。';
             manifestFeaturesText += manifestFeatures[2].slice(0, 2).map(f => f).join('。') + '。';
-            manifestFeaturesText += ' 創造性と協調性の両方を持ち合わせた稀有なタイプです。</p>';
+            manifestFeaturesText += ' 創造性と協調性の両方を持ち合わせた稀有なタイプで、独創的でありながら人との関わりも大切にします。</p>';
         } else if (hasZeroMain) {
-            // 0を含む場合
+            // Types with zero: Spiritual amplification
             const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
             if (baseType !== 0) {
                 manifestFeaturesText += manifestFeatures[baseType].slice(0, 2).map(f => f).join('。') + '。';
             }
             manifestFeaturesText += manifestFeatures[0].slice(0, 2).map(f => f).join('。') + '。';
-            manifestFeaturesText += ' 霊的な感性が他の特性を増幅させる特殊なタイプです。</p>';
+            manifestFeaturesText += ' 霊的な感性が他の特性を増幅させる特殊なタイプで、直感力や繊細さが強まっています。</p>';
         } else {
-            // 通常のケース
+            // Normal types
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
             manifestFeaturesText += manifestFeatures[manifestType.mainType].slice(0, 3).map(f => f).join('。') + '。';
             manifestFeaturesText += ' これがあなたの中心的な個性です。</p>';
         }
 
-        // サブテーマ1の特徴
+        // Subtype 1 features
         if (!hasZeroSub || manifestType.subType2 === 0) {
             manifestFeaturesText += `<p class="mb-2"><strong>サブテーマ1「<span class="super-highlight">${subType1Name}</span>」</strong>: `;
             if (manifestType.subType1 === 0) {
                 manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
                 manifestFeaturesText += manifestFeatures[0].slice(0, 1).map(f => f).join('。') + '。';
-                manifestFeaturesText += ' 霊的な感性がこの特性を増幅させています。</p>';
+                manifestFeaturesText += ' 霊的な感性がこの特性を増幅させ、より洗練された直感力を発揮します。</p>';
             } else {
                 manifestFeaturesText += manifestFeatures[manifestType.subType1].slice(0, 3).map(f => f).join('。') + '。';
                 manifestFeaturesText += ' この特性がメインテーマをサポートします。</p>';
             }
         }
 
-        // サブテーマ2の特徴
+        // Subtype 2 features
         if (!hasZeroSub && manifestType.subType1 !== 0) {
             manifestFeaturesText += `<p class="mb-2"><strong>サブテーマ2「<span class="super-highlight">${subType2Name}</span>」</strong>: `;
             if (manifestType.subType2 === 0) {
                 manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
                 manifestFeaturesText += manifestFeatures[0].slice(0, 1).map(f => f).join('。') + '。';
-                manifestFeaturesText += ' 霊的な感性がこの特性を増幅させています。</p>';
+                manifestFeaturesText += ' 霊的な感性がこの特性を増幅させています。この小さな歯車が特に重要です。</p>';
             } else {
                 manifestFeaturesText += manifestFeatures[manifestType.subType2].slice(0, 3).map(f => f).join('。') + '。';
-                manifestFeaturesText += ' これがメインテーマを動かす小さな歯車となります。</p>';
+                manifestFeaturesText += ' これがメインテーマを動かす小さな歯車となります。まずはここから意識すると効果的です。</p>';
             }
         }
 
-        // 2. 課題・注意点の文章化（サブ2→サブ1→メインの順）
-        // サブテーマ2の課題
+        // Challenges for subtype 2 (start with smallest gear)
         if (!hasZeroSub && manifestType.subType1 !== 0) {
             manifestChallengesText += `<p class="mb-2"><strong>サブテーマ2「<span class="super-highlight">${subType2Name}</span>」の課題</strong>: `;
             if (manifestType.subType2 === 0) {
                 manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
                 manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
-                manifestChallengesText += ' 霊的な感性の扱いに注意しましょう。</p>';
+                manifestChallengesText += ' 霊的な感性の扱いに注意しながら、この小さな歯車の課題に取り組みましょう。</p>';
             } else {
                 manifestChallengesText += manifestChallenges[manifestType.subType2].slice(0, 3).map(c => c).join('。') + '。';
-                manifestChallengesText += ' この小さな歯車の課題に取り組むことで、全体が効率よく動き出します。</p>';
+                manifestChallengesText += ' この小さな歯車の課題に取り組むことで、全体の歯車構造が効率よく動き出します。</p>';
             }
         }
 
-        // サブテーマ1の課題
+        // Challenges for subtype 1
         if (!hasZeroSub || manifestType.subType2 === 0) {
             manifestChallengesText += `<p class="mb-2"><strong>サブテーマ1「<span class="super-highlight">${subType1Name}</span>」の課題</strong>: `;
             if (manifestType.subType1 === 0) {
                 manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
                 manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
-                manifestChallengesText += ' 霊的な感性の扱いに注意しましょう。</p>';
+                manifestChallengesText += ' 霊的な感性の扱いに注意しながら、バランスを取ることが大切です。</p>';
             } else {
                 manifestChallengesText += manifestChallenges[manifestType.subType1].slice(0, 3).map(c => c).join('。') + '。';
                 manifestChallengesText += ' これらの課題に対処することで、サブテーマの力がより発揮されます。</p>';
             }
         }
 
-        // メインテーマの課題
+        // Challenges for main type
         manifestChallengesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」の課題</strong>: `;
         if (manifestType.mainType === 11) {
             manifestChallengesText += manifestChallenges[1].slice(0, 3).map(c => c).join('。') + '。';
-            manifestChallengesText += ' これらの課題は通常よりも注意が必要です。</p>';
+            manifestChallengesText += ' これらの課題は通常よりも意識が必要で、エネルギーの効果的な発散方法を見つけることが特に重要です。</p>';
         } else if (manifestType.mainType === 12) {
             manifestChallengesText += manifestChallenges[1].slice(0, 2).map(c => c).join('。') + '。';
             manifestChallengesText += manifestChallenges[2].slice(0, 2).map(c => c).join('。') + '。';
-            manifestChallengesText += ' 両方の特性のバランスを取ることが重要です。</p>';
+            manifestChallengesText += ' 創造性と協調性の両方のバランスを取ることが重要です。時に相反する特性を上手く調和させましょう。</p>';
         } else if (hasZeroMain) {
             const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
             if (baseType !== 0) {
                 manifestChallengesText += manifestChallenges[baseType].slice(0, 2).map(c => c).join('。') + '。';
             }
             manifestChallengesText += manifestChallenges[0].slice(0, 2).map(c => c).join('。') + '。';
-            manifestChallengesText += ' 霊的な感性の扱いに注意しましょう。</p>';
+            manifestChallengesText += ' 霊的な感性と直感力を活かしつつ、現実的なバランスを取ることが大切です。</p>';
         } else {
             manifestChallengesText += manifestChallenges[manifestType.mainType].slice(0, 3).map(c => c).join('。') + '。';
             manifestChallengesText += ' これらの課題に向き合うことで、あなたの個性がより輝きます。</p>';
         }
 
-        // 特殊パターンの注釈
+        // Special note for types with zero
         let specialNoteText = '';
         if (hasZeroMain || hasZeroSub) {
             specialNoteText = `
-            <div class="bg-purple-50 p-2 rounded-md mt-3 mb-2">
+            <div class="bg-purple-50 p-3 rounded-md mt-3 mb-3">
                 <p class="text-sm text-purple-800 font-medium">
-                    <strong>※特別な注意点：</strong>
-                    「霊感・異質な力」(0)が含まれる特殊なパターンです。これは霊的資質や潜在能力を表し、
-                    組み合わさる数字の個性をより洗練された感性や直感力などで増幅させる効果があります。
-                    繊細さを生かしつつ、霊的な影響に振り回されないよう注意しましょう。
+                    <strong>※特別な注意点：「霊感・異質な力」(0)について</strong><br>
+                    これは霊的資質や潜在能力を表し、組み合わさる数字の個性をより洗練された感性や直感力などで増幅させる効果があります。
+                    繊細さや直感を活かすことができますが、過度に頼りすぎると現実感覚を失いやすくなります。
+                    この特性を意識しつつ、日常的な判断でもバランスを取ることを心がけましょう。
                 </p>
             </div>
         `;
         }
 
-        // 顕在個性セクションを作成
+        // Special note for types 11 and 12
+        if (manifestType.mainType === 11 || manifestType.mainType === 12) {
+            const specialType = manifestType.mainType === 11 ?
+              '「創造（自信）」の特性が2倍に強まる特殊パターン' :
+              '「創造（自信）」と「人間関係（バランス）」の両方を持つ特殊パターン';
+
+            const specialAdvice = manifestType.mainType === 11 ?
+              'このパターンでは、創造性とエネルギーが特に強く現れます。その強さをうまくコントロールし、発散する方法を見つけることが重要です。' :
+              'このパターンでは、創造性と協調性のバランスを取ることが重要です。時に相反する二つの特性をうまく活かせると、より大きな力を発揮できます。';
+
+            specialNoteText += `
+            <div class="bg-indigo-50 p-3 rounded-md mt-3 mb-3">
+                <p class="text-sm text-indigo-800 font-medium">
+                    <strong>※特別な注意点：特殊パターン ${manifestType.mainType} について</strong><br>
+                    あなたは${specialType}です。これは非常に稀なタイプで、特別な才能と課題を併せ持っています。
+                    ${specialAdvice}
+                </p>
+            </div>
+        `;
+        }
+
+        // Manifest personality section
         const manifestSection = `
         <div class="summary-section">
             <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの顕在個性</h4>
@@ -736,7 +762,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 ${specialNoteText}
                 
-                <div class="text-sm bg-green-50 p-2 rounded-md mt-3">
+                <div class="text-sm bg-green-50 p-3 rounded-md mt-3">
                     <p class="text-green-800 font-medium">
                         <strong>💡 歯車のポイント：</strong>
                         顕在個性は連動する歯車のような仕組みです。小さな歯車（サブテーマ2）から動かすと、
@@ -748,7 +774,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     `;
 
-        // 勘違いセクションを作成
+        // Misunderstanding section
         const misunderstandingSection = `
         <div class="summary-section">
             <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの勘違い</h4>
@@ -760,10 +786,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 <br>
                 <span class="font-semibold text-purple-700">アドバイス：</span>${misunderstandingAdvice[misunderstandingType.type] || '勘違いを知ることで自然体の自分に戻ることができます。'}
             </p>
+            <div class="text-sm bg-blue-50 p-3 rounded-md mt-3">
+                <p class="text-blue-800 font-medium">
+                    <strong>💡 勘違いについて：</strong>
+                    勘違いを知るだけで、その呪縛から解放されていきます。勘違いから解放されると、あなた本来の自然体な姿が現れてきます。
+                    ${misunderstandingType.type}という勘違いを意識して、自分の本当の強みに目を向けていきましょう。
+                </p>
+            </div>
         </div>
     `;
 
-        // 潜在個性セクションを作成
+        // Potential personality section
         const potentialSection = `
         <div class="summary-section">
             <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの潜在個性</h4>
@@ -795,13 +828,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 全体を通して、あなたの潜在個性は「${potentialTypes[potentialType.totalPoint]}」を中心に形成されています。この特性を意識して生きることで、より自然体であなたらしさを発揮できるでしょう。
             </p>
 
-            <p class="text-sm bg-purple-50 p-2 rounded-md mt-2">
-                これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
-            </p>
+            <div class="text-sm bg-yellow-50 p-3 rounded-md mt-3">
+                <p class="text-yellow-800 font-medium">
+                    <strong>💡 潜在個性について：</strong>
+                    これらの潜在個性を意識することで、より自分らしく自然体で生きることができます。特に先祖からの応援と今回の環境設定を活かすことで、本来の力を発揮しやすくなるでしょう。
+                    潜在個性は「天分」とも言え、あなたの中に眠る可能性です。
+                </p>
+            </div>
         </div>
     `;
 
-        // 総合評価セクションを作成
+        // Overall summary section
         const summarySection = `
         <div class="summary-section">
             <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 総合的な評価</h4>
@@ -813,10 +850,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 勘違いを知ると、それだけでその呪縛から外れていきます。あなたが苦手なことはやらなくても大丈夫です。
                 あなた本来の才能や特性を活かした生き方を選んでいきましょう。
             </p>
+
+            <div class="bg-purple-100 p-4 rounded-lg mt-4">
+                <h5 class="font-semibold text-purple-800 mb-2">あなたの特性の相互作用</h5>
+                <p class="text-gray-700">
+                    ${hasZeroMain || hasZeroSub ?
+          '特に「霊感・異質な力」(0)の特性により、あなたの感性や直感力は通常よりも鋭く、繊細です。この特性を活かしつつ、現実的なバランスも大切にしましょう。' :
+          manifestType.mainType === 11 ?
+            '「創造（自信）」の特性が2倍強まる特性を持ち、独創的なエネルギーに満ちています。この強力なエネルギーを上手く発散し、創造的な活動に活かしましょう。' :
+            manifestType.mainType === 12 ?
+              '「創造（自信）」と「人間関係（バランス）」の両方の特性を持つ稀なタイプです。創造性と協調性のバランスを取ることで、独自の価値を生み出せるでしょう。' :
+              '顕在個性のメインテーマとサブテーマが互いに影響し合い、あなたの個性を形作っています。潜在個性の特性も加わり、より自然体で生きることができるでしょう。'
+        }
+                    <br><br>
+                    勘違いの「${misunderstandingType.type}」を知ることで、本来のあなたらしさがより発揮されます。
+                    潜在個性の「${potentialTypes[potentialType.totalPoint]}」の特性を意識し、顕在個性の「${manifestTypes[manifestType.mainType]}」の強みを活かすことで、より充実した人生を歩めるでしょう。
+                </p>
+            </div>
         </div>
     `;
 
-        // 最終的なまとめテキスト
+        // Final summary text
         let summary = `
         ${misunderstandingSection}
         ${manifestSection}
@@ -824,26 +878,26 @@ document.addEventListener('DOMContentLoaded', function() {
         ${summarySection}
     `;
 
-        // HTMLに結果を表示
+        // Display result in HTML
         summaryText.innerHTML = summary;
     }
-    
-    // リセットボタンのクリックイベント
+
+    // Reset button click event
     resetButton.addEventListener('click', function() {
         form.reset();
         form.closest('.bg-white').classList.remove('hidden');
         resultArea.classList.add('hidden');
         calculatedMoonSign.value = '';
-        
-        // ページトップにスクロール
+
+        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    
-    // 生年選択肢の生成（現在から100年前まで）
+
+    // Generate year options (current year to 100 years ago)
     function populateYearOptions() {
         const yearSelect = document.getElementById('birthYear');
         const currentYear = new Date().getFullYear();
-        
+
         for (let i = currentYear; i >= currentYear - 100; i--) {
             const option = document.createElement('option');
             option.value = i;
@@ -851,11 +905,11 @@ document.addEventListener('DOMContentLoaded', function() {
             yearSelect.appendChild(option);
         }
     }
-    
-    // 月選択肢の生成
+
+    // Generate month options
     function populateMonthOptions() {
         const monthSelect = document.getElementById('birthMonth');
-        
+
         for (let i = 1; i <= 12; i++) {
             const option = document.createElement('option');
             option.value = i;
@@ -863,11 +917,11 @@ document.addEventListener('DOMContentLoaded', function() {
             monthSelect.appendChild(option);
         }
     }
-    
-    // 日選択肢の生成（とりあえず31日分）
+
+    // Generate day options (initially 31 days)
     function populateDayOptions() {
         const daySelect = document.getElementById('birthDay');
-        
+
         for (let i = 1; i <= 31; i++) {
             const option = document.createElement('option');
             option.value = i;
@@ -875,11 +929,11 @@ document.addEventListener('DOMContentLoaded', function() {
             daySelect.appendChild(option);
         }
     }
-    
-    // 時間選択肢の生成（0-23時）
+
+    // Generate hour options (0-23)
     function populateHourOptions() {
         const hourSelect = document.getElementById('birthHour');
-        
+
         for (let i = 0; i <= 23; i++) {
             const option = document.createElement('option');
             option.value = i;
@@ -887,11 +941,11 @@ document.addEventListener('DOMContentLoaded', function() {
             hourSelect.appendChild(option);
         }
     }
-    
-    // 分選択肢の生成（0-59分、5分間隔）
+
+    // Generate minute options (0-55, 5-minute intervals)
     function populateMinuteOptions() {
         const minuteSelect = document.getElementById('birthMinute');
-        
+
         for (let i = 0; i <= 55; i += 5) {
             const option = document.createElement('option');
             option.value = i;
@@ -899,16 +953,16 @@ document.addEventListener('DOMContentLoaded', function() {
             minuteSelect.appendChild(option);
         }
     }
-    
-    // 都道府県選択肢の生成
+
+    // Generate prefecture options
     function populatePrefectureOptions() {
         if (!window.MoonCalculator || !window.MoonCalculator.PREFECTURES) {
             console.error('MoonCalculator not found or PREFECTURES not defined');
             return;
         }
-        
+
         const prefectureSelect = document.getElementById('birthPrefecture');
-        
+
         window.MoonCalculator.PREFECTURES.forEach((prefecture, index) => {
             const option = document.createElement('option');
             option.value = index;
@@ -916,176 +970,49 @@ document.addEventListener('DOMContentLoaded', function() {
             prefectureSelect.appendChild(option);
         });
     }
-    
-    // 月の選択が変わった時に日数を調整
+
+    // Adjust days in month when month selection changes
     document.getElementById('birthMonth').addEventListener('change', function() {
         adjustDaysInMonth();
     });
-    
-    // 年の選択が変わった時に閏年を考慮して日数を調整
+
+    // Adjust days in month when year selection changes (for leap years)
     document.getElementById('birthYear').addEventListener('change', function() {
         adjustDaysInMonth();
     });
-    
-    // 月と年に応じて日の選択肢を調整
+
+    // Adjust days based on month and year (accounts for leap years)
     function adjustDaysInMonth() {
         const year = parseInt(document.getElementById('birthYear').value) || new Date().getFullYear();
         const month = parseInt(document.getElementById('birthMonth').value);
         const daySelect = document.getElementById('birthDay');
         const currentDay = parseInt(daySelect.value) || 0;
-        
+
         if (!month) return;
-        
-        // 選択された月の日数を取得
+
+        // Get number of days in selected month
         const daysInMonth = new Date(year, month, 0).getDate();
-        
-        // 現在の選択肢をクリア
+
+        // Clear current options
         daySelect.innerHTML = '';
-        
-        // 「選択してください」オプション
+
+        // Add default option
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = '選択してください';
         daySelect.appendChild(defaultOption);
-        
-        // 日数分のオプションを追加
+
+        // Add day options
         for (let i = 1; i <= daysInMonth; i++) {
             const option = document.createElement('option');
             option.value = i;
             option.textContent = i + '日';
             daySelect.appendChild(option);
         }
-        
-        // 以前選択していた日が新しい月の範囲内なら再選択
+
+        // Restore previously selected day if in range
         if (currentDay > 0 && currentDay <= daysInMonth) {
             daySelect.value = currentDay;
         }
     }
-
-    // デバッグ機能追加
-    const diagnosisForm = document.getElementById('diagnosisForm');
-    diagnosisForm.addEventListener('submit', function(e) {
-        // 入力値の取得
-        const year = document.getElementById('birthYear').value;
-        const month = document.getElementById('birthMonth').value;
-        const day = document.getElementById('birthDay').value;
-        const hour = document.getElementById('birthHour').value || '12';
-        const minute = document.getElementById('birthMinute').value || '0';
-
-        // フォームの通常処理は続行させる
-
-        // 少し遅延させてコンソールにログを出力（計算完了後に実行するため）
-        setTimeout(() => {
-            // 計算された値を取得
-            const moonSign = document.getElementById('calculatedMoonSign').value;
-            const mainType = document.getElementById('mainTypeHidden').value;
-            const subType1 = document.getElementById('subType1Hidden').value;
-            const subType2 = document.getElementById('subType2Hidden').value;
-
-            if (moonSign && mainType) {
-                // タイプ名称の定義
-                const manifestTypes = {
-                    1: '創造（自信）',
-                    2: '人間関係（バランス）',
-                    3: '感情、感性（表現）',
-                    4: '安心安定（過程）',
-                    5: '自由（学び）',
-                    6: '理想、満足',
-                    7: '信頼・委任',
-                    8: '豊かさ・受容',
-                    9: '高尚・叡智',
-                    0: '霊感・異質な力',
-                    11: '創造（自信）×2倍',
-                    12: '創造（自信）と人間関係（バランス）'
-                };
-
-                const potentialTypes = {
-                    1: '宇宙（天）',
-                    2: '金（ゴールド）',
-                    3: '炎（火）',
-                    4: '樹木',
-                    5: '風',
-                    6: '水',
-                    7: '山',
-                    8: '土（地面）'
-                };
-
-                const misunderstandingTypes = {
-                    '牡羊座': 'できるタイプ',
-                    '牡牛座': '自称HSPタイプ',
-                    '双子座': '知的タイプ',
-                    '蟹座': '優しいタイプ',
-                    '獅子座': '人事エキスパートタイプ',
-                    '乙女座': '開けっぱなし症候群',
-                    '天秤座': '公平タイプ',
-                    '蠍座': '違和感センサータイプ',
-                    '射手座': '社会貢献タイプ',
-                    '山羊座': '仕事人間タイプ',
-                    '水瓶座': 'ユニークタイプ',
-                    '魚座': 'マザー・テレサタイプ'
-                };
-
-                // 特殊マニフェストタイプの処理
-                let mainTypeName = manifestTypes[mainType] || '';
-                if (!mainTypeName && typeof mainType === 'string' && mainType.endsWith('0')) {
-                    const firstDigit = mainType.toString()[0];
-                    const baseName = manifestTypes[parseInt(firstDigit)] || '不明';
-                    mainTypeName = `${baseName} ＋霊感・増幅`;
-                }
-
-                // 潜在個性の計算
-                const potentialType = window.PotentialTypeCalculator.calculatePotentialType(
-                  parseInt(year), parseInt(month), parseInt(day)
-                );
-
-                // 勘違いタイプの取得
-                const misunderstandingType = window.MisunderstandingTypeCalculator.getMisunderstandingType(moonSign);
-
-                // コンソール出力
-                console.log('============= 勘違い鑑定結果 =============');
-                console.log(`入力情報: ${year}年${month}月${day}日 ${hour}時${minute}分`);
-                console.log('----------------------------------------');
-
-                // 月星座と勘違い
-                console.log(`【月星座】${moonSign}`);
-                console.log(`【勘違い】${moonSign}: ${misunderstandingTypes[moonSign] || misunderstandingType.type}`);
-                console.log(`  説明: ${misunderstandingType.description}`);
-                console.log(`  実際: ${misunderstandingType.reality}`);
-                console.log('----------------------------------------');
-
-                // 顕在個性の詳細出力
-                console.log('【顕在個性】');
-                console.log(`  メインタイプ: ${mainType} ${mainTypeName}`);
-
-                // 特殊なメインタイプの追加説明
-                if (mainType === 11) {
-                    console.log('  特殊パターン: 1が2倍強まったタイプ');
-                } else if (mainType === 12) {
-                    console.log('  特殊パターン: 1と2の両方を持つタイプ');
-                } else if (mainType === 0 || (typeof mainType === 'string' && mainType.endsWith('0'))) {
-                    console.log(`  特殊パターン: 霊感・増幅 (0) を含むパターン`);
-                }
-
-                console.log(`  サブタイプ1: ${subType1} ${manifestTypes[subType1] || ''}`);
-                console.log(`  サブタイプ2: ${subType2} ${manifestTypes[subType2] || ''}`);
-
-                // 0が含まれるかチェック
-                const hasZero = subType1 == 0 || subType2 == 0;
-                if (hasZero) {
-                    console.log('  特殊サブタイプ: 霊感・増幅 (0) を含むサブパターン');
-                }
-
-                console.log('----------------------------------------');
-
-                // 潜在個性の詳細出力
-                console.log('【潜在個性】');
-                console.log(`  生まれ変わっても変わらない望み: ${potentialType.type1} ${potentialTypes[potentialType.type1] || ''}`);
-                console.log(`  先祖が応援してくれること: ${potentialType.type2} ${potentialTypes[potentialType.type2] || ''}`);
-                console.log(`  今回の人生の環境設定: ${potentialType.type3} ${potentialTypes[potentialType.type3] || ''}`);
-                console.log(`  総合ポイント: ${potentialType.totalPoint} ${potentialTypes[potentialType.totalPoint] || ''}`);
-
-                console.log('=========================================');
-            }
-        }, 500); // 0.5秒遅延
-    });
 });
