@@ -187,136 +187,174 @@ function calculateManifestType(year, month, day) {
     };
 }
 
-// 顕在個性の結果表示
+// 顕在個性の結果表示（リスト形式で分割表示）
 function displayManifestResult(result, manifestResultElement) {
-    // メインテーマを処理
-    let mainTypeHTML = '';
+    // 特殊ケース（11, 12, 0を含む）の処理
+    const hasZeroMain = result.mainType === 0 || (typeof result.mainType === 'string' && result.mainType.endsWith('0'));
+    const hasZeroSub = result.subType1 === 0 || result.subType2 === 0;
+    const nonZeroSub = result.subType1 === 0 ? result.subType2 : result.subType1;
 
+    // HTMLを構築（他のセクションのスタイルに合わせて修正）
+    let html = `
+        <div class="manifest-content mb-4">
+            <!-- メインテーマ -->
+            <div class="highlight">
+    `;
+
+    // メインテーマの情報
     if (result.mainType === 11) {
         // 11の場合: 1が2倍強まる
         const typeOne = manifestTypes[1];
-        mainTypeHTML = `
-            <div class="highlight">${typeOne.name} <span class="text-red-600 font-bold">×2倍の強さ</span></div>
-            <p class="text-gray-700">${typeOne.keywords}</p>
-            <p class="text-purple-700 font-semibold mt-2">※1をダブルで持っているため、その特性が2倍強く現れます</p>
-            <ul class="feature-list mt-2">
-                ${typeOne.features.map(feature => `<li>${feature}</li>`).slice(0, 3).join('')}
-            </ul>
-        `;
+        html += `メインテーマ：${typeOne.name} <span class="text-red-600 font-bold">×2倍の強さ</span>`;
     } else if (result.mainType === 12) {
         // 12の場合: 1と2の両方を持つ
         const typeOne = manifestTypes[1];
         const typeTwo = manifestTypes[2];
-        mainTypeHTML = `
-            <div class="highlight">
-                ${typeOne.name} と ${typeTwo.name} <span class="text-purple-700 font-bold">の両方</span>
-            </div>
-            <p class="text-gray-700">${typeOne.keywords} および ${typeTwo.keywords}</p>
-            <p class="text-purple-700 font-semibold mt-2">※1と2の両方の特性を併せ持っています</p>
-            <ul class="feature-list mt-2">
-                ${typeOne.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('')}
-                ${typeTwo.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('')}
-            </ul>
-        `;
-    } else if (result.mainType === 0 || (typeof result.mainType === 'string' && result.mainType.endsWith('0'))) {
-        // 0の場合: 霊感・異質な力が加わる
+        html += `メインテーマ：${typeOne.name} と ${typeTwo.name} <span class="text-purple-700 font-bold">の両方</span>`;
+    } else if (hasZeroMain) {
+        // 0を含む場合: 霊感・異質な力が加わる
         const typeZero = manifestTypes[0];
-        const pairedType = manifestTypes[parseInt(result.mainType.toString()[0]) || 0];
+        const baseType = parseInt(result.mainType.toString()[0]) || 0;
+        const pairedType = manifestTypes[baseType] || manifestTypes[0];
 
-        mainTypeHTML = `
-            <div class="highlight">
-                ${pairedType ? pairedType.name : ''}
-                <span class="text-indigo-600 font-bold"> ＋ 霊感・増幅</span>
-            </div>
-            <p class="text-gray-700">${pairedType ? pairedType.keywords : ''} および ${typeZero.keywords}</p>
-            <p class="text-purple-700 font-semibold mt-2">※霊的資質・潜在能力が加わり、他の特性が増幅されます</p>
-            <ul class="feature-list mt-2">
-                ${pairedType ? pairedType.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('') : ''}
-                ${typeZero.features.map(feature => `<li>${feature}</li>`).slice(0, 2).join('')}
-            </ul>
-        `;
+        html += `メインテーマ：${pairedType.name} <span class="text-indigo-600 font-bold">＋霊感・増幅</span>`;
     } else {
-        // 通常ケース
-        const mainType = manifestTypes[result.mainType] || manifestTypes[9]; // 他の特殊な数字の場合は9として処理
-        mainTypeHTML = `
-            <div class="highlight">${mainType.name}</div>
-            <p class="text-gray-700">${mainType.keywords}</p>
-            <ul class="feature-list mt-2">
-                ${mainType.features.map(feature => `<li>${feature}</li>`).slice(0, 3).join('')}
-            </ul>
-        `;
+        // 通常のケース
+        const mainType = manifestTypes[result.mainType] || manifestTypes[9];
+        html += `メインテーマ：${mainType.name}`;
     }
 
-    // サブテーマの処理
-    let subThemesHTML = '';
+    html += `
+            </div>
+            <p class="text-gray-700 mt-2">
+    `;
 
-    // ゼロが含まれるかチェック
-    const hasZero = result.subType1 === 0 || result.subType2 === 0;
+    // メインテーマの特徴文
+    if (result.mainType === 11) {
+        // 11の場合: 1が2倍強まる
+        const typeOne = manifestTypes[1];
+        html += typeOne.features.slice(0, 3).map(f => f).join('。') + '。';
+        html += ` <span class="text-purple-600">この特性が通常より2倍強く現れます。</span>`;
+    } else if (result.mainType === 12) {
+        // 12の場合: 1と2の両方を持つ
+        const typeOne = manifestTypes[1];
+        const typeTwo = manifestTypes[2];
+        html += typeOne.features.slice(0, 2).map(f => f).join('。') + '。';
+        html += typeTwo.features.slice(0, 2).map(f => f).join('。') + '。';
+        html += ` <span class="text-purple-600">創造性と協調性の両方を持つ稀なタイプです。</span>`;
+    } else if (hasZeroMain) {
+        // 0を含む場合: 霊感・異質な力が加わる
+        const typeZero = manifestTypes[0];
+        const baseType = parseInt(result.mainType.toString()[0]) || 0;
+        const pairedType = manifestTypes[baseType] || manifestTypes[0];
 
-    if (hasZero) {
-        // ゼロが含まれる場合は1つのサブテーマとして表示
-        const nonZeroType = result.subType1 === 0 ? result.subType2 : result.subType1;
-        const nonZeroTypeData = manifestTypes[nonZeroType];
-        const zeroTypeData = manifestTypes[0];
+        if (baseType !== 0) {
+            html += pairedType.features.slice(0, 2).map(f => f).join('。') + '。';
+        }
+        html += typeZero.features.slice(0, 2).map(f => f).join('。') + '。';
+        html += ` <span class="text-purple-600">霊的な感性が他の特性を増幅させます。</span>`;
+    } else {
+        // 通常のケース
+        const mainType = manifestTypes[result.mainType] || manifestTypes[9];
+        html += mainType.features.slice(0, 3).map(f => f).join('。') + '。';
+    }
 
-        if (nonZeroTypeData) {
-            subThemesHTML = `
-                <div class="manifest-sub">
-                    <div class="sub-title">サブテーマ</div>
-                    <div class="highlight">
-                        ${nonZeroTypeData.name}
-                        <span class="text-indigo-600 font-bold"> ＋ 霊感・増幅</span>
-                    </div>
-                    <p class="text-gray-700">${nonZeroTypeData.keywords} および ${zeroTypeData.keywords}</p>
-                    <p class="text-sm text-purple-600 mt-2">※霊的資質（0）により、このサブテーマの性質が増幅されています</p>
-                    <p class="text-sm text-purple-600 mt-1">※メインテーマを動かすには、このサブテーマを意識することが大切です</p>
-                </div>
+    html += `</p>`;
+
+    // サブテーマの表示
+    if (!hasZeroSub) {
+        // サブテーマ1と2を表示（通常のケース）
+        if (result.subType1 !== 0) {
+            const subType1 = manifestTypes[result.subType1];
+            html += `
+                <div class="highlight mt-3">サブテーマ1：${subType1.name}</div>
+                <p class="text-gray-700 mt-2">${subType1.features.slice(0, 3).map(f => f).join('。')}。</p>
+            `;
+        }
+
+        if (result.subType2 !== 0) {
+            const subType2 = manifestTypes[result.subType2];
+            html += `
+                <div class="highlight mt-3">サブテーマ2：${subType2.name}</div>
+                <p class="text-gray-700 mt-2">${subType2.features.slice(0, 3).map(f => f).join('。')}。 <span class="text-purple-600">これがメインテーマを動かす小さな歯車となります。</span></p>
             `;
         }
     } else {
-        // 通常のサブテーマ表示（ゼロなし）
-        // サブテーマ1
-        const subTypeOne = manifestTypes[result.subType1];
-        const subTypeOneHTML = result.subType1 !== 0 ? `
-            <div class="manifest-sub">
-                <div class="sub-title">サブテーマ1</div>
-                <div class="highlight">${subTypeOne.name}</div>
-                <p class="text-gray-700">${subTypeOne.keywords}</p>
-            </div>
-        ` : '';
+        // 0を含むサブテーマの表示（特殊ケース）
+        const nonZeroTypeData = manifestTypes[nonZeroSub];
+        const typeZero = manifestTypes[0];
 
-        // サブテーマ2
-        const subTypeTwo = manifestTypes[result.subType2];
-        const subTypeTwoHTML = result.subType2 !== 0 ? `
-            <div class="manifest-sub">
-                <div class="sub-title">サブテーマ2</div>
-                <div class="highlight">${subTypeTwo.name}</div>
-                <p class="text-gray-700">${subTypeTwo.keywords}</p>
-                <p class="text-sm text-purple-600 mt-2">※メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です</p>
-            </div>
-        ` : '';
-
-        subThemesHTML = subTypeOneHTML + subTypeTwoHTML;
+        html += `
+            <div class="highlight mt-3">サブテーマ：${nonZeroTypeData.name} <span class="text-indigo-600 font-bold">＋霊感・増幅</span></div>
+            <p class="text-gray-700 mt-2">${nonZeroTypeData.features.slice(0, 2).map(f => f).join('。')}。${typeZero.features.slice(0, 1).map(f => f).join('。')}。 <span class="text-purple-600">霊的な感性がこの特性を増幅させます。</span></p>
+        `;
     }
 
-    // 最終的なHTML構築
-    let html = `
-        <div class="manifest-hierarchy">
-            <div class="manifest-main">
-                <h4 class="result-title mb-2">メインテーマ</h4>
-                ${mainTypeHTML}
+    // 課題・注意点セクション
+    html += `
+        </div>
+        
+        <div class="manifest-elements">
+            <div class="manifest-element">
+                <div class="manifest-title">課題・注意点</div>
+                <p class="text-gray-700">
+    `;
+
+    // 課題のテキスト
+    if (hasZeroSub) {
+        // 0を含むサブテーマの課題（特殊ケース）
+        const nonZeroTypeData = manifestTypes[nonZeroSub];
+        const typeZero = manifestTypes[0];
+
+        html += nonZeroTypeData.challenges.slice(0, 2).map(c => c).join('。') + '。';
+        html += typeZero.challenges.slice(0, 1).map(c => c).join('。') + '。';
+        html += ` <span class="text-purple-600">まずはこの課題から取り組みましょう。</span>`;
+    } else if (result.subType2 !== 0) {
+        // サブテーマ2の課題（通常のケース）
+        const subType2 = manifestTypes[result.subType2];
+        html += subType2.challenges.slice(0, 3).map(c => c).join('。') + '。';
+        html += ` <span class="text-purple-600">この小さな歯車から取り組むと効率的です。</span>`;
+    } else if (result.subType1 !== 0) {
+        // サブテーマ1の課題（サブテーマ2がない場合）
+        const subType1 = manifestTypes[result.subType1];
+        html += subType1.challenges.slice(0, 3).map(c => c).join('。') + '。';
+    }
+
+    html += `
+                </p>
             </div>
-            
-            <div class="manifest-subs">
-                ${subThemesHTML}
+    `;
+
+    // 特殊パターンの注釈
+    if (hasZeroMain || hasZeroSub) {
+        html += `
+            <div class="manifest-element">
+                <div class="manifest-title">特別な注意点</div>
+                <p class="text-sm text-purple-600">
+                    「霊感・異質な力」(0)が含まれる特殊なパターンです。これは霊的資質や潜在能力を表し、
+                    組み合わさる数字の個性をより洗練された感性や直感力などで増幅させる効果があります。
+                </p>
+            </div>
+        `;
+    }
+
+    // ポイント
+    html += `
+            <div class="manifest-element">
+                <div class="manifest-title">ポイント</div>
+                <p class="text-sm text-purple-600">
+                    勘違いを知ると、それだけで外れるのが特徴です。あなたが苦手なことはやらなくて大丈夫です。
+                    ${!hasZeroSub ? 'サブテーマ2（小さな歯車）から取り組むのが効果的です。' : ''}
+                </p>
             </div>
         </div>
     `;
 
+    // 結果を表示
     manifestResultElement.innerHTML = html;
 }
 
-// エクスポート
+// エクスポート設定（window.ManifestTypeCalculatorの一部として定義）
 window.ManifestTypeCalculator = {
     calculateManifestType,
     displayManifestResult

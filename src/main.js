@@ -1,3 +1,6 @@
+// main.jsの完全なバージョン
+// 以下のコードでsrc/main.jsファイル全体を置き換えてください
+
 import './tailwind.min.css'
 import './style.css'
 import './potentialType.js'
