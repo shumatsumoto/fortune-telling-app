@@ -155,11 +155,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check if any subtype is zero
         const hasZero = subType1 === '0' || subType2 === '0';
 
-        // Determine if main type contains zero
-        const mainHasZero = mainType === '0' || mainType === '10' || mainType === '20' ||
-          mainType === '30' || mainType === '40' || mainType === '50' ||
-          mainType === '60' || mainType === '70' || mainType === '80' ||
-          mainType === '90';
+        // Determine if main type contains zero or is a special pattern
+        const mainHasZero = mainType === '0' || (typeof mainType === 'string' && mainType.endsWith('0'));
+        const isSpecialCase11 = mainType === '11';
+        const isSpecialCase12 = mainType === '12';
+        const needsExtraHeight = mainHasZero || isSpecialCase11 || isSpecialCase12;
 
         // Determine which non-zero subtype to display when one is zero
         const nonZeroSub = subType1 === '0' ? subType2 : subType1;
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const gearContainer = document.createElement('div');
         gearContainer.className = 'gear-visualization-container bg-white rounded-lg shadow-lg p-4 mb-6 max-w-4xl mx-auto';
 
-        // SVG content - with adjustments for zero cases
+        // SVG content - with adjustments for special cases
         if (hasZero) {
             // Only one subtheme gear when there's a zero
             gearContainer.innerHTML = `
@@ -229,17 +229,25 @@ document.addEventListener('DOMContentLoaded', function() {
                         ` : ''}
                         
                         <!-- Text background for better readability -->
-                        <rect x="-75" y="-25" width="150" height="${mainHasZero ? '55' : '40'}" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        <rect x="-85" y="-25" width="170" height="${needsExtraHeight ? '60' : '40'}" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
                         <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">
-                            ${mainType === '0' ? manifestTypes[0] :
-              mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
-              mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
-              mainType === '90' ?
-                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
+                            ${isSpecialCase11 ? `${manifestTypes[1]} ×2倍の強さ` :
+                            isSpecialCase12 ? `${manifestTypes[1]} と ${manifestTypes[2]}` :
+                            mainType === '0' ? manifestTypes[0] :
+                            mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
+                            mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
+                            mainType === '90' ?
+                                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
                         </text>
+                        ${isSpecialCase11 ? `
+                        <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#e11d48">特殊パターン：1が2倍強まる</text>
+                        ` : ''}
+                        ${isSpecialCase12 ? `
+                        <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">特殊パターン：両方の特性</text>
+                        ` : ''}
                         ${mainHasZero ? `
                         <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">＋霊感・増幅</text>
                         ` : ''}
@@ -284,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <h3 class="text-xl font-semibold text-purple-700 mb-4 flex items-center">
                 <span class="text-2xl mr-2">⚙️</span>
                 顕在個性の歯車構造
+                ${isSpecialCase11 || isSpecialCase12 ? '<span class="ml-2 text-sm font-normal text-purple-500">(特殊パターン)</span>' : ''}
             </h3>
             <div class="gear-svg-container">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220">
@@ -343,9 +352,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <!-- Main gear (largest) - now on right -->
                     <g transform="translate(600, 110)" class="main-gear">
-                        <!-- Gear outline with lighter fill -->
-                        <circle cx="0" cy="0" r="80" fill="${mainHasZero ? 'url(#zero-gradient)' : '#8a5cf6'}" fill-opacity="${mainHasZero ? '0.2' : '0.05'}" stroke="#6b46c1" stroke-width="2"/>
+                        <!-- Gear outline with lighter fill or special styles -->
+                        <circle cx="0" cy="0" r="80" fill="${isSpecialCase11 ? '#fee2e2' : isSpecialCase12 ? '#f3e8ff' : mainHasZero ? 'url(#zero-gradient)' : '#8a5cf6'}" 
+                            fill-opacity="${isSpecialCase11 || isSpecialCase12 ? '0.2' : mainHasZero ? '0.2' : '0.05'}" 
+                            stroke="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" 
+                            stroke-width="2"/>
                         <circle cx="0" cy="0" r="30" fill="#f9fafb" stroke="#6b46c1" stroke-width="1.5"/>
+                        
+                        ${isSpecialCase11 ? `
+                        <!-- Special aura for case 11 -->
+                        <circle cx="0" cy="0" r="95" fill="none" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="3,4" opacity="0.5">
+                            <animate attributeName="r" values="90;100;90" dur="3s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" values="0.5;0.2;0.5" dur="3s" repeatCount="indefinite" />
+                        </circle>
+                        ` : ''}
+                        
+                        ${isSpecialCase12 ? `
+                        <!-- Special aura for case 12 - dual nature -->
+                        <circle cx="0" cy="0" r="90" fill="none" stroke="#8b5cf6" stroke-width="0.5" stroke-dasharray="5,5" opacity="0.5">
+                            <animate attributeName="r" values="85;95;85" dur="4s" repeatCount="indefinite" />
+                        </circle>
+                        <circle cx="0" cy="0" r="100" fill="none" stroke="#8b5cf6" stroke-width="0.5" stroke-dasharray="5,5" opacity="0.3">
+                            <animate attributeName="r" values="100;110;100" dur="5s" repeatCount="indefinite" />
+                        </circle>
+                        ` : ''}
                         
                         ${mainHasZero ? `
                         <!-- Magical aura for zero in main type -->
@@ -356,35 +386,43 @@ document.addEventListener('DOMContentLoaded', function() {
                         ` : ''}
                         
                         <!-- Text background for better readability -->
-                        <rect x="-75" y="-25" width="150" height="${mainHasZero ? '55' : '40'}" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
+                        <rect x="-85" y="-25" width="170" height="${needsExtraHeight ? '60' : '40'}" rx="4" fill="#f9fafb" fill-opacity="0.9"/>
                         
                         <!-- Text content -->
                         <text x="0" y="-5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6d28d9">メインテーマ</text>
-                        <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#6d28d9">
-                            ${mainType === '0' ? manifestTypes[0] :
-              mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
-              mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
-              mainType === '90' ?
-                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
+                        <text x="0" y="15" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="${isSpecialCase11 ? '#ef4444' : '#6d28d9'}">
+                            ${isSpecialCase11 ? `${manifestTypes[1]} ×2倍の強さ` :
+                            isSpecialCase12 ? `${manifestTypes[1]} と ${manifestTypes[2]}` :
+                            mainType === '0' ? manifestTypes[0] :
+                            mainType === '10' || mainType === '20' || mainType === '30' || mainType === '40' ||
+                            mainType === '50' || mainType === '60' || mainType === '70' || mainType === '80' ||
+                            mainType === '90' ?
+                                manifestTypes[mainType.charAt(0)] : manifestTypes[mainType] || manifestTypes[9]}
                         </text>
+                        ${isSpecialCase11 ? `
+                        <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#e11d48">特殊パターン：1が2倍強まる</text>
+                        ` : ''}
+                        ${isSpecialCase12 ? `
+                        <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">特殊パターン：両方の特性</text>
+                        ` : ''}
                         ${mainHasZero ? `
                         <text x="0" y="35" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="12" fill="#9061f9">＋霊感・増幅</text>
                         ` : ''}
                         
                         <!-- Teeth for main gear -->
                         <g opacity="0.6">
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(0)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(30)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(60)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(90)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(120)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(150)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(180)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(210)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(240)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(270)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(300)"/>
-                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="#6b46c1" transform="rotate(330)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(0)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(30)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(60)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(90)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(120)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(150)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(180)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(210)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(240)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(270)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(300)"/>
+                            <path d="M 15,-95 L 17,-110 L -17,-110 L -15,-95 Z" fill="${isSpecialCase11 ? '#ef4444' : isSpecialCase12 ? '#8b5cf6' : '#6b46c1'}" transform="rotate(330)"/>
                         </g>
                     </g>
 
@@ -401,7 +439,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     </defs>
                 </svg>
             </div>
-            <p class="text-sm text-purple-600 mt-2 text-center">メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です。<br>→大きな歯車よりも、小さな歯車の方が動かしやすい。</p>
+            <p class="text-sm text-purple-600 mt-2 text-center">
+                ${isSpecialCase11 ? 
+                'このケースでは、「創造（自信）」の特性が2倍に強まるという特殊パターンです。<br>独自のエネルギーと創造性が特に強く現れます。' :
+                isSpecialCase12 ? 
+                'このケースでは、「創造（自信）」と「人間関係（バランス）」の両方を持つ特殊パターンです。<br>創造力と協調性のバランスが取れています。' :
+                'メインテーマを動かすには、小さな歯車（サブテーマ2）を動かすことが大切です。<br>→大きな歯車よりも、小さな歯車の方が動かしやすい。'}
+            </p>
         `;
         }
 
