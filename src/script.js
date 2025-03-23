@@ -575,24 +575,33 @@ document.addEventListener('DOMContentLoaded', function() {
             8: '今回の人生では、「土（地面）」の環境に置かれています。確かな立場やアイデンティティを築き、安定を得る機会に恵まれています。柔軟に人や状況を受け入れ、場を和ませる役割を担う環境です。人と人をつなげる橋渡し役として活躍できるでしょう。'
         };
 
+        // 以下の行で、manifestType.mainTypeをチェックして、有効な値を確保する
+        const mainTypeStr = String(manifestType.mainType);
+        // 数値か文字列かにかかわらず、manifestFeaturesに存在するキーに変換
+        const validMainType = manifestFeatures.hasOwnProperty(mainTypeStr) ?
+          mainTypeStr :
+          (mainTypeStr === '10' || mainTypeStr === '20' || mainTypeStr === '30' || mainTypeStr === '40' ||
+            mainTypeStr === '50' || mainTypeStr === '60' || mainTypeStr === '70' || mainTypeStr === '80' ||
+            mainTypeStr === '90') ? mainTypeStr.charAt(0) : '9';
+
         // Check for special patterns
         const hasZeroMain = manifestType.mainType === 0 ||
-          (typeof manifestType.mainType === 'string' && manifestType.mainType.includes('0'));
+          (typeof manifestType.mainType === 'string' && mainTypeStr.includes('0'));
 
         const hasZeroSub = manifestType.subType1 === 0 || manifestType.subType2 === 0;
         const nonZeroSub = manifestType.subType1 === 0 ? manifestType.subType2 : manifestType.subType1;
 
         // Get main type name with appropriate formatting for special patterns
         let mainTypeName = '';
-        if (manifestType.mainType === 11) {
+        if (mainTypeStr === '11') {
             mainTypeName = `${manifestTypes[1]} <span class="text-red-600 font-bold">×2倍の強さ</span>`;
-        } else if (manifestType.mainType === 12) {
+        } else if (mainTypeStr === '12') {
             mainTypeName = `${manifestTypes[1]} と ${manifestTypes[2]} <span class="text-purple-700 font-bold">の両方</span>`;
         } else if (hasZeroMain) {
-            const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
+            const baseType = parseInt(mainTypeStr.toString()[0]) || 0;
             mainTypeName = `${manifestTypes[baseType]} <span class="text-indigo-600 font-bold">＋霊感・増幅</span>`;
         } else {
-            mainTypeName = manifestTypes[manifestType.mainType] || '高尚・叡智';
+            mainTypeName = manifestTypes[validMainType] || '高尚・叡智';
         }
 
         // Get subtype names with appropriate formatting
@@ -609,22 +618,21 @@ document.addEventListener('DOMContentLoaded', function() {
         let manifestChallengesText = '';
 
         // Main type features
-        if (manifestType.mainType === 11) {
+        if (mainTypeStr === '11') {
             // Type 11: Double strength of type 1
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
-            manifestFeaturesText += manifestFeatures[1].slice(0, 3).map(f => f).join('。') + '。';
+            manifestFeaturesText += manifestFeatures[11].slice(0, 3).map(f => f).join('。') + '。';
             manifestFeaturesText += ' この特性が通常よりも2倍強く現れ、想像力とエネルギーの源泉となっています。創造性がより高いレベルで発揮されます。</p>';
-        } else if (manifestType.mainType === 12) {
+        } else if (mainTypeStr === '12') {
             // Type 12: Combination of types 1 and 2
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
-            manifestFeaturesText += manifestFeatures[1].slice(0, 2).map(f => f).join('。') + '。';
-            manifestFeaturesText += manifestFeatures[2].slice(0, 2).map(f => f).join('。') + '。';
+            manifestFeaturesText += manifestFeatures[12].slice(0, 3).map(f => f).join('。') + '。';
             manifestFeaturesText += ' 創造性と協調性の両方を持ち合わせた稀有なタイプで、独創的でありながら人との関わりも大切にします。</p>';
         } else if (hasZeroMain) {
             // Types with zero: Spiritual amplification
-            const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
+            const baseType = parseInt(mainTypeStr.toString()[0]) || 0;
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
-            if (baseType !== 0) {
+            if (baseType !== 0 && manifestFeatures[baseType]) {
                 manifestFeaturesText += manifestFeatures[baseType].slice(0, 2).map(f => f).join('。') + '。';
             }
             manifestFeaturesText += manifestFeatures[0].slice(0, 2).map(f => f).join('。') + '。';
@@ -632,7 +640,12 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Normal types
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
-            manifestFeaturesText += manifestFeatures[manifestType.mainType].slice(0, 3).map(f => f).join('。') + '。';
+            // エラーが出る可能性のある箇所を修正
+            if (manifestFeatures[validMainType]) {
+                manifestFeaturesText += manifestFeatures[validMainType].slice(0, 3).map(f => f).join('。') + '。';
+            } else {
+                manifestFeaturesText += '個性を発揮する力があります。'; // フォールバックテキスト
+            }
             manifestFeaturesText += ' これがあなたの中心的な個性です。</p>';
         }
 
@@ -640,12 +653,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!hasZeroSub || manifestType.subType2 === 0) {
             manifestFeaturesText += `<p class="mb-2"><strong>サブテーマ1「<span class="super-highlight">${subType1Name}</span>」</strong>: `;
             if (manifestType.subType1 === 0) {
-                manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
+                if (manifestFeatures[nonZeroSub]) {
+                    manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
+                }
                 manifestFeaturesText += manifestFeatures[0].slice(0, 1).map(f => f).join('。') + '。';
                 manifestFeaturesText += ' 霊的な感性がこの特性を増幅させ、より洗練された直感力を発揮します。</p>';
-            } else {
+            } else if (manifestFeatures[manifestType.subType1]) {
                 manifestFeaturesText += manifestFeatures[manifestType.subType1].slice(0, 3).map(f => f).join('。') + '。';
                 manifestFeaturesText += ' この特性がメインテーマをサポートします。</p>';
+            } else {
+                manifestFeaturesText += 'メインテーマをサポートする特性です。</p>'; // フォールバックテキスト
             }
         }
 
@@ -653,12 +670,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!hasZeroSub && manifestType.subType1 !== 0) {
             manifestFeaturesText += `<p class="mb-2"><strong>サブテーマ2「<span class="super-highlight">${subType2Name}</span>」</strong>: `;
             if (manifestType.subType2 === 0) {
-                manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
+                if (manifestFeatures[nonZeroSub]) {
+                    manifestFeaturesText += manifestFeatures[nonZeroSub].slice(0, 2).map(f => f).join('。') + '。';
+                }
                 manifestFeaturesText += manifestFeatures[0].slice(0, 1).map(f => f).join('。') + '。';
                 manifestFeaturesText += ' 霊的な感性がこの特性を増幅させています。この小さな歯車が特に重要です。</p>';
-            } else {
+            } else if (manifestFeatures[manifestType.subType2]) {
                 manifestFeaturesText += manifestFeatures[manifestType.subType2].slice(0, 3).map(f => f).join('。') + '。';
                 manifestFeaturesText += ' これがメインテーマを動かす小さな歯車となります。まずはここから意識すると効果的です。</p>';
+            } else {
+                manifestFeaturesText += 'メインテーマを動かす小さな歯車となる特性です。まずはここから意識すると効果的です。</p>'; // フォールバックテキスト
             }
         }
 
@@ -666,12 +687,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!hasZeroSub && manifestType.subType1 !== 0) {
             manifestChallengesText += `<p class="mb-2"><strong>サブテーマ2「<span class="super-highlight">${subType2Name}</span>」の課題</strong>: `;
             if (manifestType.subType2 === 0) {
-                manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
+                if (manifestChallenges[nonZeroSub]) {
+                    manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
+                }
                 manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
                 manifestChallengesText += ' 霊的な感性の扱いに注意しながら、この小さな歯車の課題に取り組みましょう。</p>';
-            } else {
+            } else if (manifestChallenges[manifestType.subType2]) {
                 manifestChallengesText += manifestChallenges[manifestType.subType2].slice(0, 3).map(c => c).join('。') + '。';
                 manifestChallengesText += ' この小さな歯車の課題に取り組むことで、全体の歯車構造が効率よく動き出します。</p>';
+            } else {
+                manifestChallengesText += '小さな歯車の課題に取り組むことで、全体の歯車構造が効率よく動き出します。</p>'; // フォールバックテキスト
             }
         }
 
@@ -679,34 +704,39 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!hasZeroSub || manifestType.subType2 === 0) {
             manifestChallengesText += `<p class="mb-2"><strong>サブテーマ1「<span class="super-highlight">${subType1Name}</span>」の課題</strong>: `;
             if (manifestType.subType1 === 0) {
-                manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
+                if (manifestChallenges[nonZeroSub]) {
+                    manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
+                }
                 manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
                 manifestChallengesText += ' 霊的な感性の扱いに注意しながら、バランスを取ることが大切です。</p>';
-            } else {
+            } else if (manifestChallenges[manifestType.subType1]) {
                 manifestChallengesText += manifestChallenges[manifestType.subType1].slice(0, 3).map(c => c).join('。') + '。';
                 manifestChallengesText += ' これらの課題に対処することで、サブテーマの力がより発揮されます。</p>';
+            } else {
+                manifestChallengesText += 'これらの課題に対処することで、サブテーマの力がより発揮されます。</p>'; // フォールバックテキスト
             }
         }
 
         // Challenges for main type
         manifestChallengesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」の課題</strong>: `;
-        if (manifestType.mainType === 11) {
-            manifestChallengesText += manifestChallenges[1].slice(0, 3).map(c => c).join('。') + '。';
+        if (mainTypeStr === '11') {
+            manifestChallengesText += manifestChallenges[11].slice(0, 3).map(c => c).join('。') + '。';
             manifestChallengesText += ' これらの課題は通常よりも意識が必要で、エネルギーの効果的な発散方法を見つけることが特に重要です。</p>';
-        } else if (manifestType.mainType === 12) {
-            manifestChallengesText += manifestChallenges[1].slice(0, 2).map(c => c).join('。') + '。';
-            manifestChallengesText += manifestChallenges[2].slice(0, 2).map(c => c).join('。') + '。';
+        } else if (mainTypeStr === '12') {
+            manifestChallengesText += manifestChallenges[12].slice(0, 3).map(c => c).join('。') + '。';
             manifestChallengesText += ' 創造性と協調性の両方のバランスを取ることが重要です。時に相反する特性を上手く調和させましょう。</p>';
         } else if (hasZeroMain) {
-            const baseType = parseInt(manifestType.mainType.toString()[0]) || 0;
-            if (baseType !== 0) {
+            const baseType = parseInt(mainTypeStr.toString()[0]) || 0;
+            if (baseType !== 0 && manifestChallenges[baseType]) {
                 manifestChallengesText += manifestChallenges[baseType].slice(0, 2).map(c => c).join('。') + '。';
             }
             manifestChallengesText += manifestChallenges[0].slice(0, 2).map(c => c).join('。') + '。';
             manifestChallengesText += ' 霊的な感性と直感力を活かしつつ、現実的なバランスを取ることが大切です。</p>';
-        } else {
-            manifestChallengesText += manifestChallenges[manifestType.mainType].slice(0, 3).map(c => c).join('。') + '。';
+        } else if (manifestChallenges[validMainType]) {
+            manifestChallengesText += manifestChallenges[validMainType].slice(0, 3).map(c => c).join('。') + '。';
             manifestChallengesText += ' これらの課題に向き合うことで、あなたの個性がより輝きます。</p>';
+        } else {
+            manifestChallengesText += '課題に向き合うことで、あなたの個性がより輝きます。</p>'; // フォールバックテキスト
         }
 
         // Special note for types with zero
