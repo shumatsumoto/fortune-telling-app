@@ -3,10 +3,24 @@
 
 import './tailwind.min.css'
 import './style.css'
-import './potentialType.js'
-import './manifestType.js'
-import './misunderstandingType.js'
-import './moonCalculator.js'
+
+// データファイルのインポート
+import './data/potentialTypes.js'
+import './data/manifestTypes.js'
+import './data/misunderstandingTypes.js'
+import './data/prefectures.js'
+
+// ユーティリティファイルのインポート
+import './utils/potentialCalculator.js'
+import './utils/manifestCalculator.js'
+import './utils/misunderstandingCalculator.js'
+import './utils/moonCalculator.js'
+
+// コンポーネントファイルのインポート
+import './components/formHandlers.js'
+import './components/resultDisplayers.js'
+
+// スクリプトファイルのインポート
 import './script.js'
 
 document.querySelector('#app').innerHTML = `

@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    // グローバル変数でイベントリスナー登録済みかどうかを確認
+    if (window.formHandlersInitialized) return;
+
+    // フォーム要素の初期化と設定
+    window.FormHandlers.initializers.initializeAllFormFields();
+    window.FormHandlers.eventHandlers.setupAllEventListeners();
+
+    // 初期化済みフラグをセット
+    window.formHandlersInitialized = true;
+
+    // フォーム要素の初期化と設定
+    window.FormHandlers.initializers.initializeAllFormFields();
+    window.FormHandlers.eventHandlers.setupAllEventListeners();
+
     // Form elements
     const form = document.getElementById('diagnosisForm');
     const resultArea = document.getElementById('resultArea');
