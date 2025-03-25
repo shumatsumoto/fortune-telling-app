@@ -10,24 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初期化済みフラグをセット
     window.formHandlersInitialized = true;
 
-    // フォーム要素の初期化と設定
-    window.FormHandlers.initializers.initializeAllFormFields();
-    window.FormHandlers.eventHandlers.setupAllEventListeners();
-
-    // Form elements
-    const form = document.getElementById('diagnosisForm');
-    const resultArea = document.getElementById('resultArea');
-    const resetButton = document.getElementById('resetButton');
-    const potentialResult = document.getElementById('potentialResult');
-    const manifestResult = document.getElementById('manifestResult');
-    const misunderstandingResult = document.getElementById('misunderstandingResult');
-    const calculatedMoonSign = document.getElementById('calculatedMoonSign');
-    const birthCountrySelect = document.getElementById('birthCountry');
-    const japanPrefectureContainer = document.getElementById('japanPrefectureContainer');
-    const otherCountryContainer = document.getElementById('otherCountryContainer');
-    const summaryText = document.getElementById('summaryText');
-
-
     // Country selection change event
     birthCountrySelect.addEventListener('change', function() {
         if (this.value === 'JP') {
@@ -476,6 +458,30 @@ document.addEventListener('DOMContentLoaded', function() {
         resultArea.insertBefore(gearContainer, summarySection.nextSibling);
     }
 
+    // Reset button click event
+    resetButton.addEventListener('click', function() {
+        form.reset();
+        form.closest('.bg-white').classList.remove('hidden');
+        resultArea.classList.add('hidden');
+        calculatedMoonSign.value = '';
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Form elements
+    const form = document.getElementById('diagnosisForm');
+    const resultArea = document.getElementById('resultArea');
+    const resetButton = document.getElementById('resetButton');
+    const potentialResult = document.getElementById('potentialResult');
+    const manifestResult = document.getElementById('manifestResult');
+    const misunderstandingResult = document.getElementById('misunderstandingResult');
+    const calculatedMoonSign = document.getElementById('calculatedMoonSign');
+    const birthCountrySelect = document.getElementById('birthCountry');
+    const japanPrefectureContainer = document.getElementById('japanPrefectureContainer');
+    const otherCountryContainer = document.getElementById('otherCountryContainer');
+    const summaryText = document.getElementById('summaryText');
+
     // Enhanced summary generation with better special pattern explanations
     function generateSummary(misunderstandingType, potentialType, manifestType, moonSign) {
         // Type name mappings
@@ -654,7 +660,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Normal types
             manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
-            // エラーが出る可能性のある箇所を修正
             if (manifestFeatures[validMainType]) {
                 manifestFeaturesText += manifestFeatures[validMainType].slice(0, 3).map(f => f).join('。') + '。';
             } else {
@@ -925,105 +930,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Display result in HTML
         summaryText.innerHTML = summary;
     }
-
-    // Reset button click event
-    resetButton.addEventListener('click', function() {
-        form.reset();
-        form.closest('.bg-white').classList.remove('hidden');
-        resultArea.classList.add('hidden');
-        calculatedMoonSign.value = '';
-
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Generate year options (current year to 100 years ago)
-    function populateYearOptions() {
-        const yearSelect = document.getElementById('birthYear');
-        const currentYear = new Date().getFullYear();
-
-        for (let i = currentYear; i >= currentYear - 100; i--) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i + '年';
-            yearSelect.appendChild(option);
-        }
-    }
-
-    // Generate month options
-    function populateMonthOptions() {
-        const monthSelect = document.getElementById('birthMonth');
-
-        for (let i = 1; i <= 12; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i + '月';
-            monthSelect.appendChild(option);
-        }
-    }
-
-    // Generate day options (initially 31 days)
-    function populateDayOptions() {
-        const daySelect = document.getElementById('birthDay');
-
-        for (let i = 1; i <= 31; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i + '日';
-            daySelect.appendChild(option);
-        }
-    }
-
-    // Generate hour options (0-23)
-    function populateHourOptions() {
-        const hourSelect = document.getElementById('birthHour');
-
-        for (let i = 0; i <= 23; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i + '時';
-            hourSelect.appendChild(option);
-        }
-    }
-
-    // Generate minute options (0-55, 5-minute intervals)
-    function populateMinuteOptions() {
-        const minuteSelect = document.getElementById('birthMinute');
-
-        for (let i = 0; i <= 55; i += 5) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i.toString().padStart(2, '0') + '分';
-            minuteSelect.appendChild(option);
-        }
-    }
-
-    // Generate prefecture options
-    function populatePrefectureOptions() {
-        if (!window.MoonCalculator || !window.MoonCalculator.PREFECTURES) {
-            console.error('MoonCalculator not found or PREFECTURES not defined');
-            return;
-        }
-
-        const prefectureSelect = document.getElementById('birthPrefecture');
-
-        window.MoonCalculator.PREFECTURES.forEach((prefecture, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = prefecture.name;
-            prefectureSelect.appendChild(option);
-        });
-    }
-
-    // Adjust days in month when month selection changes
-    document.getElementById('birthMonth').addEventListener('change', function() {
-        adjustDaysInMonth();
-    });
-
-    // Adjust days in month when year selection changes (for leap years)
-    document.getElementById('birthYear').addEventListener('change', function() {
-        adjustDaysInMonth();
-    });
 
     // Adjust days based on month and year (accounts for leap years)
     function adjustDaysInMonth() {

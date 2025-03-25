@@ -3,10 +3,16 @@
 
 // フォーム用選択肢生成関数
 const FormInitializers = {
-  // 年の選択肢を生成
+  // 年の選択肢を生成（改良版：すでにオプションがある場合はクリアしてから追加）
   populateYearOptions() {
     const yearSelect = document.getElementById('birthYear');
     const currentYear = new Date().getFullYear();
+    const currentValue = yearSelect.value; // 現在の選択値を保存
+
+    // すでにオプションが存在する場合はクリア（デフォルトのオプションは保持）
+    while (yearSelect.options.length > 1) {
+      yearSelect.remove(1);
+    }
 
     for (let i = currentYear; i >= currentYear - 100; i--) {
       const option = document.createElement('option');
@@ -14,11 +20,17 @@ const FormInitializers = {
       option.textContent = i + '年';
       yearSelect.appendChild(option);
     }
+
+    // 以前の選択値がある場合は復元
+    if (currentValue) {
+      yearSelect.value = currentValue;
+    }
   },
 
   // 月の選択肢を生成（改良版：すでにオプションがある場合はクリアしてから追加）
   populateMonthOptions() {
     const monthSelect = document.getElementById('birthMonth');
+    const currentValue = monthSelect.value; // 現在の選択値を保存
 
     // すでにオプションが存在する場合はクリア（デフォルトのオプションは保持）
     while (monthSelect.options.length > 1) {
@@ -31,11 +43,22 @@ const FormInitializers = {
       option.textContent = i + '月';
       monthSelect.appendChild(option);
     }
+
+    // 以前の選択値がある場合は復元
+    if (currentValue) {
+      monthSelect.value = currentValue;
+    }
   },
 
-  // 日の選択肢を生成（初期は31日分）
+  // 日の選択肢を生成（改良版：すでにオプションがある場合はクリアしてから追加）
   populateDayOptions() {
     const daySelect = document.getElementById('birthDay');
+    const currentValue = daySelect.value; // 現在の選択値を保存
+
+    // すでにオプションが存在する場合はクリア（デフォルトのオプションは保持）
+    while (daySelect.options.length > 1) {
+      daySelect.remove(1);
+    }
 
     for (let i = 1; i <= 31; i++) {
       const option = document.createElement('option');
@@ -43,11 +66,22 @@ const FormInitializers = {
       option.textContent = i + '日';
       daySelect.appendChild(option);
     }
+
+    // 以前の選択値がある場合は復元
+    if (currentValue && currentValue <= 31) {
+      daySelect.value = currentValue;
+    }
   },
 
-  // 時間の選択肢を生成
+  // 時間の選択肢を生成（改良版：すでにオプションがある場合はクリアしてから追加）
   populateHourOptions() {
     const hourSelect = document.getElementById('birthHour');
+    const currentValue = hourSelect.value; // 現在の選択値を保存
+
+    // すでにオプションが存在する場合はクリア（デフォルトのオプションは保持）
+    while (hourSelect.options.length > 1) {
+      hourSelect.remove(1);
+    }
 
     for (let i = 0; i <= 23; i++) {
       const option = document.createElement('option');
@@ -55,11 +89,22 @@ const FormInitializers = {
       option.textContent = i + '時';
       hourSelect.appendChild(option);
     }
+
+    // 以前の選択値がある場合は復元
+    if (currentValue) {
+      hourSelect.value = currentValue;
+    }
   },
 
-  // 分の選択肢を生成（5分間隔）
+  // 分の選択肢を生成（改良版：5分間隔、すでにオプションがある場合はクリアしてから追加）
   populateMinuteOptions() {
     const minuteSelect = document.getElementById('birthMinute');
+    const currentValue = minuteSelect.value; // 現在の選択値を保存
+
+    // すでにオプションが存在する場合はクリア（デフォルトのオプションは保持）
+    while (minuteSelect.options.length > 1) {
+      minuteSelect.remove(1);
+    }
 
     for (let i = 0; i <= 55; i += 5) {
       const option = document.createElement('option');
@@ -67,9 +112,14 @@ const FormInitializers = {
       option.textContent = i.toString().padStart(2, '0') + '分';
       minuteSelect.appendChild(option);
     }
+
+    // 以前の選択値がある場合は復元
+    if (currentValue) {
+      minuteSelect.value = currentValue;
+    }
   },
 
-  // 都道府県の選択肢を生成
+  // 都道府県の選択肢を生成（改良版：すでにオプションがある場合はクリアしてから追加）
   populatePrefectureOptions() {
     if (!window.MoonCalculator || !window.MoonCalculator.PREFECTURES) {
       console.error('MoonCalculator not found or PREFECTURES not defined');
@@ -77,6 +127,12 @@ const FormInitializers = {
     }
 
     const prefectureSelect = document.getElementById('birthPrefecture');
+    const currentValue = prefectureSelect.value; // 現在の選択値を保存
+
+    // すでにオプションが存在する場合はクリア（デフォルトのオプションは保持）
+    while (prefectureSelect.options.length > 1) {
+      prefectureSelect.remove(1);
+    }
 
     window.MoonCalculator.PREFECTURES.forEach((prefecture, index) => {
       const option = document.createElement('option');
@@ -84,6 +140,11 @@ const FormInitializers = {
       option.textContent = prefecture.name;
       prefectureSelect.appendChild(option);
     });
+
+    // 以前の選択値がある場合は復元
+    if (currentValue) {
+      prefectureSelect.value = currentValue;
+    }
   },
 
   // 月と年に基づいて日の選択肢を調整（閏年対応）
@@ -245,8 +306,8 @@ const FormEventHandlers = {
     document.getElementById('resultArea').classList.remove('hidden');
     document.getElementById('resultArea').classList.add('result-appear');
 
-    // まとめの生成と表示
-    window.ResultDisplayers.generateSummary(misunderstandingType, potentialType, manifestType, moonSignResult.moonSign);
+    // 歯車可視化のフラグをリセット
+    window.gearVisualizationAdded = false;
 
     // ページ上部へスクロール
     window.scrollTo({ top: 0, behavior: 'smooth' });

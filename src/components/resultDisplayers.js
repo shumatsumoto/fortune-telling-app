@@ -17,12 +17,6 @@ const ResultDisplayers = {
       return;
     }
 
-    // 既存の歯車可視化コンテナがあれば削除（重複防止）
-    const existingGearContainer = document.querySelector('.gear-visualization-container');
-    if (existingGearContainer) {
-      existingGearContainer.remove();
-    }
-
     // manifestTypes object definition for display
     const manifestTypes = {
       1: '創造（自信）',
@@ -360,6 +354,7 @@ const ResultDisplayers = {
       `;
     }
 
+    // フラグを設定して重複を防止
     window.gearVisualizationAdded = true;
 
     // サマリーセクションの後、3枚カードのグリッドの前に挿入
@@ -521,12 +516,13 @@ const ResultDisplayers = {
     if (mainTypeStr === '11') {
       // タイプ11: タイプ1の2倍の強さ
       manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
-      manifestFeaturesText += manifestFeatures[11].slice(0, 3).map(f => f).join('。') + '。';
+      manifestFeaturesText += manifestFeatures[1].slice(0, 3).map(f => f).join('。') + '。';
       manifestFeaturesText += ' この特性が通常よりも2倍強く現れ、想像力とエネルギーの源泉となっています。創造性がより高いレベルで発揮されます。</p>';
     } else if (mainTypeStr === '12') {
       // タイプ12: タイプ1と2の両方
       manifestFeaturesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」</strong>: `;
-      manifestFeaturesText += manifestFeatures[12].slice(0, 3).map(f => f).join('。') + '。';
+      manifestFeaturesText += manifestFeatures[1].slice(0, 2).map(f => f).join('。') + '。';
+      manifestFeaturesText += manifestFeatures[2].slice(0, 1).map(f => f).join('。') + '。';
       manifestFeaturesText += ' 創造性と協調性の両方を持ち合わせた稀有なタイプで、独創的でありながら人との関わりも大切にします。</p>';
     } else if (hasZeroMain) {
       // 0を含むタイプ: 霊的増幅
@@ -620,10 +616,11 @@ const ResultDisplayers = {
     // メインタイプの課題
     manifestChallengesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」の課題</strong>: `;
     if (mainTypeStr === '11') {
-      manifestChallengesText += manifestChallenges[11].slice(0, 3).map(c => c).join('。') + '。';
+      manifestChallengesText += manifestChallenges[1].slice(0, 3).map(c => c).join('。') + '。';
       manifestChallengesText += ' これらの課題は通常よりも意識が必要で、エネルギーの効果的な発散方法を見つけることが特に重要です。</p>';
     } else if (mainTypeStr === '12') {
-      manifestChallengesText += manifestChallenges[12].slice(0, 3).map(c => c).join('。') + '。';
+      manifestChallengesText += manifestChallenges[1].slice(0, 1).map(c => c).join('。') + '。';
+      manifestChallengesText += manifestChallenges[2].slice(0, 1).map(c => c).join('。') + '。';
       manifestChallengesText += ' 創造性と協調性の両方のバランスを取ることが重要です。時に相反する特性を上手く調和させましょう。</p>';
     } else if (hasZeroMain) {
       const baseType = parseInt(mainTypeStr.toString()[0]) || 0;
@@ -812,11 +809,6 @@ const ResultDisplayers = {
     document.getElementById('summaryText').innerHTML = summary;
 
     // 歯車可視化は一度だけ行う
-    // 既存の歯車可視化を削除
-    const existingGears = document.querySelectorAll('.gear-visualization-container');
-    existingGears.forEach(gear => gear.remove());
-
-    // 歯車可視化を生成
     this.addGearVisualization();
   }
 };
