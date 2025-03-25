@@ -16,9 +16,14 @@ const FormInitializers = {
     }
   },
 
-  // 月の選択肢を生成
+  // 月の選択肢を生成（改良版：すでにオプションがある場合はクリアしてから追加）
   populateMonthOptions() {
     const monthSelect = document.getElementById('birthMonth');
+
+    // すでにオプションが存在する場合はクリア（デフォルトのオプションは保持）
+    while (monthSelect.options.length > 1) {
+      monthSelect.remove(1);
+    }
 
     for (let i = 1; i <= 12; i++) {
       const option = document.createElement('option');

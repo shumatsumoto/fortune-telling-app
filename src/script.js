@@ -27,13 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const otherCountryContainer = document.getElementById('otherCountryContainer');
     const summaryText = document.getElementById('summaryText');
 
-    // Initialize form fields
-    populateYearOptions();
-    populateMonthOptions();
-    populateDayOptions();
-    populateHourOptions();
-    populateMinuteOptions();
-    populatePrefectureOptions();
 
     // Country selection change event
     birthCountrySelect.addEventListener('change', function() {
