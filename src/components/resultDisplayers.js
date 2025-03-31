@@ -579,24 +579,29 @@ const ResultDisplayers = {
       }
     }
 
-    // サブタイプ2の課題（小さな歯車から取り組むべき）
-    if (!hasZeroSub && manifestType.subType1 !== 0) {
-      manifestChallengesText += `<p class="mb-2"><strong>サブテーマ2「<span class="super-highlight">${subType2Name}</span>」の課題</strong>: `;
-      if (manifestType.subType2 === 0) {
-        if (manifestChallenges[nonZeroSub]) {
-          manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
-        }
-        manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
-        manifestChallengesText += ' 霊的な感性の扱いに注意しながら、この小さな歯車の課題に取り組みましょう。</p>';
-      } else if (manifestChallenges[manifestType.subType2]) {
-        manifestChallengesText += manifestChallenges[manifestType.subType2].slice(0, 3).map(c => c).join('。') + '。';
-        manifestChallengesText += ' この小さな歯車の課題に取り組むことで、全体の歯車構造が効率よく動き出します。</p>';
-      } else {
-        manifestChallengesText += '小さな歯車の課題に取り組むことで、全体の歯車構造が効率よく動き出します。</p>'; // フォールバックテキスト
+    // メインタイプの課題を最初に表示
+    manifestChallengesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」の課題</strong>: `;
+    if (mainTypeStr === '11') {
+      manifestChallengesText += manifestChallenges[11].slice(0, 3).map(c => c).join('。') + '。';
+      manifestChallengesText += ' これらの課題は通常よりも意識が必要で、エネルギーの効果的な発散方法を見つけることが特に重要です。</p>';
+    } else if (mainTypeStr === '12') {
+      manifestChallengesText += manifestChallenges[12].slice(0, 3).map(c => c).join('。') + '。';
+      manifestChallengesText += ' 創造性と協調性の両方のバランスを取ることが重要です。時に相反する特性を上手く調和させましょう。</p>';
+    } else if (hasZeroMain) {
+      const baseType = parseInt(mainTypeStr.toString()[0]) || 0;
+      if (baseType !== 0 && manifestChallenges[baseType]) {
+        manifestChallengesText += manifestChallenges[baseType].slice(0, 2).map(c => c).join('。') + '。';
       }
+      manifestChallengesText += manifestChallenges[0].slice(0, 2).map(c => c).join('。') + '。';
+      manifestChallengesText += ' 霊的な感性と直感力を活かしつつ、現実的なバランスを取ることが大切です。</p>';
+    } else if (manifestChallenges[validMainType]) {
+      manifestChallengesText += manifestChallenges[validMainType].slice(0, 3).map(c => c).join('。') + '。';
+      manifestChallengesText += ' これらの課題に向き合うことで、あなたの個性がより輝きます。</p>';
+    } else {
+      manifestChallengesText += '課題に向き合うことで、あなたの個性がより輝きます。</p>'; // フォールバックテキスト
     }
 
-    // サブタイプ1の課題
+    // サブタイプ1の課題を次に表示
     if (!hasZeroSub || manifestType.subType2 === 0) {
       manifestChallengesText += `<p class="mb-2"><strong>サブテーマ1「<span class="super-highlight">${subType1Name}</span>」の課題</strong>: `;
       if (manifestType.subType1 === 0) {
@@ -613,27 +618,23 @@ const ResultDisplayers = {
       }
     }
 
-    // メインタイプの課題
-    manifestChallengesText += `<p class="mb-2"><strong>メインテーマ「<span class="super-highlight">${mainTypeName}</span>」の課題</strong>: `;
-    if (mainTypeStr === '11') {
-      manifestChallengesText += manifestChallenges[1].slice(0, 3).map(c => c).join('。') + '。';
-      manifestChallengesText += ' これらの課題は通常よりも意識が必要で、エネルギーの効果的な発散方法を見つけることが特に重要です。</p>';
-    } else if (mainTypeStr === '12') {
-      manifestChallengesText += manifestChallenges[1].slice(0, 1).map(c => c).join('。') + '。';
-      manifestChallengesText += manifestChallenges[2].slice(0, 1).map(c => c).join('。') + '。';
-      manifestChallengesText += ' 創造性と協調性の両方のバランスを取ることが重要です。時に相反する特性を上手く調和させましょう。</p>';
-    } else if (hasZeroMain) {
-      const baseType = parseInt(mainTypeStr.toString()[0]) || 0;
-      if (baseType !== 0 && manifestChallenges[baseType]) {
-        manifestChallengesText += manifestChallenges[baseType].slice(0, 2).map(c => c).join('。') + '。';
+    // サブテーマ2の課題を最後に表示して控えめに目立たせる
+    if (!hasZeroSub && manifestType.subType1 !== 0) {
+      manifestChallengesText += `<p class="mb-2">
+    <strong class="text-red-700">サブテーマ2「<span class="super-highlight">${subType2Name}</span>」の課題</strong>
+    <span class="text-xs text-red-600 ml-2">※ 小さな歯車から取り組むのが最も効果的です ⭐</span>: `;
+      if (manifestType.subType2 === 0) {
+        if (manifestChallenges[nonZeroSub]) {
+          manifestChallengesText += manifestChallenges[nonZeroSub].slice(0, 2).map(c => c).join('。') + '。';
+        }
+        manifestChallengesText += manifestChallenges[0].slice(0, 1).map(c => c).join('。') + '。';
+        manifestChallengesText += ' <span class="text-purple-700">霊的な感性の扱いに注意しながら、この小さな歯車の課題に取り組みましょう。</span></p>';
+      } else if (manifestChallenges[manifestType.subType2]) {
+        manifestChallengesText += manifestChallenges[manifestType.subType2].slice(0, 3).map(c => c).join('。') + '。';
+        manifestChallengesText += ' <span class="text-purple-700">この小さな歯車の課題に取り組むことで、全体の歯車構造が効率よく動き出します。</span></p>';
+      } else {
+        manifestChallengesText += '<span class="text-purple-700">小さな歯車の課題に取り組むことで、全体の歯車構造が効率よく動き出します。</span></p>'; // フォールバックテキスト
       }
-      manifestChallengesText += manifestChallenges[0].slice(0, 2).map(c => c).join('。') + '。';
-      manifestChallengesText += ' 霊的な感性と直感力を活かしつつ、現実的なバランスを取ることが大切です。</p>';
-    } else if (manifestChallenges[validMainType]) {
-      manifestChallengesText += manifestChallenges[validMainType].slice(0, 3).map(c => c).join('。') + '。';
-      manifestChallengesText += ' これらの課題に向き合うことで、あなたの個性がより輝きます。</p>';
-    } else {
-      manifestChallengesText += '課題に向き合うことで、あなたの個性がより輝きます。</p>'; // フォールバックテキスト
     }
 
     // 0を含むタイプの特別な注意点
@@ -707,7 +708,7 @@ const ResultDisplayers = {
           <h4 class="text-lg font-semibold text-purple-800 mb-3">🌼 あなたの勘違い</h4>
           <p class="mb-4">
               あなたは「<span class="super-highlight">${misunderstandingType.type}</span>」という勘違いタイプです。
-              これは「<strong>${misunderstandingType.description}</strong>」と思い込んでいる状態です。
+              これは「<strong class="text-red-600">${misunderstandingType.description}</strong>」と思い込んでいる状態です。
               <br><br>
               <span class="font-semibold text-purple-700">実際には：</span>「${misunderstandingType.reality}」
               <br>
